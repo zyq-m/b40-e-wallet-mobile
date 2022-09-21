@@ -48,7 +48,6 @@ const StudentDashboard = ({ navigation }) => {
 
   useEffect(() => {
     getValueFor("accessToken").then(res => fetchUser(user.id, res));
-    console.log(user);
   }, [user.refresh]);
 
   return (
