@@ -21,22 +21,22 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [user, setUser] = useState({
     id: undefined,
-    login: false,
     student: false,
     refresh: false,
+    accessToken: null,
   });
 
   const getInitialValue = async () => {
     try {
       const id = await getValueFor("id");
-      const login = await getValueFor("login");
       const student = await getValueFor("student");
+      const accessToken = await getValueFor("accessToken");
 
       setUser(prev => ({
         ...prev,
         id: id,
-        login: JSON.parse(login),
         student: JSON.parse(student),
+        accessToken: accessToken,
       }));
     } catch (error) {
       console.log(error);
@@ -57,7 +57,7 @@ export default function App() {
             headerStyle: { backgroundColor: "#FFD400" },
             animation: "fade_from_bottom",
           }}>
-          {user.login ? (
+          {user.accessToken !== null ? (
             <>
               <Stack.Screen name="QR Scan" component={QRScan} />
               <Stack.Screen
