@@ -2,27 +2,28 @@ import instanceAxios from "../lib/instanceAxios";
 import { useState, useEffect } from "react";
 
 export const useCafe = ({ id, student }) => {
-  const [cafe, setCafe] = useState([])
+  const [cafe, setCafe] = useState([]);
+  const controller = new AbortController();
 
-  const getCafeById = async () => {
+  const getCafeById = async signal => {
     try {
-      let response
+      const response = await instanceAxios.get(`/api/cafe/${id}`, {
+        signal: signal,
+      });
 
-      if (id) {
-        response = await instanceAxios.get(`/api/cafe/${id}`)
-      } else {
-        response = await instanceAxios.get('/api/cafe')
-      }
-
-      setCafe(response.data)
+      setCafe(response.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
-    !student && getCafeById()
-  }, [])
+    !student && getCafeById(controller.signal);
 
-  return { cafe }
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  return { cafe };
 };

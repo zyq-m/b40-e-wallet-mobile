@@ -14,10 +14,6 @@ const dashboardStyle = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  logoutIcon: {
-    width: 25,
-    height: 22,
-  },
   transactionHeader: {
     marginLeft: 11,
     fontSize: 12,

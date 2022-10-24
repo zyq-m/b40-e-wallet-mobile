@@ -1,26 +1,19 @@
 import React from "react";
-import { Image, Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { dashboardStyle } from "../styles";
+import { Text, View, StyleSheet } from "react-native";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import FA from "react-native-vector-icons/FontAwesome";
 
 const Profile = ({ textField1, textField2, onLogout }) => {
   return (
     <View style={[profileStyle.profileContainer, profileStyle.bgWhite]}>
       <View>
-        <Image
-          style={profileStyle.profileImg}
-          source={require("../assets/profile.png")}
-        />
+        <FA name="user-circle" size={58} color="rgba(88, 83, 76, 1)" />
       </View>
       <View style={{ flex: 1, marginLeft: 6 }}>
         <Text style={profileStyle.profileHeader}>{textField1}</Text>
         <Text style={profileStyle.profileSub}>{textField2}</Text>
       </View>
-      <TouchableOpacity style={{ paddingRight: 6 }} onPress={onLogout}>
-        <Image
-          style={dashboardStyle.logoutIcon}
-          source={require("../assets/icons/logout-icon.png")}
-        />
-      </TouchableOpacity>
+      <MaterialIcon name="logout" size={30} onPress={onLogout} />
     </View>
   );
 };

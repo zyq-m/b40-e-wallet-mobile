@@ -45,10 +45,6 @@ const filterStyle = StyleSheet.create({
   filterItemTxt: {
     marginLeft: 12,
   },
-  checkedIcon: {
-    width: 16,
-    height: 12,
-  },
   printIcon: {
     width: 20,
     height: 18,

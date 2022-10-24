@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Image } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../components";
@@ -24,7 +24,7 @@ const QRScan = ({ navigation, route }) => {
 
   const navigate = () => {
     setScanned(true);
-    navigation.navigate("Dashboard");
+    navigation.navigate("Home");
   };
 
   const handleQRScan = async ({ data }) => {

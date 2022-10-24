@@ -6,5 +6,16 @@ import PayNow from "./PayNow";
 import QRScan from "./QRScan";
 import Transaction from "./Transaction";
 import TransactionDetail from "./TransactionDetail";
+import Report from "./Report";
 
-export { CafeList, Dashboard, Login, MyQRCode, PayNow, QRScan, Transaction, TransactionDetail }
+export {
+  CafeList,
+  Dashboard,
+  Login,
+  MyQRCode,
+  PayNow,
+  QRScan,
+  Transaction,
+  TransactionDetail,
+  Report,
+};

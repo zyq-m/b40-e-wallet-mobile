@@ -1,6 +1,7 @@
 import { View, Image, Text, TouchableOpacity, Platform } from "react-native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 // import html2pdf from "html2pdf.js"; // comment this out before compile to android
 
 import Button from "./Button";
@@ -38,12 +39,7 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
       onPress={onCollapse}>
       <View style={filterStyle.filterContainer}>
         <View style={[filterStyle.filterRow, { paddingTop: 10 }]}>
-          <TouchableOpacity onPress={onCollapse}>
-            <Image
-              style={{ width: 15, height: 15 }}
-              source={require("../assets/icons/close-icon.png")}
-            />
-          </TouchableOpacity>
+          <MCIcon name="close" size={24} onPress={onCollapse} />
           <Text style={filterStyle.filterHeader}>Sort by</Text>
         </View>
         <View style={{ marginTop: 10, marginBottom: 32 }}>
