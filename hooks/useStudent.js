@@ -1,32 +1,41 @@
 import instanceAxios from "../lib/instanceAxios";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
-export const useStudent = ({ id, student, refresh }) => {
-  const [students, setStudents] = useState([])
+export const useStudent = ({ id, student, refresh, screen }) => {
+  const [students, setStudents] = useState([]);
+  const controller = new AbortController();
 
-  const getStudentById = async () => {
-    try {
-      let response
-
-      if (id) {
-        response = await instanceAxios.get(`/api/students/${id}`)
-      } else {
-        response = await instanceAxios.get('/api/students')
-      }
-
-      setStudents(response.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    student && getStudentById()
-  }, [])
+  const getStudentById = signal => {
+    instanceAxios
+      .get(`/api/students/${id}`, {
+        signal: signal,
+      })
+      .then(res => setStudents(res.data))
+      .catch(err => {
+        if (axios.isCancel(err)) {
+          console.log("cancel");
+        }
+        console.warn(err);
+      });
+  };
 
   useEffect(() => {
-    student && refresh && getStudentById()
-  }, [refresh])
+    student && getStudentById(controller.signal);
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
-  return { students }
+  useEffect(() => {
+    student &&
+      refresh &&
+      screen === "dashboard" &&
+      getStudentById(controller.signal);
+    return () => {
+      controller.abort();
+    };
+  }, [refresh]);
+
+  return { students };
 };

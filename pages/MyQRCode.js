@@ -1,31 +1,39 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import QRCode from 'react-qr-code'
-import instanceAxios from '../lib/instanceAxios'
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import QRCode from "react-qr-code";
+import instanceAxios from "../lib/instanceAxios";
 
-import { getValueFor } from '../utils/SecureStore'
-import { useUserContext } from '../hooks'
-import { globals } from '../styles'
+import { getValueFor } from "../utils/SecureStore";
+import { useUserContext } from "../hooks";
+import { globals } from "../styles";
 
 const MyQRCode = () => {
-  const { user } = useUserContext()
-  const [cafeName, setCafeName] = useState(undefined)
+  const { user } = useUserContext();
+  const [cafeName, setCafeName] = useState(undefined);
 
   useEffect(() => {
-    getValueFor('accessToken').then(token => {
-      instanceAxios
-        .get(`/api/cafe/${user.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(name => setCafeName(name.data[0].cafe_name))
-        .catch(err => console.error(err));
-    })
-  }, [])
+    const controller = new AbortController();
+    instanceAxios
+      .get(`/api/cafe/${user.id}`, {
+        signal: controller.signal,
+      })
+      .then(name => setCafeName(name.data[0].cafe_name))
+      .catch(err => console.error(err));
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   return (
-    <View style={[globals.container, { paddingHorizontal: 16, justifyContent: "center", alignItems: "center" }]}>
+    <View
+      style={[
+        globals.container,
+        {
+          paddingHorizontal: 16,
+          justifyContent: "center",
+          alignItems: "center",
+        },
+      ]}>
       {cafeName && (
         <>
           <View style={QRStyles.QRWrapper}>
@@ -37,18 +45,17 @@ const MyQRCode = () => {
           </View>
           <Text style={QRStyles.cafeName}>{cafeName}</Text>
         </>
-      )
-      }
+      )}
     </View>
-  )
-}
+  );
+};
 
-export default MyQRCode
+export default MyQRCode;
 
 const QRStyles = StyleSheet.create({
   QRWrapper: {
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderWidth: 1,
     borderRadius: 9,
     borderColor: "rgba(0, 0, 0, 0.08)",
@@ -56,6 +63,6 @@ const QRStyles = StyleSheet.create({
   cafeName: {
     marginTop: 20,
     fontSize: 24,
-    fontWeight: '600'
-  }
-})
+    fontWeight: "600",
+  },
+});

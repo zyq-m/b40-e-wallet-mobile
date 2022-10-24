@@ -32,14 +32,14 @@ const PayNow = ({ navigation }) => {
 
     let total = amount;
     transactionDate.forEach(({ amount }) => {
-      total += parseInt(amount)
-    })
+      total += parseInt(amount);
+    });
 
     if (total <= 6) {
-      if (Platform.OS === 'web') {
-        navigation.navigate("Cafe List", { amount: amount })
+      if (Platform.OS === "web") {
+        navigation.navigate("Cafe List", { amount: amount });
       } else {
-        navigation.navigate("QR Scan", { amount: amount })
+        navigation.navigate("QR Scan", { amount: amount });
       }
     } else {
       alert("You only can spend RM6 per day");
@@ -47,15 +47,22 @@ const PayNow = ({ navigation }) => {
   };
 
   useEffect(() => {
-    getStudentTransactions(user.id)
+    const controller = new AbortController();
+
+    getStudentTransactions(user.id, controller.signal)
       .then(res => {
         return res.filter(
           data =>
             moment(data.created_at).format("D-MM-YY") ===
             moment().format("D-MM-YY")
         );
-      }).then((filtered) => setTransactionDate(filtered))
-      .catch((error) => console.warn(error))
+      })
+      .then(filtered => setTransactionDate(filtered))
+      .catch(error => console.warn(error));
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return (
@@ -70,8 +77,7 @@ const PayNow = ({ navigation }) => {
               payNowStyle.textCenter,
               payNowStyle.payAmount,
               active.btn1 && payNowStyle.active,
-            ]}
-          >
+            ]}>
             RM 1
           </Text>
         </TouchableOpacity>
@@ -81,8 +87,7 @@ const PayNow = ({ navigation }) => {
               payNowStyle.textCenter,
               payNowStyle.payAmount,
               active.btn2 && payNowStyle.active,
-            ]}
-          >
+            ]}>
             RM 2
           </Text>
         </TouchableOpacity>

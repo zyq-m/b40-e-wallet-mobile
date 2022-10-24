@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import moment from "moment";
-import FeatherIcon from "react-native-vector-icons/Feather";
 
 import {
   Profile,
@@ -13,8 +12,10 @@ import {
 } from "../components";
 
 import { useUserContext } from "../hooks";
-import { deleteItem, save } from "../utils/SecureStore";
+import { deleteItem } from "../utils/SecureStore";
+import { countTotal } from "../utils/countTotal";
 import { useCafe, useStudent, useTransaction } from "../hooks";
+
 import { globals, dashboardStyle } from "../styles";
 
 const Dashboard = ({ navigation }) => {
@@ -66,7 +67,7 @@ const Dashboard = ({ navigation }) => {
   }, [transactions]);
 
   return (
-    <View style={[globals.container, { paddingTop: 16 }]}>
+    <View style={[globals.container, { paddingTop: 48 }]}>
       <Refresh>
         <View style={dashboardStyle.logoutContainer}>
           <Profile
@@ -92,11 +93,13 @@ const Dashboard = ({ navigation }) => {
             <Text style={dashboardStyle.transactionHeader}>
               Recent transaction
             </Text>
-            <FeatherIcon
-              name="more-horizontal"
-              size={25}
-              onPress={() => navigation.navigate("Transactions")}
-            />
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Transactions")}>
+              <Image
+                style={{ width: 25, height: 25 }}
+                source={require("../assets/icons/more-icon.png")}
+              />
+            </TouchableOpacity>
           </View>
           <TransactionContainer>
             {transactions &&

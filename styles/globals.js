@@ -4,8 +4,8 @@ const globals = StyleSheet.create({
   container: {
     flex: 1,
     maxWidth: 425,
-    width: '100%',
-    marginHorizontal: 'auto'
+    width: "100%",
+    alignSelf: "center",
   },
 });
 

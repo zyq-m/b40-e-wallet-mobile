@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { Text, View } from "react-native";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import moment from "moment";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
 import { Refresh, TransactionItem, FilterList } from "../components";
 
@@ -42,7 +41,12 @@ const Transaction = ({ navigation }) => {
       navigation.setOptions({
         headerRight: () => (
           <View style={transactionStyle.row}>
-            <MaterialIcon name="filter-list" size={25} onPress={onCollapse} />
+            <TouchableOpacity onPress={onCollapse}>
+              <Image
+                style={transactionStyle.fitlerIcon}
+                source={require("../assets/icons/filter-icon.png")}
+              />
+            </TouchableOpacity>
           </View>
         ),
       });
@@ -62,6 +66,23 @@ const Transaction = ({ navigation }) => {
       }
     });
   }, [list, transactions]);
+
+  if (loading) {
+    return (
+      <>
+        <Refresh />
+        <Text
+          style={{
+            flex: 1,
+            textAlign: "center",
+            fontWeight: "500",
+            color: "rgba(132, 132, 132, 1)",
+          }}>
+          {error ? error : "Loading.."}
+        </Text>
+      </>
+    );
+  }
 
   return (
     <View style={[globals.container]}>
