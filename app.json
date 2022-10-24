@@ -2,7 +2,7 @@
   "expo": {
     "name": "b40-e-wallet",
     "slug": "b40-e-wallet",
-    "version": "1.0.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
