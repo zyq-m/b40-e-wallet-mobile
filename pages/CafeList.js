@@ -73,12 +73,12 @@ const CafeList = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    user.refresh && fetchCafe();
-  }, [user.refresh]);
+    user.cafeList.refresh && fetchCafe();
+  }, [user.cafeList.refresh]);
 
   return (
     <View style={[globals.container]}>
-      <Refresh>
+      <Refresh cafeList={true}>
         <View style={{ flex: 1, justifyContent: "center", marginVertical: 16 }}>
           {radioBtn.map(({ id, label, value, selected }) => {
             return (

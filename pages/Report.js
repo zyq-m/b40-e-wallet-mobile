@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  Linking,
-} from "react-native";
-import React, { useCallback } from "react";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 
 import { globals } from "../styles";
 
@@ -18,41 +9,6 @@ const AboutUs = () => {
         <Para>Report bug</Para>
       </ScrollView>
     </View>
-  );
-};
-
-const ContactUs = () => {
-  const handleURL = url =>
-    useCallback(async () => {
-      const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      }
-    }, [url]);
-
-  return (
-    <>
-      <Header>Hubungi kami:</Header>
-      <View style={{ flexDirection: "row", marginTop: 8 }}>
-        <Icon
-          name="email"
-          size={24}
-          style={{ marginRight: 8 }}
-          onPress={handleURL("mailto:haziq.musa02@gmail.com")}
-        />
-        <Icon
-          name="phone"
-          size={24}
-          style={{ marginRight: 8 }}
-          onPress={handleURL("tel:0132733528")}
-        />
-        <Icon
-          name="twitter"
-          size={24}
-          onPress={handleURL("https://twitter.com/zyq__m")}
-        />
-      </View>
-    </>
   );
 };
 

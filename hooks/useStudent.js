@@ -2,7 +2,7 @@ import instanceAxios from "../lib/instanceAxios";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export const useStudent = ({ id, student, refresh, screen }) => {
+export const useStudent = ({ id, student, refresh }) => {
   const [students, setStudents] = useState([]);
   const controller = new AbortController();
 
@@ -14,7 +14,7 @@ export const useStudent = ({ id, student, refresh, screen }) => {
       .then(res => setStudents(res.data))
       .catch(err => {
         if (axios.isCancel(err)) {
-          console.log("cancel");
+          console.log("Request cancel");
         }
         console.warn(err);
       });
@@ -28,10 +28,9 @@ export const useStudent = ({ id, student, refresh, screen }) => {
   }, []);
 
   useEffect(() => {
-    student &&
-      refresh &&
-      screen === "dashboard" &&
+    if (student && refresh) {
       getStudentById(controller.signal);
+    }
     return () => {
       controller.abort();
     };

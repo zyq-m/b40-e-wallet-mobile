@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import QRCode from "react-qr-code";
-import instanceAxios from "../lib/instanceAxios";
 
-import { getValueFor } from "../utils/SecureStore";
+import instanceAxios from "../lib/instanceAxios";
 import { useUserContext } from "../hooks";
 import { globals } from "../styles";
 
 const MyQRCode = () => {
   const { user } = useUserContext();
   const [cafeName, setCafeName] = useState(undefined);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -18,11 +18,26 @@ const MyQRCode = () => {
         signal: controller.signal,
       })
       .then(name => setCafeName(name.data[0].cafe_name))
+      .then(() => setLoading(false))
       .catch(err => console.error(err));
     return () => {
       controller.abort();
     };
   }, []);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text
+          style={{
+            fontWeight: "500",
+            color: "rgba(132, 132, 132, 1)",
+          }}>
+          Loading..
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View

@@ -8,10 +8,10 @@ export const useTransaction = ({ id, student, refresh }) => {
   const [error, setError] = useState("");
   const controller = new AbortController();
 
-  const getTransactionById = signal => {
+  const getTransactionById = () => {
     instanceAxios
       .get(`/api/transactions/${student ? `students` : `cafe`}/${id}`, {
-        signal: signal,
+        signal: controller.signal,
       })
       .then(res => {
         setTransactions(res.data);
@@ -27,7 +27,7 @@ export const useTransaction = ({ id, student, refresh }) => {
   };
 
   useEffect(() => {
-    getTransactionById(controller.signal);
+    getTransactionById();
 
     return () => {
       controller.abort();
