@@ -17,7 +17,7 @@ const Transaction = ({ navigation }) => {
   const { transactions, loading, error } = useTransaction({
     id: user.id,
     student: user.student,
-    refresh: user.refresh,
+    refresh: user.transaction.refresh,
   });
   const [list, setList] = useState(listData);
   const [filterTransaction, setFilterTransaction] = useState([]);
@@ -71,7 +71,7 @@ const Transaction = ({ navigation }) => {
   if (loading) {
     return (
       <>
-        <Refresh />
+        <Refresh transaction={true} />
         <Text
           style={{
             flex: 1,
@@ -87,7 +87,7 @@ const Transaction = ({ navigation }) => {
 
   return (
     <View style={[globals.container]}>
-      <Refresh>
+      <Refresh transaction={true}>
         <View style={{ paddingBottom: 24 }}>
           {filterTransaction?.map(
             (

@@ -22,7 +22,6 @@ export const useStudent = ({ id, student, refresh }) => {
 
   useEffect(() => {
     student && getStudentById(controller.signal);
-    console.log("run");
     return () => {
       controller.abort();
     };
@@ -32,7 +31,6 @@ export const useStudent = ({ id, student, refresh }) => {
     if (student && refresh) {
       getStudentById(controller.signal);
     }
-    console.log("run2");
     return () => {
       controller.abort();
     };

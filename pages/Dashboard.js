@@ -26,11 +26,11 @@ const Dashboard = ({ navigation }) => {
   const { students } = useStudent({
     id: user.id,
     student: user.student,
-    refresh: user.refresh,
+    refresh: user.dashboard.refresh,
   });
   const { transactions } = useTransaction({
     id: user.id,
-    refresh: user.refresh,
+    refresh: user.dashboard.refresh,
     student: user.student,
   });
 
@@ -60,7 +60,7 @@ const Dashboard = ({ navigation }) => {
 
   return (
     <View style={[globals.container, { paddingTop: 16 }]}>
-      <Refresh>
+      <Refresh dashboard={true}>
         <View style={dashboardStyle.logoutContainer}>
           <Profile
             textField1={cafe[0]?.cafe_name || students[0]?.student_name}

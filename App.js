@@ -48,7 +48,9 @@ export default function App() {
     id: undefined,
     login: false,
     student: false,
-    refresh: false,
+    dashboard: { refresh: false },
+    transaction: { refresh: false },
+    cafeList: { refresh: false },
   });
 
   const getInitialValue = async () => {
