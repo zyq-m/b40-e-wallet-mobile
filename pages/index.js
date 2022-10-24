@@ -6,7 +6,6 @@ import PayNow from "./PayNow";
 import QRScan from "./QRScan";
 import Transaction from "./Transaction";
 import TransactionDetail from "./TransactionDetail";
-import Report from "./Report";
 
 export {
   CafeList,
@@ -17,5 +16,4 @@ export {
   QRScan,
   Transaction,
   TransactionDetail,
-  Report,
 };
