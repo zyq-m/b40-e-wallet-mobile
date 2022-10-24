@@ -7,7 +7,7 @@ import { Button, Refresh } from "../components";
 import { useUserContext } from "../hooks";
 import { getCafe, setTransactions } from "../lib/API";
 
-import { globals, payNowStyle } from "../styles";
+import { globals } from "../styles";
 
 const CafeList = ({ navigation, route }) => {
   const { amount } = route.params;
@@ -48,8 +48,8 @@ const CafeList = ({ navigation, route }) => {
         });
   };
 
-  const fetchCafe = () => {
-    getCafe()
+  const fetchCafe = signal => {
+    getCafe(signal)
       .then(res => {
         let newArr = res.map((data, i) => ({
           id: i,
@@ -64,7 +64,12 @@ const CafeList = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    fetchCafe();
+    const controller = new AbortController();
+    fetchCafe(controller.signal);
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   useEffect(() => {

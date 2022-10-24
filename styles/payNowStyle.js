@@ -17,7 +17,7 @@ const payNowStyle = StyleSheet.create({
     color: "rgba(88, 83, 76, 1)",
   },
   active: {
-    color: "rgba(255, 247, 217, 1)",
+    color: "white",
     backgroundColor: "rgba(88, 83, 76, 1)",
     borderRadius: 9,
   },

@@ -12,8 +12,10 @@ import {
 } from "../components";
 
 import { useUserContext } from "../hooks";
-import { deleteItem, save } from "../utils/SecureStore";
+import { deleteItem } from "../utils/SecureStore";
+import { countTotal } from "../utils/countTotal";
 import { useCafe, useStudent, useTransaction } from "../hooks";
+
 import { globals, dashboardStyle } from "../styles";
 
 const Dashboard = ({ navigation }) => {
@@ -50,6 +52,7 @@ const Dashboard = ({ navigation }) => {
     await deleteItem("accessToken");
     await deleteItem("refreshToken");
     await deleteItem("id");
+    await deleteItem("login");
     await deleteItem("student");
     setUser(prev => ({
       ...prev,

@@ -13,7 +13,11 @@ import { globals, transactionStyle } from "../styles";
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
   const { user } = useUserContext();
-  const { transactions } = useTransaction({ id: user.id, student: user.student, refresh: user.refresh });
+  const { transactions } = useTransaction({
+    id: user.id,
+    student: user.student,
+    refresh: user.refresh,
+  });
   const [list, setList] = useState(listData);
   const [filterTransaction, setFilterTransaction] = useState([]);
 
@@ -63,33 +67,68 @@ const Transaction = ({ navigation }) => {
     });
   }, [list, transactions]);
 
+  if (loading) {
+    return (
+      <>
+        <Refresh />
+        <Text
+          style={{
+            flex: 1,
+            textAlign: "center",
+            fontWeight: "500",
+            color: "rgba(132, 132, 132, 1)",
+          }}>
+          {error ? error : "Loading.."}
+        </Text>
+      </>
+    );
+  }
+
   return (
     <View style={[globals.container]}>
       <Refresh>
         <View style={{ paddingBottom: 24 }}>
-          {filterTransaction?.map(({ sender, amount, created_at, transaction_id, cafe_name, student_name }, i) => {
-            let details = {
-              sender: `${student_name} (${sender})`,
-              recipient: cafe_name,
-              transactionId: transaction_id,
-              amount: `RM${amount}`,
-              date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(created_at).format("h.mma")}`
-            }
+          {filterTransaction?.map(
+            (
+              {
+                sender,
+                amount,
+                created_at,
+                transaction_id,
+                cafe_name,
+                student_name,
+              },
+              i
+            ) => {
+              let details = {
+                sender: `${student_name} (${sender})`,
+                recipient: cafe_name,
+                transactionId: transaction_id,
+                amount: `RM${amount}`,
+                date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(
+                  created_at
+                ).format("h.mma")}`,
+              };
 
-            return (
-              <View style={transactionStyle.transactionItemWrap} key={i}>
-                <TransactionItem
-                  field1={sender}
-                  time={moment(created_at).format("h.mma")}
-                  date={moment(created_at).format("D-MM")}
-                  amount={amount}
-                  cafe={!user.student}
-                  noBorder={true}
-                  navigate={() => navigation.navigate("Transaction Details", { data: details })}
-                />
-              </View>
-            );
-          })}
+              return (
+                <View style={transactionStyle.transactionItemWrap} key={i}>
+                  <TransactionItem
+                    field1={sender}
+                    time={moment(created_at).format("h.mma")}
+                    date={moment(created_at).format("D-MM")}
+                    amount={amount}
+                    cafe={!user.student}
+                    noBorder={true}
+                    navigate={() =>
+                      navigation.navigate("Transaction Details", {
+                        data: details,
+                      })
+                    }
+                  />
+                </View>
+              );
+            }
+          )}
         </View>
       </Refresh>
       {filterTransaction?.length === 0 && (
@@ -99,8 +138,7 @@ const Transaction = ({ navigation }) => {
             textAlign: "center",
             fontWeight: "500",
             color: "rgba(132, 132, 132, 1)",
-          }}
-        >
+          }}>
           No transactions history
         </Text>
       )}

@@ -7,7 +7,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "eas-build-android": "eas build -p android --profile localApk",
+    "eas-build-android": "eas build -p android --profile local-apk",
     "prebuild": "npx expo prebuild",
     "rebuild": "npx expo prebuild --clean",
     "build-web": "expo build:web"

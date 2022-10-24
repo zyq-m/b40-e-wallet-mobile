@@ -36,11 +36,6 @@ const Login = ({ navigation }) => {
       if (res) {
         await save("id", cafeAcc);
         authUser({ id: cafeAcc, cafe: true });
-
-        setUser(prev => ({
-          ...prev,
-          accessToken: res.accessToken,
-        }));
         navigation.navigate("Dashboard");
       } else {
         alert("Invalid username or password");
@@ -55,11 +50,6 @@ const Login = ({ navigation }) => {
         await save("id", studentAcc);
         await save("student", true);
         authUser({ id: studentAcc, student: true });
-
-        setUser(prev => ({
-          ...prev,
-          accessToken: res.accessToken,
-        }));
         navigation.navigate("Dashboard");
       } else {
         alert("Invalid matric no or password");

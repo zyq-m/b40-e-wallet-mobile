@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Platform, RefreshControl, ScrollView, View } from "react-native";
-import { RefreshControl as WebRefreshControl } from 'react-native-web-refresh-control'
+import { RefreshControl as WebRefreshControl } from "react-native-web-refresh-control";
 import { useUserContext } from "../hooks";
 
 const Refresh = ({ children }) => {
@@ -24,21 +24,17 @@ const Refresh = ({ children }) => {
       <ScrollView
         refreshControl={
           <WebRefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View style={{ paddingHorizontal: 16 }}>
-          {children}
-        </View>
+        }>
+        <View style={{ paddingHorizontal: 16 }}>{children}</View>
       </ScrollView>
-    )
+    );
   } else {
     return (
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        style={{ paddingHorizontal: 16 }}
-      >
+        style={{ paddingHorizontal: 16 }}>
         {children}
       </ScrollView>
     );
