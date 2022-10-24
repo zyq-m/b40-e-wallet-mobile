@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import moment from "moment";
+import FeatherIcon from "react-native-vector-icons/Feather";
 
 import {
   Profile,
@@ -33,15 +34,6 @@ const Dashboard = ({ navigation }) => {
     student: user.student,
   });
 
-  const countTotal = () => {
-    let temp = 0;
-    transactions.forEach(({ amount }) => {
-      temp += parseInt(amount);
-    });
-
-    setTotal(temp);
-  };
-
   const onNavigate = () => {
     user.student
       ? navigation.navigate("Pay")
@@ -63,11 +55,11 @@ const Dashboard = ({ navigation }) => {
   };
 
   useEffect(() => {
-    transactions && countTotal();
+    transactions && setTotal(countTotal(transactions));
   }, [transactions]);
 
   return (
-    <View style={[globals.container, { paddingTop: 48 }]}>
+    <View style={[globals.container, { paddingTop: 16 }]}>
       <Refresh>
         <View style={dashboardStyle.logoutContainer}>
           <Profile
@@ -93,13 +85,11 @@ const Dashboard = ({ navigation }) => {
             <Text style={dashboardStyle.transactionHeader}>
               Recent transaction
             </Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Transactions")}>
-              <Image
-                style={{ width: 25, height: 25 }}
-                source={require("../assets/icons/more-icon.png")}
-              />
-            </TouchableOpacity>
+            <FeatherIcon
+              name="more-horizontal"
+              size={25}
+              onPress={() => navigation.navigate("Transactions")}
+            />
           </View>
           <TransactionContainer>
             {transactions &&

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Platform } from "react-native";
 import moment from "moment";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
 import { Refresh, TransactionItem, FilterList } from "../components";
 
@@ -13,7 +14,7 @@ import { globals, transactionStyle } from "../styles";
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
   const { user } = useUserContext();
-  const { transactions } = useTransaction({
+  const { transactions, loading, error } = useTransaction({
     id: user.id,
     student: user.student,
     refresh: user.refresh,
@@ -41,12 +42,12 @@ const Transaction = ({ navigation }) => {
       navigation.setOptions({
         headerRight: () => (
           <View style={transactionStyle.row}>
-            <TouchableOpacity onPress={onCollapse}>
-              <Image
-                style={transactionStyle.fitlerIcon}
-                source={require("../assets/icons/filter-icon.png")}
-              />
-            </TouchableOpacity>
+            <MaterialIcon
+              name="filter-list"
+              size={25}
+              onPress={onCollapse}
+              style={Platform.OS === "web" && { marginRight: 11 }}
+            />
           </View>
         ),
       });
