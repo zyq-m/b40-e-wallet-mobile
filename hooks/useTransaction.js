@@ -6,12 +6,11 @@ export const useTransaction = ({ id, student, refresh }) => {
   const [transactions, setTransactions] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const controller = new AbortController();
 
-  const getTransactionById = () => {
+  const getTransactionById = signal => {
     instanceAxios
       .get(`/api/transactions/${student ? `students` : `cafe`}/${id}`, {
-        signal: controller.signal,
+        signal: signal,
       })
       .then(res => {
         setTransactions(res.data);
@@ -22,12 +21,12 @@ export const useTransaction = ({ id, student, refresh }) => {
           setError("Try refresh again");
           setLoading(true);
         }
-        console.warn(err);
       });
   };
 
   useEffect(() => {
-    getTransactionById();
+    const controller = new AbortController();
+    getTransactionById(controller.signal);
 
     return () => {
       controller.abort();
@@ -35,6 +34,7 @@ export const useTransaction = ({ id, student, refresh }) => {
   }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
     if (refresh) {
       getTransactionById(controller.signal);
     }

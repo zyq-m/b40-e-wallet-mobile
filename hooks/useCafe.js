@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 
 export const useCafe = ({ id, student }) => {
   const [cafe, setCafe] = useState([]);
-  const controller = new AbortController();
 
   const getCafeById = async signal => {
     try {
@@ -18,6 +17,7 @@ export const useCafe = ({ id, student }) => {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
     !student && getCafeById(controller.signal);
 
     return () => {
