@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { View, Image, Platform, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../components";
 import { setTransactions } from "../lib/API";
+import { ws } from "../lib/Socket";
 import { useUserContext } from "../hooks";
 import { checkURL } from "../utils/checkURL";
+import { popupMessage } from "../utils/popupMessage";
 
 import { globals, QRScanStyle } from "../styles";
 
@@ -37,12 +39,26 @@ const QRScan = ({ navigation, route }) => {
     if (cafeId) {
       setTransactions({ id: cafeId, data: bodyData })
         .then(() => {
-          alert("Payment successful👍");
+          popupMessage({ title: "Success", message: "Payment successful👍" });
+        })
+        .then(() => {
+          ws.emit("get_student", user.id);
+          ws.emit("get_transaction_student", user.id);
+          ws.emit("get_transaction_cafe", cafeId);
+
           navigate();
         })
-        .catch(() => alert("Error occur"));
+        .catch(() => {
+          popupMessage({
+            title: "Error",
+            message: "There a problem. Please try again later",
+          });
+        });
     } else {
-      alert("Invalid QR code. Please scan again");
+      popupMessage({
+        title: "Error",
+        message: "Invalid QR code. Please scan again.",
+      });
     }
 
     setScanned(true);

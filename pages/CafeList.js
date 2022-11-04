@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { RadioButton } from "react-native-radio-buttons-group";
 
 import { Button, Refresh } from "../components";
 
 import { useUserContext } from "../hooks";
 import { getCafe, setTransactions } from "../lib/API";
+import { ws } from "../lib/Socket";
 
 import { globals } from "../styles";
 
@@ -29,23 +30,20 @@ const CafeList = ({ navigation, route }) => {
     );
 
   const onPress = () => {
-    selectedCafe &&
-      setTransactions({
-        id: selectedCafe,
-        data: {
-          sender: user.id,
-          amount: amount,
-        },
-      })
-        .then(() => {
-          alert("Payment successful👍");
-          navigation.navigate("Dashboard");
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Error occur");
-          navigation.navigate("Dashboard");
-        });
+    if (selectedCafe) {
+      ws.emit("pay", selectedCafe, user.id, amount);
+      ws.on("pay_detail", () => {
+        ws.emit("get_student", user.id);
+        ws.emit("get_transaction_cafe", selectedCafe);
+        ws.emit("get_transaction_student", user.id);
+
+        alert("Payment successful👍");
+        navigation.navigate("Dashboard");
+
+        // remove socket to avoid looping ascendingly
+        ws.removeAllListeners("pay_detail");
+      });
+    }
   };
 
   const fetchCafe = signal => {

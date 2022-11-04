@@ -38,6 +38,7 @@ const Transaction = ({ navigation }) => {
     );
 
   useEffect(() => {
+    let subscribe = false;
     const header = async () => {
       navigation.setOptions({
         headerRight: () => (
@@ -53,7 +54,13 @@ const Transaction = ({ navigation }) => {
       });
     };
 
-    header();
+    if (!subscribe) {
+      header();
+    }
+
+    return () => {
+      subscribe = true;
+    };
   }, []);
 
   useEffect(() => {

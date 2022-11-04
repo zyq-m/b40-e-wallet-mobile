@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import moment from "moment";
 import FeatherIcon from "react-native-vector-icons/Feather";
+import { ws } from "../lib/Socket";
 
 import {
   Profile,
@@ -22,17 +23,21 @@ import { globals, dashboardStyle } from "../styles";
 const Dashboard = ({ navigation }) => {
   const { user, setUser } = useUserContext();
   const [total, setTotal] = useState(0);
+  // const [socket, setSocket] = useState(ws);
   const { cafe } = useCafe({ id: user.id, student: user.student });
-  const { students } = useStudent({
-    id: user.id,
-    student: user.student,
-    refresh: user.dashboard.refresh,
-  });
-  const { transactions } = useTransaction({
-    id: user.id,
-    refresh: user.dashboard.refresh,
-    student: user.student,
-  });
+  // const { students } = useStudent({
+  //   id: user.id,
+  //   student: user.student,
+  //   refresh: user.dashboard.refresh,
+  // });
+  // const { transactions, setTransactions } = useTransaction({
+  //   id: user.id,
+  //   refresh: user.dashboard.refresh,
+  //   student: user.student,
+  // });
+
+  const [students, setStudents] = useState();
+  const [transactions, setTransactions] = useState();
 
   const onNavigate = () => {
     user.student
@@ -58,19 +63,47 @@ const Dashboard = ({ navigation }) => {
     transactions && setTotal(countTotal(transactions));
   }, [transactions]);
 
+  useEffect(() => {
+    // send id to get transaction
+    if (user.student) {
+      ws.emit("get_transaction_student", user.id);
+      // receive new data
+      ws.on("set_transaction_student", msg => setTransactions(msg));
+
+      ws.emit("get_student", user.id);
+      ws.on("set_student", data => {
+        setStudents(data);
+      });
+    } else {
+      ws.emit("get_transaction_cafe", user.id);
+      ws.on("set_transaction_cafe", msg => {
+        setTransactions(msg);
+      });
+
+      ws.emit("get_cafe", user.id);
+      ws.on("set_cafe", data => {
+        setStudents(data);
+      });
+    }
+
+    return () => {
+      ws.removeAllListeners();
+    };
+  }, [ws, user.id]);
+
   return (
     <View style={[globals.container, { paddingTop: 16 }]}>
       <Refresh dashboard={true}>
         <View style={dashboardStyle.logoutContainer}>
           <Profile
-            textField1={cafe[0]?.cafe_name || students[0]?.student_name}
-            textField2={cafe[0]?.username || students[0]?.matric_no}
+            textField1={cafe[0]?.cafe_name || students?.student_name}
+            textField2={cafe[0]?.username || students?.matric_no}
             onLogout={onLogout}
           />
         </View>
         <View style={{ marginTop: 24 }}>
           <Amount
-            amount={user.student ? students[0]?.wallet_amount : total}
+            amount={user.student ? students?.wallet_amount : total}
             student={user.student}
           />
         </View>
@@ -94,7 +127,7 @@ const Dashboard = ({ navigation }) => {
           <TransactionContainer>
             {transactions &&
               transactions
-                .slice(0, 3)
+                .slice(0, 5)
                 .map(
                   (
                     {
