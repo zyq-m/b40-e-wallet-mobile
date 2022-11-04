@@ -24,6 +24,7 @@ const Drawer = createDrawerNavigator();
 function Home() {
   return (
     <Drawer.Navigator
+      initialRouteName="Dashboard"
       screenOptions={{
         drawerStyle: { paddingTop: 16 },
         drawerActiveTintColor: "rgba(88, 83, 76, 1)",
@@ -38,7 +39,13 @@ function Home() {
           drawerLabel: "Home",
         }}
       />
-      <Drawer.Screen name="Report" component={Report} />
+      <Drawer.Screen
+        name="Report"
+        component={Report}
+        options={{
+          headerTitle: "Report a problem",
+        }}
+      />
     </Drawer.Navigator>
   );
 }
