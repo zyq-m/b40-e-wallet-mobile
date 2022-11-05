@@ -38,8 +38,8 @@ const TransactionItem = ({
       updateChecked();
     } else {
       if (Platform.OS === "web") {
-        alert("Are you sure want?");
-        return updateChecked();
+        confirm("Are you sure?") && updateChecked();
+        return false;
       }
 
       Alert.alert("Important", "Are you sure?", [
