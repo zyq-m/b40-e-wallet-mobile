@@ -125,49 +125,51 @@ const Dashboard = ({ navigation }) => {
             />
           </View>
           <TransactionContainer>
-            {transactions &&
-              transactions
-                .slice(0, 5)
-                .map(
-                  (
-                    {
-                      sender,
-                      amount,
-                      created_at,
-                      transaction_id,
-                      cafe_name,
-                      student_name,
-                    },
-                    i
-                  ) => {
-                    let details = {
-                      sender: `${student_name} (${sender})`,
-                      recipient: cafe_name,
-                      transactionId: transaction_id,
-                      amount: `RM${amount}`,
-                      date: `${moment(created_at).format(
-                        "D-MM-YYYY"
-                      )} at ${moment(created_at).format("h.mma")}`,
-                    };
+            {transactions
+              ?.slice(0, 5)
+              .map(
+                (
+                  {
+                    sender,
+                    amount,
+                    created_at,
+                    transaction_id,
+                    cafe_name,
+                    student_name,
+                    approved_by_recipient,
+                  },
+                  i
+                ) => {
+                  let details = {
+                    sender: `${student_name} (${sender})`,
+                    recipient: cafe_name,
+                    transactionId: transaction_id,
+                    amount: `RM${amount}`,
+                    date: `${moment(created_at).format(
+                      "D-MM-YYYY"
+                    )} at ${moment(created_at).format("h.mma")}`,
+                  };
 
-                    return (
-                      <TransactionItem
-                        key={i}
-                        field1={sender}
-                        time={moment(created_at).format("h.mma")}
-                        date={moment(created_at).format("D-MM")}
-                        amount={amount}
-                        noBorder={i == 0 && true}
-                        cafe={!user.student}
-                        navigate={() =>
-                          navigation.navigate("Transaction Details", {
-                            data: details,
-                          })
-                        }
-                      />
-                    );
-                  }
-                )}
+                  return (
+                    <TransactionItem
+                      key={i}
+                      transactionId={transaction_id}
+                      approved={approved_by_recipient}
+                      field1={sender}
+                      time={moment(created_at).format("h.mma")}
+                      date={moment(created_at).format("D-MM")}
+                      amount={amount}
+                      noBorder={i == 0 && true}
+                      cafe={!user.student}
+                      navigate={() =>
+                        navigation.navigate("Transaction Details", {
+                          data: details,
+                        })
+                      }
+                    />
+                  );
+                }
+              )}
           </TransactionContainer>
         </View>
       </Refresh>
