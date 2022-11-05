@@ -105,6 +105,7 @@ const Transaction = ({ navigation }) => {
                 transaction_id,
                 cafe_name,
                 student_name,
+                approved,
               },
               i
             ) => {
@@ -121,7 +122,9 @@ const Transaction = ({ navigation }) => {
               return (
                 <View style={transactionStyle.transactionItemWrap} key={i}>
                   <TransactionItem
+                    transactionId={transaction_id}
                     field1={sender}
+                    approved={approved}
                     time={moment(created_at).format("h.mma")}
                     date={moment(created_at).format("D-MM")}
                     amount={amount}
