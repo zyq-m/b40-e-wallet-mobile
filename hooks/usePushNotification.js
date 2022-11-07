@@ -7,7 +7,7 @@ Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: true, // Note: allow popup notification when app open
-    shouldSetBadge: false,
+    shouldSetBadge: true,
   }),
 });
 
@@ -45,7 +45,7 @@ async function schedulePushNotification(notification) {
   try {
     await Notifications.scheduleNotificationAsync({
       content: notification,
-      trigger: { seconds: 1 },
+      trigger: null, // cause notification trigger immediately
     });
   } catch (error) {
     return;
