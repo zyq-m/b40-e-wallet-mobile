@@ -61,11 +61,7 @@ const TransactionItem = ({
         transactionItemStyle.transactionItem,
         noBorder ? "" : transactionItemStyle.transactionItemBorder,
       ]}>
-      <View
-        style={[
-          { paddingLeft: 20 },
-          Platform.OS !== "web" && { paddingVertical: 16 },
-        ]}>
+      <View style={[{ paddingLeft: 20, paddingVertical: 16 }]}>
         <Text style={{ fontWeight: "500" }}>{field1}</Text>
         <View style={{ flexDirection: "row" }}>
           <Text style={transactionItemStyle.transactionSmallTxt}>{time}</Text>
