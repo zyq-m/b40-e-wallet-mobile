@@ -8,9 +8,10 @@ import {
   Platform,
 } from "react-native";
 
-import instanceAxios from "../lib/instanceAxios";
+import { createFeedback } from "../lib/API";
 import { useUserContext } from "../hooks";
 import { Button } from "../components";
+import { popupMessage } from "../utils/popupMessage";
 
 import { globals, loginStyle } from "../styles";
 
@@ -21,8 +22,7 @@ const Report = ({ navigation }) => {
 
   const handleSend = () => {
     if (title !== "") {
-      instanceAxios
-        .post("/api/feedback", { id: user.id, title: title, description: desc })
+      createFeedback(user.id, title, desc)
         .then(() => {
           if (Platform.OS === "web") {
             alert("Thank you for your feedback");
@@ -36,18 +36,16 @@ const Report = ({ navigation }) => {
           setDesc("");
         })
         .catch(() => {
-          if (Platform.OS === "web") {
-            alert("Please try again");
-          } else {
-            Alert.alert("Request timeout", "Please try again");
-          }
+          popupMessage({
+            title: "Request timeout",
+            message: "Please try again",
+          });
         });
     } else {
-      if (Platform.OS === "web") {
-        alert("Please describe your feedback");
-      } else {
-        Alert.alert("Important", "Please describe your feedback");
-      }
+      popupMessage({
+        title: "Important",
+        message: "Please describe your comment",
+      });
     }
   };
 
@@ -60,7 +58,7 @@ const Report = ({ navigation }) => {
           onChangeText={setTitle}
           placeholder="I want new feature"
         />
-        <Para>Descrption</Para>
+        <Para>Comment</Para>
         <Input
           value={desc}
           onChangeText={setDesc}
