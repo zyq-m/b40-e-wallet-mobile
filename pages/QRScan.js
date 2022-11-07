@@ -37,23 +37,29 @@ const QRScan = ({ navigation, route }) => {
     };
 
     if (cafeId) {
-      setTransactions({ id: cafeId, data: bodyData })
-        .then(() => {
-          popupMessage({ title: "Success", message: "Payment successful👍" });
-        })
-        .then(() => {
-          ws.emit("get_student", user.id);
-          ws.emit("get_transaction_student", user.id);
-          ws.emit("get_transaction_cafe", cafeId);
+      ws.emit("pay", cafeId, user.id, amount);
 
-          navigate();
-        })
-        .catch(() => {
-          popupMessage({
-            title: "Error",
-            message: "There a problem. Please try again later",
-          });
+      // ! mcm pelik
+      ws.on("pay_detail", () => {
+        ws.emit("get_student", user.id);
+        ws.emit("get_transaction_student", user.id);
+        ws.emit("get_transaction_cafe", cafeId);
+        // TODO: set event to push notification
+        ws.emit("send_notification", cafeId, {
+          title: "Payment recieved",
+          body: `You recieved RM${amount}.00 from ${user.id}`,
         });
+        ws.emit("send_notification", user.id, {
+          title: "Payment sent",
+          body: `You spent RM${amount}.00 at ${cafeId}`,
+        });
+
+        popupMessage({ title: "Success", message: "Payment successful👍" });
+        navigation.navigate("Dashboard");
+
+        // remove socket to avoid looping ascendingly
+        ws.removeAllListeners("pay_detail");
+      });
     } else {
       popupMessage({
         title: "Error",
