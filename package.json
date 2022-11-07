@@ -40,7 +40,9 @@
     "react-native-web": "0.17.7",
     "react-native-web-refresh-control": "^1.1.1",
     "react-qr-code": "^2.0.8",
-    "socket.io-client": "^4.5.3"
+    "socket.io-client": "^4.5.3",
+    "expo-notifications": "~0.15.4",
+    "expo-device": "~4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

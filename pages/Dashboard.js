@@ -16,36 +16,32 @@ import {
 import { useUserContext } from "../hooks";
 import { deleteItem } from "../utils/SecureStore";
 import { countTotal } from "../utils/countTotal";
-import { useCafe, useStudent, useTransaction } from "../hooks";
+import { popupMessage } from "../utils/popupMessage";
+import { useCafe, usePushNotification } from "../hooks";
 
 import { globals, dashboardStyle } from "../styles";
 
 const Dashboard = ({ navigation }) => {
   const { user, setUser } = useUserContext();
   const [total, setTotal] = useState(0);
-  // const [socket, setSocket] = useState(ws);
+  const { schedulePushNotification } = usePushNotification();
   const { cafe } = useCafe({ id: user.id, student: user.student });
-  // const { students } = useStudent({
-  //   id: user.id,
-  //   student: user.student,
-  //   refresh: user.dashboard.refresh,
-  // });
-  // const { transactions, setTransactions } = useTransaction({
-  //   id: user.id,
-  //   refresh: user.dashboard.refresh,
-  //   student: user.student,
-  // });
 
   const [students, setStudents] = useState();
   const [transactions, setTransactions] = useState();
 
   const onNavigate = () => {
-    user.student
-      ? navigation.navigate("Pay")
-      : navigation.navigate("My QRCode");
+    if (user.student) {
+      if (students.wallet_amount <= 0)
+        return popupMessage({ title: "Sorry", message: "Insufficient amount" });
+      navigation.navigate("Pay");
+    } else {
+      navigation.navigate("My QRCode");
+    }
   };
 
   const onLogout = async () => {
+    ws.emit("logout", user.id);
     await deleteItem("accessToken");
     await deleteItem("refreshToken");
     await deleteItem("id");
@@ -74,15 +70,27 @@ const Dashboard = ({ navigation }) => {
       ws.on("set_student", data => {
         setStudents(data);
       });
+
+      ws.on("get_notification", async notification => {
+        if (notification) {
+          schedulePushNotification(notification);
+        }
+      });
     } else {
       ws.emit("get_transaction_cafe", user.id);
-      ws.on("set_transaction_cafe", msg => {
+      ws.on("set_transaction_cafe", async msg => {
         setTransactions(msg);
       });
 
       ws.emit("get_cafe", user.id);
       ws.on("set_cafe", data => {
         setStudents(data);
+      });
+
+      ws.on("get_notification", async notification => {
+        if (notification) {
+          schedulePushNotification(notification);
+        }
       });
     }
 
