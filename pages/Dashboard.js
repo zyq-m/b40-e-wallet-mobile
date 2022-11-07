@@ -73,7 +73,7 @@ const Dashboard = ({ navigation }) => {
 
       ws.on("get_notification", async notification => {
         if (notification) {
-          schedulePushNotification(notification);
+          await schedulePushNotification(notification);
         }
       });
     } else {
@@ -82,14 +82,9 @@ const Dashboard = ({ navigation }) => {
         setTransactions(msg);
       });
 
-      ws.emit("get_cafe", user.id);
-      ws.on("set_cafe", data => {
-        setStudents(data);
-      });
-
       ws.on("get_notification", async notification => {
         if (notification) {
-          schedulePushNotification(notification);
+          await schedulePushNotification(notification);
         }
       });
     }

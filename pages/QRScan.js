@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, Platform, Alert } from "react-native";
+import { View, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../components";
-import { setTransactions } from "../lib/API";
 import { ws } from "../lib/Socket";
 import { useUserContext } from "../hooks";
 import { checkURL } from "../utils/checkURL";
@@ -30,8 +29,11 @@ const QRScan = ({ navigation, route }) => {
     if (cafeId) {
       ws.emit("pay", cafeId, user.id, amount);
 
-      // ! mcm pelik
-      ws.on("pay_detail", () => {
+      ws.on("pay_detail", res => {
+        if (!res) {
+          return;
+        }
+
         ws.emit("get_student", user.id);
         ws.emit("get_transaction_student", user.id);
         ws.emit("get_transaction_cafe", cafeId);

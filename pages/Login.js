@@ -3,6 +3,7 @@ import { View, Text, Image } from "react-native";
 
 import { loginCafe, loginStudent } from "../lib/API";
 import { useUserContext } from "../hooks";
+import { ws } from "../lib/Socket";
 
 import { Button, Input } from "../components";
 
@@ -26,6 +27,10 @@ const Login = ({ navigation }) => {
     }));
   };
 
+  const addSocketUser = id => {
+    ws.emit("new_user", id);
+  };
+
   const onSubmit = async () => {
     if (cafeOwner) {
       const res = await loginCafe({
@@ -35,6 +40,7 @@ const Login = ({ navigation }) => {
 
       if (res) {
         await save("id", cafeAcc);
+        addSocketUser(cafeAcc);
         authUser({ id: cafeAcc, cafe: true });
         navigation.navigate("Home", { screen: "Dashboard" });
       } else {
@@ -49,6 +55,7 @@ const Login = ({ navigation }) => {
       if (res) {
         await save("id", studentAcc);
         await save("student", true);
+        addSocketUser(studentAcc);
         authUser({ id: studentAcc, student: true });
         navigation.navigate("Home", { screen: "Dashboard" });
       } else {
