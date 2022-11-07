@@ -24,17 +24,8 @@ const QRScan = ({ navigation, route }) => {
     }
   };
 
-  const navigate = () => {
-    setScanned(true);
-    navigation.navigate("Home");
-  };
-
   const handleQRScan = async ({ data }) => {
     const cafeId = checkURL(data);
-    const bodyData = {
-      sender: user.id,
-      amount: amount,
-    };
 
     if (cafeId) {
       ws.emit("pay", cafeId, user.id, amount);
