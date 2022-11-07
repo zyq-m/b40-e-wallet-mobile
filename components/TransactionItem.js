@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import CheckBox from "expo-checkbox";
 import instanceAxios from "../lib/instanceAxios";
+import { popupMessage } from "../utils/popupMessage";
 
 const TransactionItem = ({
   navigate,
@@ -29,7 +30,10 @@ const TransactionItem = ({
         transactionId: transactionId,
         value: !checked,
       })
-      .then(() => setChecked(!checked));
+      .then(() => setChecked(!checked))
+      .catch(() => {
+        popupMessage({ title: "Error", message: "Please try again" });
+      });
   };
 
   const handleCheck = () => {
@@ -57,7 +61,11 @@ const TransactionItem = ({
         transactionItemStyle.transactionItem,
         noBorder ? "" : transactionItemStyle.transactionItemBorder,
       ]}>
-      <View style={{ paddingLeft: 20 }}>
+      <View
+        style={[
+          { paddingLeft: 20 },
+          Platform.OS !== "web" && { paddingVertical: 16 },
+        ]}>
         <Text style={{ fontWeight: "500" }}>{field1}</Text>
         <View style={{ flexDirection: "row" }}>
           <Text style={transactionItemStyle.transactionSmallTxt}>{time}</Text>
@@ -78,7 +86,7 @@ const TransactionItem = ({
         <Text
           style={[
             transactionItemStyle.transactionAmount,
-            !cafe && { paddingRight: 20, paddingVertical: 16 },
+            !cafe && { paddingRight: 20 },
           ]}>
           {cafe ? "+" : "-"}RM{amount}
         </Text>
@@ -133,6 +141,7 @@ const transactionItemStyle = StyleSheet.create({
     color: "rgba(0, 0, 0, 0.47)",
   },
   transactionAmount: {
+    paddingVertical: 16,
     fontSize: 12,
     fontWeight: "600",
   },
