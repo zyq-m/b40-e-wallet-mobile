@@ -42,14 +42,21 @@ export function usePushNotification() {
 }
 
 async function schedulePushNotification(notification) {
-  await Notifications.scheduleNotificationAsync({
-    content: notification,
-    trigger: { seconds: 1 },
-  });
+  try {
+    await Notifications.scheduleNotificationAsync({
+      content: notification,
+      trigger: { seconds: 1 },
+    });
+  } catch (error) {
+    return;
+  }
 }
 
 async function registerForPushNotificationsAsync() {
   let token;
+  if (Platform.OS === "web") {
+    return;
+  }
 
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
@@ -67,9 +74,6 @@ async function registerForPushNotificationsAsync() {
     if (existingStatus !== "granted") {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
-    }
-    if (Platform.OS === "web") {
-      return;
     }
     if (finalStatus !== "granted") {
       alert("Failed to get push token for push notification!");
