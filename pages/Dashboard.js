@@ -14,10 +14,11 @@ import {
 } from "../components";
 
 import { useUserContext } from "../hooks";
-import { deleteItem } from "../utils/SecureStore";
+import { deleteItem, getValueFor } from "../utils/SecureStore";
 import { countTotal } from "../utils/countTotal";
 import { popupMessage } from "../utils/popupMessage";
 import { useCafe, usePushNotification } from "../hooks";
+import { logout } from "../lib/API";
 
 import { globals, dashboardStyle } from "../styles";
 
@@ -41,7 +42,9 @@ const Dashboard = ({ navigation }) => {
   };
 
   const onLogout = async () => {
+    const refreshToken = await getValueFor("refreshToken");
     ws.emit("logout", user.id);
+    await logout(refreshToken);
     await deleteItem("accessToken");
     await deleteItem("refreshToken");
     await deleteItem("id");
