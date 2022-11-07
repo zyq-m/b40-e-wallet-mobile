@@ -81,7 +81,7 @@ const Dashboard = ({ navigation }) => {
       });
     } else {
       ws.emit("get_transaction_cafe", user.id);
-      ws.on("set_transaction_cafe", async msg => {
+      ws.on("set_transaction_cafe", msg => {
         setTransactions(msg);
       });
 
