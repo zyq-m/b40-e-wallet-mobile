@@ -11,7 +11,7 @@ import { getValueFor } from "../utils/SecureStore";
 import { popupMessage } from "../utils/popupMessage";
 import { useUserContext } from "../hooks";
 
-const Login = ({ navigation }) => {
+const Login = () => {
   const [cafeOwner, setCafeOwner] = useState(false);
   const [studentAcc, setStudentAcc] = useState("");
   const [cafeAcc, setCafeAcc] = useState("");
@@ -27,12 +27,30 @@ const Login = ({ navigation }) => {
     }));
   };
 
+  const handleDuplicateSocketUser = cafe => {
+    ws.on("login_error", async error => {
+      if (error) {
+        popupMessage({
+          title: "Cannot login",
+          message: "You only can login to 1 device",
+        });
+      } else {
+        if (cafe) {
+          authUser({ id: cafeAcc });
+        } else {
+          authUser({ id: studentAcc, student: true });
+        }
+      }
+      ws.removeAllListeners("login_error");
+    });
+  };
+
   const onSubmit = async () => {
     if (cafeOwner) {
       login("cafe", { username: cafeAcc, password: password })
         .then(() => {
           ws.emit("new_user", cafeAcc);
-          authUser({ id: cafeAcc });
+          handleDuplicateSocketUser(true);
         })
         .catch(() => {
           popupMessage({
@@ -44,7 +62,7 @@ const Login = ({ navigation }) => {
       login("students", { matric_no: studentAcc, password: password })
         .then(() => {
           ws.emit("new_user", studentAcc);
-          authUser({ id: studentAcc, student: true });
+          handleDuplicateSocketUser(false);
         })
         .catch(() => {
           popupMessage({
@@ -53,17 +71,6 @@ const Login = ({ navigation }) => {
           });
         });
     }
-
-    ws.on("login_error", async error => {
-      if (error) {
-        popupMessage({
-          title: "Cannot login",
-          message: "You only can login to 1 device",
-        });
-        return ws.removeAllListeners("login_error");
-      }
-      ws.removeAllListeners("login_error");
-    });
   };
 
   useEffect(() => {
