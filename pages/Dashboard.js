@@ -95,7 +95,7 @@ const Dashboard = ({ navigation }) => {
     return () => {
       ws.removeAllListeners();
     };
-  }, [ws, user.id]);
+  }, [ws]);
 
   return (
     <View style={[globals.container, { paddingTop: 16 }]}>
