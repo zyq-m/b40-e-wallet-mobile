@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image } from "react-native";
 
-import { loginCafe, loginStudent } from "../lib/API";
-import { useUserContext } from "../hooks";
+import { login } from "../lib/API";
 import { ws } from "../lib/Socket";
 
 import { Button, Input } from "../components";
 
 import { globals, loginStyle } from "../styles";
-import { save } from "../utils/SecureStore";
+import { getValueFor } from "../utils/SecureStore";
+import { popupMessage } from "../utils/popupMessage";
+import { useUserContext } from "../hooks";
 
 const Login = ({ navigation }) => {
   const [cafeOwner, setCafeOwner] = useState(false);
@@ -17,52 +18,63 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const { setUser } = useUserContext();
 
-  const authUser = ({ id, student, cafe }) => {
+  const authUser = ({ id, student }) => {
     setUser(prev => ({
       ...prev,
       id: id,
       login: true,
       student: student || false,
-      cafe: cafe || false,
     }));
   };
 
-  const addSocketUser = id => {
-    ws.emit("new_user", id);
-  };
-
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (cafeOwner) {
-      const res = await loginCafe({
-        username: cafeAcc,
-        password: password,
-      });
-
-      if (res) {
-        await save("id", cafeAcc);
-        addSocketUser(cafeAcc);
-        authUser({ id: cafeAcc, cafe: true });
-        navigation.navigate("Home", { screen: "Dashboard" });
-      } else {
-        alert("Invalid username or password");
-      }
+      ws.emit("new_user", cafeAcc);
     } else {
-      const res = await loginStudent({
-        matric_no: studentAcc,
-        password: password,
-      });
-
-      if (res) {
-        await save("id", studentAcc);
-        await save("student", true);
-        addSocketUser(studentAcc);
-        authUser({ id: studentAcc, student: true });
-        navigation.navigate("Home", { screen: "Dashboard" });
-      } else {
-        alert("Invalid matric no or password");
-      }
+      ws.emit("new_user", studentAcc);
     }
+
+    ws.on("login_error", async error => {
+      if (error) {
+        popupMessage({
+          title: "Cannot login",
+          message: "You only can login to 1 device",
+        });
+        return ws.removeAllListeners("login_error");
+      }
+
+      if (cafeOwner) {
+        await login(
+          "cafe",
+          { username: cafeAcc, password: password },
+          "Invalid username or password"
+        );
+        authUser({ id: cafeAcc });
+      } else {
+        await login(
+          "students",
+          { matric_no: studentAcc, password: password },
+          "Invalid matric no or password"
+        );
+        authUser({ id: studentAcc, student: true });
+      }
+
+      navigation.navigate("Home", { screen: "Dashboard" });
+      ws.removeAllListeners("login_error");
+    });
   };
+
+  useEffect(() => {
+    // trigger sockect to update when page refresh
+    getValueFor("id")
+      .then(id => ws.emit("connected", id))
+      .catch(() => {
+        return;
+      });
+    return () => {
+      ws.removeAllListeners();
+    };
+  }, [ws]);
 
   return (
     <View
