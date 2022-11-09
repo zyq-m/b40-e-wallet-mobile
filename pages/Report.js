@@ -86,6 +86,7 @@ const Input = props => {
 
 const aboutStyle = StyleSheet.create({
   para: {
+    marginLeft: 11,
     marginBottom: 6,
   },
   form: {
