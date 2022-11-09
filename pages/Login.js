@@ -27,11 +27,31 @@ const Login = ({ navigation }) => {
     }));
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (cafeOwner) {
-      ws.emit("new_user", cafeAcc);
+      login("cafe", { username: cafeAcc, password: password })
+        .then(() => {
+          ws.emit("new_user", cafeAcc);
+          authUser({ id: cafeAcc });
+        })
+        .catch(() => {
+          popupMessage({
+            title: "Cannot login",
+            message: "Invalid username or password",
+          });
+        });
     } else {
-      ws.emit("new_user", studentAcc);
+      login("students", { matric_no: studentAcc, password: password })
+        .then(() => {
+          ws.emit("new_user", studentAcc);
+          authUser({ id: studentAcc, student: true });
+        })
+        .catch(() => {
+          popupMessage({
+            title: "Cannot login",
+            message: "Invalid matric no or password",
+          });
+        });
     }
 
     ws.on("login_error", async error => {
@@ -42,24 +62,6 @@ const Login = ({ navigation }) => {
         });
         return ws.removeAllListeners("login_error");
       }
-
-      if (cafeOwner) {
-        await login(
-          "cafe",
-          { username: cafeAcc, password: password },
-          "Invalid username or password"
-        );
-        authUser({ id: cafeAcc });
-      } else {
-        await login(
-          "students",
-          { matric_no: studentAcc, password: password },
-          "Invalid matric no or password"
-        );
-        authUser({ id: studentAcc, student: true });
-      }
-
-      navigation.navigate("Home", { screen: "Dashboard" });
       ws.removeAllListeners("login_error");
     });
   };
