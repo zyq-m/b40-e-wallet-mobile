@@ -67,11 +67,15 @@ const Dashboard = ({ navigation }) => {
     if (user.student) {
       ws.emit("get_transaction_student", user.id);
       // receive new data
-      ws.on("set_transaction_student", msg => setTransactions(msg));
+      ws.on("set_transaction_student", data => setTransactions(data));
 
       ws.emit("get_student", user.id);
       ws.on("set_student", data => {
         setStudents(data);
+        setUser(prev => ({
+          ...prev,
+          details: { id: data.matric_no, name: data.student_name },
+        }));
       });
 
       ws.on("get_notification", async notification => {

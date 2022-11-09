@@ -27,7 +27,7 @@ const QRScan = ({ navigation, route }) => {
     const cafeId = checkURL(data);
 
     if (cafeId) {
-      ws.emit("pay", cafeId, user.id, amount);
+      ws.emit("pay", cafeId.id, user.id, amount);
 
       ws.on("pay_detail", res => {
         if (!res) {
@@ -36,15 +36,15 @@ const QRScan = ({ navigation, route }) => {
 
         ws.emit("get_student", user.id);
         ws.emit("get_transaction_student", user.id);
-        ws.emit("get_transaction_cafe", cafeId);
+        ws.emit("get_transaction_cafe", cafeId.id);
         // TODO: set event to push notification
-        ws.emit("send_notification", cafeId, {
+        ws.emit("send_notification", cafeId.id, {
           title: "Payment recieved",
-          body: `You recieved RM${amount}.00 from ${user.id}`,
+          body: `You recieved RM${amount}.00 from ${user.details.name} - ${user.details.id}`,
         });
         ws.emit("send_notification", user.id, {
           title: "Payment sent",
-          body: `You spent RM${amount}.00 at ${cafeId}`,
+          body: `You spent RM${amount}.00 at ${cafeId.name}`,
         });
 
         popupMessage({ title: "Success", message: "Payment successful👍" });

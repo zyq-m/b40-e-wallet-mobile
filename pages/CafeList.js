@@ -22,7 +22,7 @@ const CafeList = ({ navigation, route }) => {
     setRadioBtn(prev =>
       prev.map(data => {
         if (data.id == i) {
-          setSelectedCafe(data.value);
+          setSelectedCafe({ id: data.value, name: data.cafe_name });
           return { ...data, selected: true };
         } else {
           return { ...data, selected: false };
@@ -32,7 +32,7 @@ const CafeList = ({ navigation, route }) => {
 
   const onPress = () => {
     if (selectedCafe) {
-      ws.emit("pay", selectedCafe, user.id, amount);
+      ws.emit("pay", selectedCafe.id, user.id, amount);
 
       ws.on("pay_detail", res => {
         if (!res) {
@@ -43,15 +43,15 @@ const CafeList = ({ navigation, route }) => {
         ws.emit("get_transaction_student", user.id);
 
         // TODO: update new data to only selected cafe
-        ws.emit("get_transaction_cafe", selectedCafe);
+        ws.emit("get_transaction_cafe", selectedCafe.id);
         // TODO: set event to push notification
-        ws.emit("send_notification", selectedCafe, {
+        ws.emit("send_notification", selectedCafe.id, {
           title: "Payment recieved",
-          body: `You recieved RM${amount}.00 from ${user.id}`,
+          body: `You recieved RM${amount}.00 from ${user.details.name} - ${user.details.id}`,
         });
         ws.emit("send_notification", user.id, {
           title: "Payment sent",
-          body: `You spent RM${amount}.00 at ${selectedCafe}`,
+          body: `You spent RM${amount}.00 at ${selectedCafe.name}`,
         });
 
         popupMessage({ title: "Success", message: "Payment successful👍" });
