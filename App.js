@@ -34,8 +34,7 @@ function Home() {
         name="Dashboard"
         component={Dashboard}
         options={{
-          title: "e-Voucher",
-          headerTitleAlign: "center",
+          title: "eKupon",
           drawerLabel: "Home",
         }}
       />
@@ -87,7 +86,6 @@ export default function App() {
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
-            headerTitleAlign: "center",
             headerStyle: { backgroundColor: "#FFD400" },
             animation: "fade_from_bottom",
           }}>
