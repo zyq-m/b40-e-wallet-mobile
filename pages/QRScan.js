@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Image } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../components";
@@ -8,7 +8,7 @@ import { useUserContext } from "../hooks";
 import { checkURL } from "../utils/checkURL";
 import { popupMessage } from "../utils/popupMessage";
 
-import { globals, QRScanStyle } from "../styles";
+import { QRScanStyle } from "../styles";
 
 const QRScan = ({ navigation, route }) => {
   const { amount } = route.params;
@@ -68,10 +68,10 @@ const QRScan = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View style={[globals.container, { paddingHorizontal: 16 }]}>
+    <View style={[{ flex: 1, paddingHorizontal: 16, backgroundColor: "#000" }]}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleQRScan}
-        style={QRScanStyle.barcode}
+        style={StyleSheet.absoluteFill}
       />
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View style={QRScanStyle.scanner}>
