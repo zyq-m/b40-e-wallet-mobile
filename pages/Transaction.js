@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Text, View, Platform } from "react-native";
-import moment from "moment";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
-import { Refresh, TransactionItem, FilterList } from "../components";
+import { Refresh, FilterList, TransactionList } from "../components";
 
 import { useUserContext, useTransaction } from "../hooks";
 import { useFilterDate } from "../utils/filterDate";
@@ -19,6 +18,7 @@ const Transaction = ({ navigation }) => {
     student: user.student,
     refresh: user.transaction.refresh,
   });
+
   const [list, setList] = useState(listData);
   const [filterTransaction, setFilterTransaction] = useState([]);
 
@@ -26,16 +26,19 @@ const Transaction = ({ navigation }) => {
 
   const onCollapse = () => setCollapse(prev => !prev);
 
-  const onList = id =>
-    setList(prev =>
+  const filtered = useMemo(() => filterDate(transactions), [transactions]);
+
+  const onList = id => {
+    return setList(prev =>
       prev.map(data => {
-        if (data.id == id) {
+        if (data.id === id) {
           return { ...data, checked: true };
         } else {
           return { ...data, checked: false };
         }
       })
     );
+  };
 
   useEffect(() => {
     let subscribe = false;
@@ -64,8 +67,7 @@ const Transaction = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    list.map(({ checked, id }) => {
-      const filtered = filterDate(transactions);
+    list.forEach(({ checked, id }) => {
       if (checked) {
         id === 0 && setFilterTransaction(filtered.getAll);
         id === 1 && setFilterTransaction(filtered.getToday);
@@ -94,55 +96,16 @@ const Transaction = ({ navigation }) => {
 
   return (
     <View style={[globals.container]}>
-      <Refresh transaction={true}>
-        <View style={{ paddingBottom: 24 }}>
-          {filterTransaction?.map(
-            (
-              {
-                sender,
-                amount,
-                created_at,
-                transaction_id,
-                cafe_name,
-                student_name,
-                approved,
-              },
-              i
-            ) => {
-              let details = {
-                sender: `${student_name} (${sender})`,
-                recipient: cafe_name,
-                transactionId: transaction_id,
-                amount: `RM${amount}`,
-                date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(
-                  created_at
-                ).format("h.mma")}`,
-              };
-
-              return (
-                <View style={transactionStyle.transactionItemWrap} key={i}>
-                  <TransactionItem
-                    transactionId={transaction_id}
-                    field1={sender}
-                    approved={approved}
-                    time={moment(created_at).format("h.mma")}
-                    date={moment(created_at).format("D-MM")}
-                    amount={amount}
-                    cafe={!user.student}
-                    noBorder={true}
-                    navigate={() =>
-                      navigation.navigate("Transaction Details", {
-                        data: details,
-                      })
-                    }
-                  />
-                </View>
-              );
-            }
-          )}
-        </View>
+      <Refresh transaction={true} style={{ paddingBottom: 24 }}>
+        <TransactionList
+          data={filterTransaction}
+          navigation={navigation}
+          user={user}
+          border={true}
+          style={transactionStyle.transactionItemWrap}
+        />
       </Refresh>
-      {filterTransaction?.length === 0 && (
+      {filterTransaction.length === 0 && (
         <Text
           style={{
             flex: 1,
@@ -159,7 +122,6 @@ const Transaction = ({ navigation }) => {
           list={list}
           onList={onList}
           document={filterTransaction}
-          filterState={state => setFilter(state)}
         />
       )}
     </View>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
-import moment from "moment";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import { ws } from "../lib/Socket";
 
@@ -8,9 +7,9 @@ import {
   Profile,
   Amount,
   TransactionContainer,
-  TransactionItem,
   Refresh,
   Button,
+  TransactionList,
 } from "../components";
 
 import { useUserContext } from "../hooks";
@@ -44,18 +43,29 @@ const Dashboard = ({ navigation }) => {
   const onLogout = async () => {
     const refreshToken = await getValueFor("refreshToken");
     ws.emit("logout", user.id);
-    await logout(refreshToken);
-    await deleteItem("accessToken");
-    await deleteItem("refreshToken");
-    await deleteItem("id");
-    await deleteItem("login");
-    await deleteItem("student");
-    setUser(prev => ({
-      ...prev,
-      id: undefined,
-      login: false,
-      student: false,
-    }));
+
+    const runLogout = logout(refreshToken);
+    const delAccessToken = deleteItem("accessToken");
+    const delRefreshToken = deleteItem("refreshToken");
+    const id = deleteItem("id");
+    const login = deleteItem("login");
+    const student = deleteItem("student");
+
+    Promise.all([
+      runLogout,
+      delAccessToken,
+      delRefreshToken,
+      id,
+      login,
+      student,
+    ]).then(() => {
+      setUser(prev => ({
+        ...prev,
+        id: undefined,
+        login: false,
+        student: false,
+      }));
+    });
   };
 
   useEffect(() => {
@@ -85,8 +95,8 @@ const Dashboard = ({ navigation }) => {
       });
     } else {
       ws.emit("get_transaction_cafe", user.id);
-      ws.on("set_transaction_cafe", msg => {
-        setTransactions(msg);
+      ws.on("set_transaction_cafe", data => {
+        setTransactions(data);
       });
 
       ws.on("get_notification", async notification => {
@@ -135,51 +145,12 @@ const Dashboard = ({ navigation }) => {
             />
           </View>
           <TransactionContainer>
-            {transactions
-              ?.slice(0, 5)
-              .map(
-                (
-                  {
-                    sender,
-                    amount,
-                    created_at,
-                    transaction_id,
-                    cafe_name,
-                    student_name,
-                    approved_by_recipient,
-                  },
-                  i
-                ) => {
-                  let details = {
-                    sender: `${student_name} (${sender})`,
-                    recipient: cafe_name,
-                    transactionId: transaction_id,
-                    amount: `RM${amount}`,
-                    date: `${moment(created_at).format(
-                      "D-MM-YYYY"
-                    )} at ${moment(created_at).format("h.mma")}`,
-                  };
-
-                  return (
-                    <TransactionItem
-                      key={i}
-                      transactionId={transaction_id}
-                      approved={approved_by_recipient}
-                      field1={sender}
-                      time={moment(created_at).format("h.mma")}
-                      date={moment(created_at).format("D-MM")}
-                      amount={amount}
-                      noBorder={i == 0 && true}
-                      cafe={!user.student}
-                      navigate={() =>
-                        navigation.navigate("Transaction Details", {
-                          data: details,
-                        })
-                      }
-                    />
-                  );
-                }
-              )}
+            <TransactionList
+              data={transactions}
+              navigation={navigation}
+              user={user}
+              slice={5}
+            />
           </TransactionContainer>
         </View>
       </Refresh>
