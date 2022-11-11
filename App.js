@@ -96,7 +96,13 @@ export default function App() {
                 component={Home}
                 options={{ headerShown: false }}
               />
-              <Stack.Screen name="QR Scan" component={QRScan} />
+              <Stack.Screen
+                name="QR Scan"
+                component={QRScan}
+                options={{
+                  headerShown: false,
+                }}
+              />
               <Stack.Screen
                 name="Pay"
                 component={PayNow}
