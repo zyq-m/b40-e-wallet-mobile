@@ -21,6 +21,7 @@ const TransactionItem = ({
   cafe,
   approved,
   transactionId,
+  style,
 }) => {
   const [checked, setChecked] = useState(approved);
 
@@ -38,7 +39,6 @@ const TransactionItem = ({
 
   const handleCheck = () => {
     if (!checked) {
-      console.log("1");
       updateChecked();
     } else {
       if (Platform.OS === "web") {
@@ -60,9 +60,19 @@ const TransactionItem = ({
       style={[
         transactionItemStyle.transactionItem,
         noBorder ? "" : transactionItemStyle.transactionItemBorder,
+        style,
       ]}>
-      <View style={[{ paddingLeft: 20, paddingVertical: 16 }]}>
-        <Text style={{ fontWeight: "500" }}>{field1}</Text>
+      <View
+        style={[
+          {
+            paddingLeft: 20,
+            paddingVertical: 16,
+            maxWidth: "70%",
+          },
+        ]}>
+        <Text numberOfLines={1} style={{ fontWeight: "500", marginBottom: 2 }}>
+          {field1}
+        </Text>
         <View style={{ flexDirection: "row" }}>
           <Text style={transactionItemStyle.transactionSmallTxt}>{time}</Text>
           <Text

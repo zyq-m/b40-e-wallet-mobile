@@ -3,7 +3,7 @@ import { Platform, RefreshControl, ScrollView, View } from "react-native";
 import { RefreshControl as WebRefreshControl } from "react-native-web-refresh-control";
 import { useUserContext } from "../hooks";
 
-const Refresh = ({ children, dashboard, transaction, cafeList }) => {
+const Refresh = ({ children, dashboard, transaction, cafeList, style }) => {
   const { setUser } = useUserContext();
   const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -40,26 +40,18 @@ const Refresh = ({ children, dashboard, transaction, cafeList }) => {
     });
   }, []);
 
-  if (Platform.OS === "web") {
-    return (
-      <ScrollView
-        refreshControl={
+  return (
+    <ScrollView
+      refreshControl={
+        Platform.OS === "web" ? (
           <WebRefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        <View style={{ paddingHorizontal: 16 }}>{children}</View>
-      </ScrollView>
-    );
-  } else {
-    return (
-      <ScrollView
-        refreshControl={
+        ) : (
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        style={{ paddingHorizontal: 16 }}>
-        {children}
-      </ScrollView>
-    );
-  }
+        )
+      }>
+      <View style={[{ paddingHorizontal: 16 }, style]}>{children}</View>
+    </ScrollView>
+  );
 };
 
 export default Refresh;

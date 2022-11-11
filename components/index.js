@@ -8,6 +8,7 @@ import TransactionItem from "./TransactionItem";
 import Refresh from "./Refresh";
 import FilterItem from "./FilterItem";
 import DocumentTemplate from "./DocumentTemplate";
+import TransactionList from "./TransactionList";
 
 export {
   Refresh,
@@ -19,5 +20,6 @@ export {
   Input,
   Profile,
   TransactionContainer,
+  TransactionList,
   TransactionItem,
 };

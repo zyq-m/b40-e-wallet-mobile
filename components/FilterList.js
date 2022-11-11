@@ -43,7 +43,7 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
           <Text style={filterStyle.filterHeader}>Sort by</Text>
         </View>
         <View style={{ marginTop: 10, marginBottom: 32 }}>
-          {list.map(({ id, label, checked }) => (
+          {list?.map(({ id, label, checked }) => (
             <FilterItem
               key={id}
               label={label}
