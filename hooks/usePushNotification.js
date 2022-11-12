@@ -43,11 +43,17 @@ export function usePushNotification() {
 
 async function schedulePushNotification(notification) {
   try {
+    if (Platform.OS === "web") {
+      alert(`${notification.title} - ${notification.body}`);
+      return;
+    }
+
     await Notifications.scheduleNotificationAsync({
       content: notification,
       trigger: null, // cause notification trigger immediately
     });
   } catch (error) {
+    console.warn(error);
     return;
   }
 }
