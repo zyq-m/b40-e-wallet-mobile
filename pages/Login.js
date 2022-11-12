@@ -93,10 +93,19 @@ const Login = () => {
       ]}>
       <View>
         <Image
+          style={{
+            width: 115,
+            height: 78,
+            alignSelf: "center",
+            marginBottom: 8,
+          }}
+          source={require("../assets/eKupon/logo.png")}
+        />
+        {/* <Image
           style={loginStyle.logo}
           source={require("../assets/logo-unisza.png")}
-        />
-        <Text style={loginStyle.loginHeader}>Welcome Back</Text>
+        /> */}
+        <Text style={loginStyle.loginHeader}>eKupon@UniSZA</Text>
         {cafeOwner ? (
           <Input label={"Username |"} value={cafeAcc} onChange={setCafeAcc} />
         ) : (

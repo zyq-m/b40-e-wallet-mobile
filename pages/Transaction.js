@@ -41,28 +41,28 @@ const Transaction = ({ navigation }) => {
   };
 
   useEffect(() => {
-    let subscribe = false;
+    let subscribe = true;
     const header = async () => {
-      navigation.setOptions({
-        headerRight: () => (
-          <View style={transactionStyle.row}>
-            <MaterialIcon
-              name="filter-list"
-              size={25}
-              onPress={onCollapse}
-              style={Platform.OS === "web" && { marginRight: 11 }}
-            />
-          </View>
-        ),
-      });
+      if (subscribe) {
+        navigation.setOptions({
+          headerRight: () => (
+            <View style={transactionStyle.row}>
+              <MaterialIcon
+                name="filter-list"
+                size={25}
+                onPress={onCollapse}
+                style={Platform.OS === "web" && { marginRight: 11 }}
+              />
+            </View>
+          ),
+        });
+      }
     };
 
-    if (!subscribe) {
-      header();
-    }
+    header();
 
     return () => {
-      subscribe = true;
+      subscribe = false;
     };
   }, []);
 

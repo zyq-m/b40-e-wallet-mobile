@@ -22,7 +22,7 @@ const CafeList = ({ navigation, route }) => {
     setRadioBtn(prev =>
       prev.map(data => {
         if (data.id == i) {
-          setSelectedCafe({ id: data.value, name: data.cafe_name });
+          setSelectedCafe({ id: data.value, name: data.label });
           return { ...data, selected: true };
         } else {
           return { ...data, selected: false };

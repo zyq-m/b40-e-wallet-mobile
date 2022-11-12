@@ -12,11 +12,10 @@ import {
   TransactionList,
 } from "../components";
 
-import { useUserContext } from "../hooks";
+import { useUserContext, usePushNotification, useCafe } from "../hooks";
 import { deleteItem, getValueFor } from "../utils/SecureStore";
 import { countTotal } from "../utils/countTotal";
 import { popupMessage } from "../utils/popupMessage";
-import { useCafe, usePushNotification } from "../hooks";
 import { logout } from "../lib/API";
 
 import { globals, dashboardStyle } from "../styles";
