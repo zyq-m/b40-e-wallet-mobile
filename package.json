@@ -8,8 +8,8 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "eas-build-android": "eas build -p android --profile local-apk",
-    "prebuild": "npx expo prebuild",
-    "rebuild": "npx expo prebuild --clean"
+    "build": "npx expo build:web",
+    "build-android": "npx expo prebuild"
   },
   "dependencies": {
     "@react-navigation/drawer": "^6.5.0",
@@ -46,6 +46,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@expo/webpack-config": "^0.17.3",
+    "expo-cli": "^6.0.8",
     "sharp-cli": "^2.1.1"
   },
   "private": true
