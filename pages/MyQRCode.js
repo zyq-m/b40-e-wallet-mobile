@@ -54,7 +54,7 @@ const MyQRCode = () => {
           <View style={QRStyles.QRWrapper}>
             <QRCode
               size={300}
-              value={`https://e-voucher-api.herokuapp.com/api/${user.id}`}
+              value={`${process.env.REACT_APP_API_KEY}/api/${user.id}/${cafeName}`}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
             />
           </View>

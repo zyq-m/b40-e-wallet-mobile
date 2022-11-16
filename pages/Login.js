@@ -1,61 +1,89 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image } from "react-native";
 
-import { loginCafe, loginStudent } from "../lib/API";
-import { useUserContext } from "../hooks";
+import { login } from "../lib/API";
+import { ws } from "../lib/Socket";
 
 import { Button, Input } from "../components";
 
 import { globals, loginStyle } from "../styles";
-import { save } from "../utils/SecureStore";
+import { getValueFor } from "../utils/SecureStore";
+import { popupMessage } from "../utils/popupMessage";
+import { useUserContext } from "../hooks";
 
-const Login = ({ navigation }) => {
+const Login = () => {
   const [cafeOwner, setCafeOwner] = useState(false);
   const [studentAcc, setStudentAcc] = useState("");
   const [cafeAcc, setCafeAcc] = useState("");
   const [password, setPassword] = useState("");
   const { setUser } = useUserContext();
 
-  const authUser = ({ id, student, cafe }) => {
+  const authUser = ({ id, student }) => {
     setUser(prev => ({
       ...prev,
       id: id,
       login: true,
       student: student || false,
-      cafe: cafe || false,
     }));
+  };
+
+  const handleDuplicateSocketUser = cafe => {
+    ws.on("login_error", async error => {
+      if (error) {
+        popupMessage({
+          title: "Cannot login",
+          message: "You only can login to 1 device",
+        });
+      } else {
+        if (cafe) {
+          authUser({ id: cafeAcc });
+        } else {
+          authUser({ id: studentAcc, student: true });
+        }
+      }
+      ws.removeAllListeners("login_error");
+    });
   };
 
   const onSubmit = async () => {
     if (cafeOwner) {
-      const res = await loginCafe({
-        username: cafeAcc,
-        password: password,
-      });
-
-      if (res) {
-        await save("id", cafeAcc);
-        authUser({ id: cafeAcc, cafe: true });
-        navigation.navigate("Home", { screen: "Dashboard" });
-      } else {
-        alert("Invalid username or password");
-      }
+      login("cafe", { username: cafeAcc, password: password })
+        .then(() => {
+          ws.emit("new_user", cafeAcc);
+          handleDuplicateSocketUser(true);
+        })
+        .catch(() => {
+          popupMessage({
+            title: "Cannot login",
+            message: "Invalid username or password",
+          });
+        });
     } else {
-      const res = await loginStudent({
-        matric_no: studentAcc,
-        password: password,
-      });
-
-      if (res) {
-        await save("id", studentAcc);
-        await save("student", true);
-        authUser({ id: studentAcc, student: true });
-        navigation.navigate("Home", { screen: "Dashboard" });
-      } else {
-        alert("Invalid matric no or password");
-      }
+      login("students", { matric_no: studentAcc, password: password })
+        .then(() => {
+          ws.emit("new_user", studentAcc);
+          handleDuplicateSocketUser(false);
+        })
+        .catch(() => {
+          popupMessage({
+            title: "Cannot login",
+            message: "Invalid matric no or password",
+          });
+        });
     }
   };
+
+  useEffect(() => {
+    // trigger sockect to update when page refresh
+    getValueFor("id")
+      .then(id => ws.emit("connected", id))
+      .catch(() => {
+        return;
+      });
+    return () => {
+      ws.removeAllListeners();
+    };
+  }, [ws]);
 
   return (
     <View
@@ -65,10 +93,19 @@ const Login = ({ navigation }) => {
       ]}>
       <View>
         <Image
+          style={{
+            width: 115,
+            height: 78,
+            alignSelf: "center",
+            marginBottom: 8,
+          }}
+          source={require("../assets/eKupon/logo.png")}
+        />
+        {/* <Image
           style={loginStyle.logo}
           source={require("../assets/logo-unisza.png")}
-        />
-        <Text style={loginStyle.loginHeader}>Welcome Back</Text>
+        /> */}
+        <Text style={loginStyle.loginHeader}>eKupon@UniSZA</Text>
         {cafeOwner ? (
           <Input label={"Username |"} value={cafeAcc} onChange={setCafeAcc} />
         ) : (

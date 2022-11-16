@@ -24,6 +24,7 @@ const Drawer = createDrawerNavigator();
 function Home() {
   return (
     <Drawer.Navigator
+      initialRouteName="Dashboard"
       screenOptions={{
         drawerStyle: { paddingTop: 16 },
         drawerActiveTintColor: "rgba(88, 83, 76, 1)",
@@ -33,12 +34,17 @@ function Home() {
         name="Dashboard"
         component={Dashboard}
         options={{
-          title: "e-Voucher",
-          headerTitleAlign: "center",
+          title: "eKupon",
           drawerLabel: "Home",
         }}
       />
-      <Drawer.Screen name="Report" component={Report} />
+      <Drawer.Screen
+        name="Report"
+        component={Report}
+        options={{
+          headerTitle: "Report a problem",
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -80,7 +86,6 @@ export default function App() {
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
-            headerTitleAlign: "center",
             headerStyle: { backgroundColor: "#FFD400" },
             animation: "fade_from_bottom",
           }}>
@@ -91,7 +96,13 @@ export default function App() {
                 component={Home}
                 options={{ headerShown: false }}
               />
-              <Stack.Screen name="QR Scan" component={QRScan} />
+              <Stack.Screen
+                name="QR Scan"
+                component={QRScan}
+                options={{
+                  headerShown: false,
+                }}
+              />
               <Stack.Screen
                 name="Pay"
                 component={PayNow}

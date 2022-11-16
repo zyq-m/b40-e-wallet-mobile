@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { RadioButton } from "react-native-radio-buttons-group";
 
 import { Button, Refresh } from "../components";
 
 import { useUserContext } from "../hooks";
-import { getCafe, setTransactions } from "../lib/API";
+import { getCafe } from "../lib/API";
+import { ws } from "../lib/Socket";
+import { popupMessage } from "../utils/popupMessage";
 
 import { globals } from "../styles";
 
@@ -20,7 +22,7 @@ const CafeList = ({ navigation, route }) => {
     setRadioBtn(prev =>
       prev.map(data => {
         if (data.id == i) {
-          setSelectedCafe(data.value);
+          setSelectedCafe({ id: data.value, name: data.label });
           return { ...data, selected: true };
         } else {
           return { ...data, selected: false };
@@ -29,23 +31,36 @@ const CafeList = ({ navigation, route }) => {
     );
 
   const onPress = () => {
-    selectedCafe &&
-      setTransactions({
-        id: selectedCafe,
-        data: {
-          sender: user.id,
-          amount: amount,
-        },
-      })
-        .then(() => {
-          alert("Payment successful👍");
-          navigation.navigate("Dashboard");
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Error occur");
-          navigation.navigate("Dashboard");
+    if (selectedCafe) {
+      ws.emit("pay", selectedCafe.id, user.id, amount);
+
+      ws.on("pay_detail", res => {
+        if (!res) {
+          return;
+        }
+
+        ws.emit("get_student", user.id);
+        ws.emit("get_transaction_student", user.id);
+
+        // TODO: update new data to only selected cafe
+        ws.emit("get_transaction_cafe", selectedCafe.id);
+        // TODO: set event to push notification
+        ws.emit("send_notification", selectedCafe.id, {
+          title: "Payment recieved",
+          body: `You recieved RM${amount}.00 from ${user.details.name} - ${user.details.id}`,
         });
+        ws.emit("send_notification", user.id, {
+          title: "Payment sent",
+          body: `You spent RM${amount}.00 at ${selectedCafe.name}`,
+        });
+
+        popupMessage({ title: "Success", message: "Payment successful👍" });
+        navigation.navigate("Dashboard");
+
+        // remove socket to avoid looping ascendingly
+        ws.removeAllListeners("pay_detail");
+      });
+    }
   };
 
   const fetchCafe = signal => {
@@ -60,7 +75,12 @@ const CafeList = ({ navigation, route }) => {
 
         setRadioBtn(newArr);
       })
-      .catch(() => alert("Please login again"));
+      .catch(() =>
+        popupMessage({
+          title: "Error",
+          message: "There's a problem please login again",
+        })
+      );
   };
 
   useEffect(() => {

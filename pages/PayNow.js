@@ -36,6 +36,7 @@ const PayNow = ({ navigation }) => {
     });
 
     if (total <= 6) {
+      // change value for testing
       if (Platform.OS === "web") {
         navigation.navigate("Cafe List", { amount: amount });
       } else {

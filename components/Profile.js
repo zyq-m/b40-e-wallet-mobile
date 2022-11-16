@@ -10,7 +10,9 @@ const Profile = ({ textField1, textField2, onLogout }) => {
         <FA name="user-circle" size={58} color="rgba(88, 83, 76, 1)" />
       </View>
       <View style={{ flex: 1, marginLeft: 6 }}>
-        <Text style={profileStyle.profileHeader}>{textField1}</Text>
+        <Text numberOfLines={1} style={profileStyle.profileHeader}>
+          {textField1}
+        </Text>
         <Text style={profileStyle.profileSub}>{textField2}</Text>
       </View>
       <MaterialIcon name="logout" size={30} onPress={onLogout} />

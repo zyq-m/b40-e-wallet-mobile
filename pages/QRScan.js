@@ -3,11 +3,12 @@ import { View, Image, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../components";
-import { setTransactions } from "../lib/API";
+import { ws } from "../lib/Socket";
 import { useUserContext } from "../hooks";
 import { checkURL } from "../utils/checkURL";
+import { popupMessage } from "../utils/popupMessage";
 
-import { globals, QRScanStyle } from "../styles";
+import { QRScanStyle } from "../styles";
 
 const QRScan = ({ navigation, route }) => {
   const { amount } = route.params;
@@ -22,27 +23,41 @@ const QRScan = ({ navigation, route }) => {
     }
   };
 
-  const navigate = () => {
-    setScanned(true);
-    navigation.navigate("Home");
-  };
-
   const handleQRScan = async ({ data }) => {
     const cafeId = checkURL(data);
-    const bodyData = {
-      sender: user.id,
-      amount: amount,
-    };
 
     if (cafeId) {
-      setTransactions({ id: cafeId, data: bodyData })
-        .then(() => {
-          alert("Payment successful👍");
-          navigate();
-        })
-        .catch(() => alert("Error occur"));
+      ws.emit("pay", cafeId.id, user.id, amount);
+
+      ws.on("pay_detail", res => {
+        if (!res) {
+          return;
+        }
+
+        ws.emit("get_student", user.id);
+        ws.emit("get_transaction_student", user.id);
+        ws.emit("get_transaction_cafe", cafeId.id);
+        // TODO: set event to push notification
+        ws.emit("send_notification", cafeId.id, {
+          title: "Payment recieved",
+          body: `You recieved RM${amount}.00 from ${user.details.name} - ${user.details.id}`,
+        });
+        ws.emit("send_notification", user.id, {
+          title: "Payment sent",
+          body: `You spent RM${amount}.00 at ${cafeId.name}`,
+        });
+
+        popupMessage({ title: "Success", message: "Payment successful👍" });
+        navigation.navigate("Dashboard");
+
+        // remove socket to avoid looping ascendingly
+        ws.removeAllListeners("pay_detail");
+      });
     } else {
-      alert("Invalid QR code. Please scan again");
+      popupMessage({
+        title: "Error",
+        message: "Invalid QR code. Please scan again.",
+      });
     }
 
     setScanned(true);
@@ -53,10 +68,10 @@ const QRScan = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View style={[globals.container, { paddingHorizontal: 16 }]}>
+    <View style={[{ flex: 1, paddingHorizontal: 16, backgroundColor: "#000" }]}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleQRScan}
-        style={QRScanStyle.barcode}
+        style={StyleSheet.absoluteFill}
       />
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View style={QRScanStyle.scanner}>
