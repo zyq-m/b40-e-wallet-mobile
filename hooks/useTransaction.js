@@ -18,13 +18,15 @@ export const useTransaction = ({ id, student, refresh }) => {
           signal: signal,
         }
       );
-      setTransactions(res.data);
+      const data = await res.data;
+      setTransactions(data);
       setLoading(false);
     } catch (error) {
-      if (axios.isCancel(err)) {
+      if (axios.isCancel(error)) {
         setError("Try refresh again");
         setLoading(true);
       }
+      setError("No transaction found");
     }
   };
 
