@@ -6,32 +6,38 @@ export const useFilterDate = () => {
 
   const filterDate = arr => {
     // filter by current day
-    const getToday = () => arr.filter(data => {
-      const date = moment(data.created_at).format(dateFormat);
+    const getToday = () =>
+      arr.filter(data => {
+        const date = moment(data.created_on).format(dateFormat);
 
-      return date === currentDate.format(dateFormat);
-    });
+        return date === currentDate.format(dateFormat);
+      });
 
     // filter by current week
-    const getWeek = () => arr.filter(data => {
-      const firstDay = currentDate.startOf("week").dayOfYear()
-      const lastDay = currentDate.endOf("week").dayOfYear()
-      const date = moment(data.created_at).dayOfYear()
+    const getWeek = () =>
+      arr.filter(data => {
+        const firstDay = currentDate.startOf("week").dayOfYear();
+        const lastDay = currentDate.endOf("week").dayOfYear();
+        const date = moment(data.created_on).dayOfYear();
 
-      return date >= firstDay && date <= lastDay;
-    });
+        return date >= firstDay && date <= lastDay;
+      });
 
     // filter by current month
-    const getMonth = () => arr.filter(data => {
-      const date = moment(data.created_at).month();
+    const getMonth = () =>
+      arr.filter(data => {
+        const date = moment(data.created_on).month();
 
-      return date === currentDate.month();
-    });
+        return date === currentDate.month();
+      });
 
-    const getAll = () => arr
+    const getAll = () => arr;
 
     return {
-      getAll, getToday, getWeek, getMonth
+      getAll,
+      getToday,
+      getWeek,
+      getMonth,
     };
   };
 
