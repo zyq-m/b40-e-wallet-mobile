@@ -1,5 +1,5 @@
 import { memo } from "react";
-import moment from "moment";
+import { formatTime, formatDate } from "../utils/formatTime";
 
 import TransactionItem from "./TransactionItem";
 
@@ -15,6 +15,7 @@ const TransactionList = ({ data, user, navigation, style, border, slice }) => {
                 sender,
                 amount,
                 created_at,
+                created_on,
                 transaction_id,
                 cafe_name,
                 student_name,
@@ -27,9 +28,7 @@ const TransactionList = ({ data, user, navigation, style, border, slice }) => {
                 recipient: cafe_name,
                 transactionId: transaction_id,
                 amount: `RM${amount}`,
-                date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(
-                  created_at
-                ).format("h.mma")}`,
+                date: `${formatDate(created_on)} at ${formatTime(created_at)}`,
               };
 
               return (
@@ -38,8 +37,8 @@ const TransactionList = ({ data, user, navigation, style, border, slice }) => {
                   transactionId={transaction_id}
                   approved={approved_by_recipient}
                   field1={details.sender}
-                  time={moment(created_at).format("hh.mma")}
-                  date={moment(created_at).format("DD/MM/YY")}
+                  time={formatTime(created_at)}
+                  date={formatDate(created_on)}
                   amount={amount}
                   noBorder={i == 0 && true}
                   cafe={!user.student}
@@ -64,6 +63,7 @@ const TransactionList = ({ data, user, navigation, style, border, slice }) => {
             sender,
             amount,
             created_at,
+            created_on,
             transaction_id,
             cafe_name,
             student_name,
@@ -76,9 +76,7 @@ const TransactionList = ({ data, user, navigation, style, border, slice }) => {
             recipient: cafe_name,
             transactionId: transaction_id,
             amount: `RM${amount}`,
-            date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(
-              created_at
-            ).format("h.mma")}`,
+            date: `${formatDate(created_on)} at ${formatTime(created_at)}`,
           };
 
           return (
@@ -87,8 +85,8 @@ const TransactionList = ({ data, user, navigation, style, border, slice }) => {
               transactionId={transaction_id}
               field1={details.sender}
               approved={approved_by_recipient}
-              time={moment(created_at).format("h.mma")}
-              date={moment(created_at).format("D-MM")}
+              time={formatTime(created_at)}
+              date={formatDate(created_on)}
               amount={amount}
               cafe={!user.student}
               noBorder={!border && i == 0}
