@@ -13,9 +13,6 @@
     "local-apk": {
       "android": {
         "buildType": "apk"
-      },
-      "env": {
-        "REACT_APP_API_KEY": "https://e-voucher-api.herokuapp.com"
       }
     },
     "production": {}
