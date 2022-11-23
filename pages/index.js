@@ -7,8 +7,10 @@ import QRScan from "./QRScan";
 import Transaction from "./Transaction";
 import TransactionDetail from "./TransactionDetail";
 import Report from "./Report";
+import ChangePassword from "./ChangePassword";
 
 export {
+  ChangePassword,
   CafeList,
   Dashboard,
   Login,
