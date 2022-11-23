@@ -39,6 +39,10 @@ const ChangePassword = ({ navigation }) => {
       setCurrPass("");
       setRePass("");
       setNewPass("");
+      popupMessage({
+        message: "Password changed successful",
+        title: "Success",
+      });
       navigation.navigate("Dashboard");
     } catch (error) {
       popupMessage({ message: "Wrong current password", title: "Alert" });
