@@ -14,6 +14,7 @@ import {
   Transaction,
   TransactionDetail,
   Report,
+  ChangePassword,
 } from "./pages";
 import { UserContext } from "./lib/Context";
 import { getValueFor } from "./utils/SecureStore";
@@ -45,6 +46,7 @@ function Home() {
           headerTitle: "Report a problem",
         }}
       />
+      <Drawer.Screen name="Change password" component={ChangePassword} />
     </Drawer.Navigator>
   );
 }
