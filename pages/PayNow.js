@@ -54,8 +54,9 @@ const PayNow = ({ navigation }) => {
       .then(res => {
         return res.filter(
           data =>
-            moment(data.created_at).format("D-MM-YY") ===
+            moment(data.created_on).format("D-MM-YY") ===
             moment().format("D-MM-YY")
+          // ! created_at = time, created_on = date
         );
       })
       .then(filtered => setTransactionDate(filtered))
