@@ -12,7 +12,12 @@ import {
   TransactionList,
 } from "../components";
 
-import { useUserContext, usePushNotification, useCafe } from "../hooks";
+import {
+  useUserContext,
+  usePushNotification,
+  useCafe,
+  useLogout,
+} from "../hooks";
 import { deleteItem, getValueFor } from "../utils/SecureStore";
 import { countTotal } from "../utils/countTotal";
 import { popupMessage } from "../utils/popupMessage";
@@ -25,6 +30,7 @@ const Dashboard = ({ navigation }) => {
   const [total, setTotal] = useState(0);
   const { schedulePushNotification } = usePushNotification();
   const { cafe } = useCafe({ id: user.id, student: user.student });
+  const { onLogout } = useLogout();
 
   const [students, setStudents] = useState();
   const [transactions, setTransactions] = useState();
@@ -37,34 +43,6 @@ const Dashboard = ({ navigation }) => {
     } else {
       navigation.navigate("My QRCode");
     }
-  };
-
-  const onLogout = async () => {
-    const refreshToken = await getValueFor("refreshToken");
-    ws.emit("logout", user.id);
-
-    const runLogout = logout(refreshToken);
-    const delAccessToken = deleteItem("accessToken");
-    const delRefreshToken = deleteItem("refreshToken");
-    const id = deleteItem("id");
-    const login = deleteItem("login");
-    const student = deleteItem("student");
-
-    Promise.all([
-      runLogout,
-      delAccessToken,
-      delRefreshToken,
-      id,
-      login,
-      student,
-    ]).then(() => {
-      setUser(prev => ({
-        ...prev,
-        id: undefined,
-        login: false,
-        student: false,
-      }));
-    });
   };
 
   useEffect(() => {
