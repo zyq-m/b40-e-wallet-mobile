@@ -1,6 +1,6 @@
 {
   "name": "ekupon@unisza",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "engines": {
     "node": "16.16.0"
   },
