@@ -35,7 +35,7 @@ function Home() {
         name="Dashboard"
         component={Dashboard}
         options={{
-          title: "eKupon",
+          title: "eKupon@UniSZA",
           drawerLabel: "Home",
         }}
       />
