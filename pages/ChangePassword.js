@@ -15,12 +15,42 @@ const ChangePassword = ({ navigation }) => {
   const { user } = useUserContext();
 
   const handleSend = async () => {
+    const reg = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
+
     const data = {
       currentPassword: currPass,
       newPassword: newPass,
     };
 
     // ! buat validation pass & re-type pass
+    if (!reg.test(newPass)) {
+      popupMessage({
+        message:
+          "Password must be at least a number, and at least a special character",
+        title: "Alert",
+      });
+
+      return;
+    }
+
+    if (newPass.length < 8) {
+      popupMessage({
+        message: "Password must be atleast 8 characters",
+        title: "Alert",
+      });
+
+      return;
+    }
+
+    if (newPass.length === 20) {
+      popupMessage({
+        message: "Password is too long",
+        title: "Alert",
+      });
+
+      return;
+    }
+
     if (rePass !== newPass) {
       popupMessage({
         message: "Retype password doesn't match",
@@ -29,6 +59,7 @@ const ChangePassword = ({ navigation }) => {
 
       return;
     }
+
     try {
       if (user.student) {
         await changeStudentPass(user.id, data);
