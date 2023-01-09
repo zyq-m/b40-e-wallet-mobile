@@ -18,10 +18,8 @@ import {
   useCafe,
   useLogout,
 } from "../hooks";
-import { deleteItem, getValueFor } from "../utils/SecureStore";
 import { countTotal } from "../utils/countTotal";
 import { popupMessage } from "../utils/popupMessage";
-import { logout } from "../lib/API";
 
 import { globals, dashboardStyle } from "../styles";
 

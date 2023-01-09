@@ -27,30 +27,12 @@ const Login = () => {
     }));
   };
 
-  const handleDuplicateSocketUser = cafe => {
-    ws.on("login_error", async error => {
-      if (error) {
-        popupMessage({
-          title: "Cannot login",
-          message: "You only can login to 1 device",
-        });
-      } else {
-        if (cafe) {
-          authUser({ id: cafeAcc });
-        } else {
-          authUser({ id: studentAcc, student: true });
-        }
-      }
-      ws.removeAllListeners("login_error");
-    });
-  };
-
   const onSubmit = async () => {
     if (cafeOwner) {
       login("cafe", { username: cafeAcc, password: password })
         .then(() => {
           ws.emit("new_user", cafeAcc);
-          handleDuplicateSocketUser(true);
+          authUser({ id: cafeAcc });
         })
         .catch(() => {
           popupMessage({
@@ -62,7 +44,7 @@ const Login = () => {
       login("students", { matric_no: studentAcc, password: password })
         .then(() => {
           ws.emit("new_user", studentAcc);
-          handleDuplicateSocketUser(false);
+          authUser({ id: studentAcc, student: true });
         })
         .catch(() => {
           popupMessage({
@@ -75,11 +57,12 @@ const Login = () => {
 
   useEffect(() => {
     // trigger sockect to update when page refresh
-    getValueFor("id")
-      .then(id => ws.emit("connected", id))
-      .catch(() => {
-        return;
-      });
+    getValueFor("id").then(id => {
+      if (id !== null) {
+        console.log(id);
+        ws.emit("new_user", id);
+      }
+    });
     return () => {
       ws.removeAllListeners();
     };
@@ -101,10 +84,6 @@ const Login = () => {
           }}
           source={require("../assets/eKupon/logo.png")}
         />
-        {/* <Image
-          style={loginStyle.logo}
-          source={require("../assets/logo-unisza.png")}
-        /> */}
         <Text style={loginStyle.loginHeader}>eKupon@UniSZA</Text>
         {cafeOwner ? (
           <Input label={"Username |"} value={cafeAcc} onChange={setCafeAcc} />
