@@ -59,7 +59,6 @@ const Login = () => {
     // trigger sockect to update when page refresh
     getValueFor("id").then(id => {
       if (id !== null) {
-        console.log(id);
         ws.emit("new_user", id);
       }
     });
