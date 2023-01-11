@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/eKupon/adaptive-icon2.png",
         "backgroundColor": "#FFD400"
       },
-      "package": "com.zyq.m.b40ewallet"
+      "package": "com.zyq.m.b40ewallet",
+      "versionCode": 2 // change this version everytime you update with new features
     },
     "web": {
       "favicon": "./assets/eKupon/favicon.png"
