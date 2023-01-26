@@ -9,7 +9,7 @@ import { globals, payNowStyle } from "../styles";
 
 const PayNow = ({ navigation }) => {
   const [active, setActive] = useState({ btn1: true, btn2: false });
-  const [total, setTotal] = useState([]);
+  const [total, setTotal] = useState(undefined);
   const { user } = useUserContext();
   const [disable, setDisable] = useState(true);
 
@@ -30,7 +30,7 @@ const PayNow = ({ navigation }) => {
       amount = 2;
     }
 
-    if (total + parseInt(amount) <= 6) {
+    if (total + amount <= 6) {
       // change value for testing
       if (Platform.OS === "web") {
         navigation.navigate("Cafe List", { amount: amount });
@@ -46,8 +46,10 @@ const PayNow = ({ navigation }) => {
     const controller = new AbortController();
 
     getTotalSpent(user.id, controller.signal)
-      .then(res => setTotal(res?.[0]?.total))
-      .then(setDisable(false))
+      .then(res => {
+        setTotal(parseInt(res?.[0]?.total));
+        setDisable(false);
+      })
       .catch(error => console.warn(error));
 
     return () => {
