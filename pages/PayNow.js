@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import { View, Text, TouchableOpacity, Platform } from "react-native";
 
 import { Button } from "../components";
-import { getStudentTransactions } from "../lib/API";
+import { getTotalSpent } from "../lib/API";
 import { useUserContext } from "../hooks";
 
 import { globals, payNowStyle } from "../styles";
 
 const PayNow = ({ navigation }) => {
   const [active, setActive] = useState({ btn1: true, btn2: false });
-  const [transactionDate, setTransactionDate] = useState([]);
+  const [total, setTotal] = useState(undefined);
   const { user } = useUserContext();
+  const [disable, setDisable] = useState(true);
 
   const onActive = value => {
     if ("btn1" === value) {
@@ -30,12 +30,7 @@ const PayNow = ({ navigation }) => {
       amount = 2;
     }
 
-    let total = amount;
-    transactionDate.forEach(({ amount }) => {
-      total += parseInt(amount);
-    });
-
-    if (total <= 6) {
+    if (total + amount <= 6) {
       // change value for testing
       if (Platform.OS === "web") {
         navigation.navigate("Cafe List", { amount: amount });
@@ -50,16 +45,11 @@ const PayNow = ({ navigation }) => {
   useEffect(() => {
     const controller = new AbortController();
 
-    getStudentTransactions(user.id, controller.signal)
+    getTotalSpent(user.id, controller.signal)
       .then(res => {
-        return res.filter(
-          data =>
-            moment(data.created_on).format("D-MM-YY") ===
-            moment().format("D-MM-YY")
-          // ! created_at = time, created_on = date
-        );
+        setTotal(parseInt(res?.[0]?.total));
+        setDisable(false);
       })
-      .then(filtered => setTransactionDate(filtered))
       .catch(error => console.warn(error));
 
     return () => {
@@ -95,7 +85,7 @@ const PayNow = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={{ paddingBottom: 24 }}>
-        <Button label={"Next"} onPress={onRoute} />
+        <Button label={"Next"} onPress={onRoute} disable={disable} />
       </View>
     </View>
   );
