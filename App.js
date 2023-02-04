@@ -15,6 +15,7 @@ import {
   TransactionDetail,
   Report,
   ChangePassword,
+  Profile,
 } from "./pages";
 import { UserContext } from "./lib/Context";
 import { getValueFor } from "./utils/SecureStore";
@@ -40,13 +41,21 @@ function Home() {
         }}
       />
       <Drawer.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerTitle: "Update profile",
+        }}
+      />
+      <Drawer.Screen name="Transactions" component={Transaction} />
+      <Drawer.Screen name="Change password" component={ChangePassword} />
+      <Drawer.Screen
         name="Report"
         component={Report}
         options={{
           headerTitle: "Report a problem",
         }}
       />
-      <Drawer.Screen name="Change password" component={ChangePassword} />
     </Drawer.Navigator>
   );
 }
@@ -125,6 +134,9 @@ export default function App() {
                 name="Transaction Details"
                 component={TransactionDetail}
               />
+              {!user.student && (
+                <Stack.Screen name="Profile" component={Profile} />
+              )}
             </>
           ) : (
             <Stack.Screen
