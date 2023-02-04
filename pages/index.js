@@ -8,6 +8,7 @@ import Transaction from "./Transaction";
 import TransactionDetail from "./TransactionDetail";
 import Report from "./Report";
 import ChangePassword from "./ChangePassword";
+import Profile from "./Profile";
 
 export {
   ChangePassword,
@@ -20,4 +21,5 @@ export {
   Transaction,
   TransactionDetail,
   Report,
+  Profile,
 };
