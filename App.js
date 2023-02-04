@@ -19,11 +19,14 @@ import {
 } from "./pages";
 import { UserContext } from "./lib/Context";
 import { getValueFor } from "./utils/SecureStore";
+import { useUserContext } from "./hooks";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function Home() {
+  const { user } = useUserContext();
+
   return (
     <Drawer.Navigator
       initialRouteName="Dashboard"
@@ -40,13 +43,15 @@ function Home() {
           drawerLabel: "Home",
         }}
       />
-      <Drawer.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          headerTitle: "Update profile",
-        }}
-      />
+      {!user.student && (
+        <Drawer.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerTitle: "Update profile",
+          }}
+        />
+      )}
       <Drawer.Screen name="Transactions" component={Transaction} />
       <Drawer.Screen name="Change password" component={ChangePassword} />
       <Drawer.Screen
