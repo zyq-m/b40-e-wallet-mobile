@@ -18,7 +18,6 @@ import {
   useCafe,
   useLogout,
 } from "../hooks";
-import { countTotal } from "../utils/countTotal";
 import { popupMessage } from "../utils/popupMessage";
 
 import { globals, dashboardStyle } from "../styles";
