@@ -51,7 +51,7 @@ const Dashboard = ({ navigation }) => {
 
       ws.emit("get_student", user.id);
       ws.on("set_student", data => {
-        // set wallet amount
+        // set wallet amount, name, matric no
         setStudents(data);
         setUser(prev => ({
           ...prev,
