@@ -108,26 +108,32 @@ const Dashboard = ({ navigation }) => {
             onPress={onNavigate}
           />
         </View>
-        <View style={{ marginTop: 40, marginBottom: 24 }}>
-          <View style={[dashboardStyle.transactionHeaderWrap]}>
-            <Text style={dashboardStyle.transactionHeader}>
-              Recent transaction
-            </Text>
-            <FeatherIcon
-              name="more-horizontal"
-              size={25}
-              onPress={() => navigation.navigate("Transactions")}
-            />
+        {transactions?.length > 0 ? (
+          <View style={{ marginTop: 40, marginBottom: 24 }}>
+            <View style={[dashboardStyle.transactionHeaderWrap]}>
+              <Text style={dashboardStyle.transactionHeader}>
+                Recent transaction
+              </Text>
+              <FeatherIcon
+                name="more-horizontal"
+                size={25}
+                onPress={() => navigation.navigate("Transactions")}
+              />
+            </View>
+            <TransactionContainer>
+              <TransactionList
+                data={transactions}
+                navigation={navigation}
+                user={user}
+                slice={5}
+              />
+            </TransactionContainer>
           </View>
-          <TransactionContainer>
-            <TransactionList
-              data={transactions}
-              navigation={navigation}
-              user={user}
-              slice={5}
-            />
-          </TransactionContainer>
-        </View>
+        ) : (
+          <Text style={[dashboardStyle.transactionHeader, { marginTop: 40 }]}>
+            No recent transactions
+          </Text>
+        )}
       </Refresh>
     </View>
   );

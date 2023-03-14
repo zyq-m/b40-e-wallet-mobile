@@ -52,7 +52,7 @@ function Home() {
           }}
         />
       )}
-      <Drawer.Screen name="Transactions" component={Transaction} />
+      <Drawer.Screen name="Transactions History" component={Transaction} />
       <Drawer.Screen name="Change password" component={ChangePassword} />
       <Drawer.Screen
         name="Report"
