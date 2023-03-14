@@ -45,16 +45,13 @@ const Dashboard = ({ navigation }) => {
   useEffect(() => {
     // send id to get transaction
     if (user.student) {
-      // get wallet balance
-      ws.emit("get_wallet_balance", user.id);
-      ws.on("set_wallet_balance", data => setTotal(data));
-
       ws.emit("get_transaction_student", user.id);
       // receive new data
       ws.on("set_transaction_student", data => setTransactions(data));
 
       ws.emit("get_student", user.id);
       ws.on("set_student", data => {
+        // set wallet amount
         setStudents(data);
         setUser(prev => ({
           ...prev,
@@ -68,6 +65,10 @@ const Dashboard = ({ navigation }) => {
         }
       });
     } else {
+      // get sales amount
+      ws.emit("get_sales_amount", user.id);
+      ws.on("set_sales_amount", data => setTotal(data?.total_sales));
+
       ws.emit("get_transaction_cafe", user.id);
       ws.on("set_transaction_cafe", data => {
         setTransactions(data);
