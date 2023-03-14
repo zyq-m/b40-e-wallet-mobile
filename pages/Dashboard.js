@@ -67,7 +67,7 @@ const Dashboard = ({ navigation }) => {
     } else {
       // get sales amount
       ws.emit("get_sales_amount", user.id);
-      ws.on("set_sales_amount", data => setTotal(data?.total_sales));
+      ws.on("set_sales_amount", data => setTotal(data?.total_sales || 0));
 
       ws.emit("get_transaction_cafe", user.id);
       ws.on("set_transaction_cafe", data => {
