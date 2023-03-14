@@ -18,7 +18,6 @@ import {
   useCafe,
   useLogout,
 } from "../hooks";
-import { countTotal } from "../utils/countTotal";
 import { popupMessage } from "../utils/popupMessage";
 
 import { globals, dashboardStyle } from "../styles";
@@ -44,10 +43,6 @@ const Dashboard = ({ navigation }) => {
   };
 
   useEffect(() => {
-    transactions && setTotal(countTotal(transactions));
-  }, [transactions]);
-
-  useEffect(() => {
     // send id to get transaction
     if (user.student) {
       ws.emit("get_transaction_student", user.id);
@@ -56,6 +51,7 @@ const Dashboard = ({ navigation }) => {
 
       ws.emit("get_student", user.id);
       ws.on("set_student", data => {
+        // set wallet amount, name, matric no
         setStudents(data);
         setUser(prev => ({
           ...prev,
@@ -69,6 +65,10 @@ const Dashboard = ({ navigation }) => {
         }
       });
     } else {
+      // get sales amount
+      ws.emit("get_sales_amount", user.id);
+      ws.on("set_sales_amount", data => setTotal(data?.total_sales || 0));
+
       ws.emit("get_transaction_cafe", user.id);
       ws.on("set_transaction_cafe", data => {
         setTransactions(data);
@@ -108,26 +108,32 @@ const Dashboard = ({ navigation }) => {
             onPress={onNavigate}
           />
         </View>
-        <View style={{ marginTop: 40, marginBottom: 24 }}>
-          <View style={[dashboardStyle.transactionHeaderWrap]}>
-            <Text style={dashboardStyle.transactionHeader}>
-              Recent transaction
-            </Text>
-            <FeatherIcon
-              name="more-horizontal"
-              size={25}
-              onPress={() => navigation.navigate("Transactions")}
-            />
+        {transactions?.length > 0 ? (
+          <View style={{ marginTop: 40, marginBottom: 24 }}>
+            <View style={[dashboardStyle.transactionHeaderWrap]}>
+              <Text style={dashboardStyle.transactionHeader}>
+                Recent transaction
+              </Text>
+              <FeatherIcon
+                name="more-horizontal"
+                size={25}
+                onPress={() => navigation.navigate("Transactions")}
+              />
+            </View>
+            <TransactionContainer>
+              <TransactionList
+                data={transactions}
+                navigation={navigation}
+                user={user}
+                slice={5}
+              />
+            </TransactionContainer>
           </View>
-          <TransactionContainer>
-            <TransactionList
-              data={transactions}
-              navigation={navigation}
-              user={user}
-              slice={5}
-            />
-          </TransactionContainer>
-        </View>
+        ) : (
+          <Text style={[dashboardStyle.transactionHeader, { marginTop: 40 }]}>
+            No recent transactions
+          </Text>
+        )}
       </Refresh>
     </View>
   );
