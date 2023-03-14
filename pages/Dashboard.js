@@ -44,12 +44,12 @@ const Dashboard = ({ navigation }) => {
   };
 
   useEffect(() => {
-    transactions && setTotal(countTotal(transactions));
-  }, [transactions]);
-
-  useEffect(() => {
     // send id to get transaction
     if (user.student) {
+      // get wallet balance
+      ws.emit("get_wallet_balance", user.id);
+      ws.on("set_wallet_balance", data => setTotal(data));
+
       ws.emit("get_transaction_student", user.id);
       // receive new data
       ws.on("set_transaction_student", data => setTransactions(data));
