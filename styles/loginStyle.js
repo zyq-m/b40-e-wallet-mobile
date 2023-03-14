@@ -33,7 +33,7 @@ const loginStyle = StyleSheet.create({
   smallText: {
     marginTop: 21,
     color: "rgba(0, 0, 0, 0.62)",
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: "700",
     textAlign: "center",
   },
