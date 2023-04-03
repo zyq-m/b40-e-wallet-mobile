@@ -2,7 +2,7 @@
   "expo": {
     "name": "eKupon",
     "slug": "b40-e-wallet",
-    "version": "1.3.4",
+    "version": "1.3.6",
     "orientation": "portrait",
     "icon": "./assets/eKupon/icon.png",
     "userInterfaceStyle": "light",
@@ -24,7 +24,7 @@
         "backgroundColor": "#FFD400"
       },
       "package": "com.zyq.m.b40ewallet",
-      "versionCode": 2 // change this version everytime you update with new features
+      "versionCode": 4 // change this version everytime you update with new features
     },
     "web": {
       "favicon": "./assets/eKupon/favicon.png"
