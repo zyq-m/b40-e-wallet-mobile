@@ -25,7 +25,6 @@
     "expo": "~47.0.12",
     "expo-barcode-scanner": "~12.1.0",
     "expo-checkbox": "~2.2.2",
-    "expo-cli": "^6.3.2",
     "expo-dev-client": "~2.0.1",
     "expo-device": "~5.0.0",
     "expo-notifications": "~0.17.0",
@@ -55,6 +54,7 @@
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
+    "expo-cli": "^6.3.2",
     "sharp-cli": "^2.1.0"
   },
   "private": true
