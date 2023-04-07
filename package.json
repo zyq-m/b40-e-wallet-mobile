@@ -2,8 +2,8 @@
   "name": "ekupon@unisza",
   "version": "1.3.6",
   "engines": {
-    "node": "18.15.0",
-    "npm": "9.6.4"
+    "node": ">=18.15.0",
+    "npm": ">=9.6.4"
   },
   "scripts": {
     "start": "expo start",
