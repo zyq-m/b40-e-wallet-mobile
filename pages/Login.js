@@ -10,6 +10,7 @@ import { globals, loginStyle } from "../styles";
 import { getValueFor } from "../utils/SecureStore";
 import { popupMessage } from "../utils/popupMessage";
 import { useUserContext } from "../hooks";
+import { REACT_APP_API_KEY_LOCAL, REACT_APP_API_KEY } from "@env";
 
 const Login = () => {
   const [cafeOwner, setCafeOwner] = useState(false);
@@ -37,7 +38,7 @@ const Login = () => {
         .catch(() => {
           popupMessage({
             title: "Cannot login",
-            message: "Invalid username or password",
+            message: `Invalid username or password ${REACT_APP_API_KEY}`,
           });
         });
     } else {
