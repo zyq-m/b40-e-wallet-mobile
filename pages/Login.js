@@ -38,7 +38,7 @@ const Login = () => {
         .catch(() => {
           popupMessage({
             title: "Cannot login",
-            message: `Invalid username or password ${REACT_APP_API_KEY}`,
+            message: "Invalid username or password",
           });
         });
     } else {
@@ -47,10 +47,10 @@ const Login = () => {
           ws.emit("new_user", studentAcc);
           authUser({ id: studentAcc, student: true });
         })
-        .catch(() => {
+        .catch(err => {
           popupMessage({
             title: "Cannot login",
-            message: "Invalid matric no or password",
+            message: `Invalid matric no or password ${err}`,
           });
         });
     }
