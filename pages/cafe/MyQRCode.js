@@ -6,18 +6,19 @@ import { api } from "../../services/axiosInstance";
 import { useUserContext } from "../../hooks";
 import { globals } from "../../styles";
 
-const MyQRCode = () => {
+const MyQRCode = ({ route }) => {
   const { user } = useUserContext();
-  const [cafeName, setCafeName] = useState(undefined);
+  const [qr, setQr] = useState(undefined);
   const [loading, setLoading] = useState(true);
+  const { loyalty } = route.params;
 
   useEffect(() => {
     const controller = new AbortController();
     api
-      .get(`/api/cafe/${user.id}`, {
+      .get(`/cafe/qr/${loyalty ? "loyalty" : "ekupon"}/${user.id}`, {
         signal: controller.signal,
       })
-      .then((name) => setCafeName(name.data[0].cafe_name))
+      .then((res) => setQr(res.data.data))
       .then(() => setLoading(false))
       .catch((err) => console.error(err));
     return () => {
@@ -51,16 +52,16 @@ const MyQRCode = () => {
         },
       ]}
     >
-      {cafeName && (
+      {qr && (
         <>
           <View style={QRStyles.QRWrapper}>
             <QRCode
               size={300}
-              value={`${process.env.REACT_APP_API_KEY}/api/${user.id}/${cafeName}`}
+              value={qr?.url}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
             />
           </View>
-          <Text style={QRStyles.cafeName}>{cafeName}</Text>
+          <Text style={QRStyles.cafeName}>{qr?.name}</Text>
         </>
       )}
     </View>
