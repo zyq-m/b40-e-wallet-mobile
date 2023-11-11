@@ -15,7 +15,7 @@ const Transaction = ({ navigation }) => {
   const { user } = useUserContext();
   const { transactions, loading, error } = useTransaction({
     id: user.id,
-    // student: user.student,
+    role: user.role,
     refresh: user.transaction.refresh,
   });
 
