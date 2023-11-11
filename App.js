@@ -45,13 +45,19 @@ function Home() {
         }}
       />
       {user?.role === "CAFE" && (
-        <Drawer.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            headerTitle: "Update profile",
-          }}
-        />
+        <>
+          <Drawer.Screen
+            name="Profile"
+            component={Profile}
+            options={{
+              headerTitle: "Update profile",
+            }}
+          />
+          <Drawer.Screen
+            name="One-time pin"
+            component={Profile} // Create new page for this
+          />
+        </>
       )}
       <Drawer.Screen name="Transactions History" component={Transaction} />
       <Drawer.Screen name="Change password" component={ChangePassword} />
@@ -71,6 +77,7 @@ export default function App() {
     dashboard: { refresh: false },
     transaction: { refresh: false },
     cafeList: { refresh: false },
+    qr: { refresh: false },
   });
 
   const loadContext = async () => {
@@ -130,14 +137,19 @@ export default function App() {
                   title: "Choose a cafe",
                 }}
               />
-              <Stack.Screen name="My QRCode" component={MyQRCode} />
               <Stack.Screen name="Transactions" component={Transaction} />
               <Stack.Screen
                 name="Transaction Details"
                 component={TransactionDetail}
               />
               {user?.role === "CAFE" && (
-                <Stack.Screen name="Profile" component={Profile} />
+                <>
+                  <Stack.Screen name="Profile" component={Profile} />
+                  <Stack.Screen name="My QRCode" component={MyQRCode} />
+                  <Stack.Screen name="One-time QRCode" component={PayNow} />
+                  <Stack.Screen name="Green Campus" component={MyQRCode} />
+                  <Stack.Screen name="Cashless" component={MyQRCode} />
+                </>
               )}
             </>
           ) : (
