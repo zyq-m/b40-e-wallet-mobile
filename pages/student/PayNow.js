@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Platform } from "react-native";
 
 import { Button } from "../../components";
-import { useUserContext } from "../../hooks";
 
 import { globals, payNowStyle } from "../../styles";
 
@@ -38,14 +37,14 @@ const PayNow = ({ navigation, route }) => {
           {
             id: 1,
             name: "Cashless",
-            amount: 1,
+            amount: 0,
             active: true,
             screen: "Cashless",
           },
           {
             id: 2,
             name: "Green Campus",
-            amount: 1,
+            amount: 0,
             active: false,
             screen: "Green Campus",
           },
@@ -59,6 +58,7 @@ const PayNow = ({ navigation, route }) => {
       const title = prev.title;
       const option = prev.option.map((e) => {
         let returnVal = { ...e };
+
         if (e.id === value) {
           returnVal.active = true;
         } else {
