@@ -132,9 +132,31 @@ const Dashboard = ({ navigation }) => {
     socket.on("student:get-wallet-total", (res) => {
       setProfile((prev) => ({
         ...prev,
-        coupon: `RM${res.coupon.total}`,
+        total: `RM${res.coupon.total}`,
         transaction: res.transaction.transaction,
       }));
+      console.log(res);
+    });
+
+    api
+      .get(`/cafe/${user?.id}`)
+      .then((res) => {
+        setProfile((prev) => ({
+          ...prev,
+          name: res.data.data.name,
+        }));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    socket.emit("cafe:get-sales-total", { cafeId: user?.id });
+    socket.on("cafe:get-sales-total", (res) => {
+      setProfile((prev) => ({
+        ...prev,
+        total: `RM${res.total}`,
+        transaction: res.transaction.transaction,
+      }));
+      console.log(res);
     });
   }, [socket]);
 
@@ -145,7 +167,7 @@ const Dashboard = ({ navigation }) => {
           <Profile textField1={profile?.name} textField2={user?.id} />
         </View>
         <View style={{ marginTop: 24 }}>
-          <Amount amount={profile?.coupon} student={user.student} />
+          <Amount amount={profile?.total} student={user.student} />
         </View>
         {btn
           .filter((val) => user?.role === val.role)[0]
