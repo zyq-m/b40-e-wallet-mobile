@@ -48,11 +48,11 @@ const Dashboard = ({ navigation }) => {
       btn: [
         {
           label: "My QRCode",
-          nav: () => navigation.navigate("My QRCode"),
+          nav: () => navigation.navigate("My QRCode", { loyalty: false }),
         },
         {
-          label: "One-Time PIN Generator",
-          nav: () => navigation.navigate("My QRCode"),
+          label: "One-time QRCode",
+          nav: () => navigation.navigate("One-time QRCode", { loyalty: true }),
         },
       ],
     },
