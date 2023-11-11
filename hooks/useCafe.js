@@ -1,12 +1,12 @@
-import instanceAxios from "../lib/instanceAxios";
+import { api } from "../services/axiosInstance";
 import { useState, useEffect } from "react";
 
 export const useCafe = ({ id, student }) => {
   const [cafe, setCafe] = useState([]);
 
-  const getCafeById = async signal => {
+  const getCafeById = async (signal) => {
     try {
-      const response = await instanceAxios.get(`/api/cafe/${id}`, {
+      const response = await api.get(`/api/cafe/${id}`, {
         signal: signal,
       });
 

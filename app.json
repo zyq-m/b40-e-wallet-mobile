@@ -27,8 +27,7 @@
       "versionCode": 4 // change this version everytime you update with new features
     },
     "web": {
-      "favicon": "./assets/eKupon/favicon.png",
-      "bundler": "webpack"
+      "favicon": "./assets/eKupon/favicon.png"
     },
     "extra": {
       "eas": {

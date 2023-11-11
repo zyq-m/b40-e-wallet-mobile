@@ -3,7 +3,31 @@ import { Text, View, StyleSheet } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import FA from "react-native-vector-icons/FontAwesome";
 
-const Profile = ({ textField1, textField2, onLogout }) => {
+import { socket } from "../services/socket";
+import { logout } from "../api/auth/auth";
+import { useUserContext } from "../hooks";
+
+import { removeAll } from "../utils/asyncStorage";
+
+const Profile = ({ textField1, textField2 }) => {
+  const { user, setUser } = useUserContext();
+  const onLogout = async () => {
+    // You can add your authentication logic here
+    // If authentication is successful, navigate to the "Dashboard" screen
+    try {
+      await logout();
+      socket.emit("user:disconnect", { id: user?.id });
+      // Remove storage
+      await removeAll();
+      // Update context
+      setUser({});
+
+      // navigation.navigate("Login"); // Replace "Dashboard" with your route name
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={[profileStyle.profileContainer, profileStyle.bgWhite]}>
       <View>

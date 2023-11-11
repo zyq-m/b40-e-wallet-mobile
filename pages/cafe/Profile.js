@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { globals, loginStyle } from "../styles";
-import { Button } from "../components";
-import { getProfile, updateProfile } from "../lib/API";
-import { useUserContext } from "../hooks";
-import { popupMessage } from "../utils/popupMessage";
+import { globals, loginStyle } from "../../styles";
+import { Button } from "../../components";
+import { getProfile, updateProfile } from "../../lib/API";
+import { useUserContext } from "../../hooks";
+import { popupMessage } from "../../utils/popupMessage";
 
 const Profile = () => {
   const [bankName, setBankName] = useState("");
@@ -20,7 +20,7 @@ const Profile = () => {
           message: "Profile successfully updated",
         });
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.response.status == 400) {
           popupMessage({
             title: "Alert",
@@ -41,11 +41,11 @@ const Profile = () => {
     const controller = new AbortController();
 
     getProfile(user.id, controller.signal)
-      .then(details => {
+      .then((details) => {
         setBankName(details.data?.bank_name);
         setAccount(details.data?.account_no);
       })
-      .catch(err => err);
+      .catch((err) => err);
 
     return () => {
       controller.abort();
@@ -69,7 +69,7 @@ const Para = ({ children, style }) => {
   return <Text style={[aboutStyle.para, style]}>{children}</Text>;
 };
 
-const Input = props => {
+const Input = (props) => {
   return (
     <TextInput
       {...props}

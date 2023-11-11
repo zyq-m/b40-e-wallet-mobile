@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 import { useTriggerRefresh } from "./useTriggerRefresh";
-import instanceAxios from "../lib/instanceAxios";
+import { api } from "../services/axiosInstance";
 
 export const useTransaction = ({ id, student, refresh }) => {
   const [transactions, setTransactions] = useState();
@@ -10,16 +10,17 @@ export const useTransaction = ({ id, student, refresh }) => {
   const [error, setError] = useState("");
   const { trigger } = useTriggerRefresh(refresh);
 
-  const getTransactionById = async signal => {
+  const getTransactionById = async (signal) => {
     try {
-      const res = await instanceAxios.get(
-        `/api/transactions/${student ? `students` : `cafe`}/${id}`,
+      const res = await api.get(
+        // `/api/transactions/${student ? `students` : `cafe`}/${id}`,
+        `/student/transaction/wallet/${id}`,
         {
           signal: signal,
         }
       );
-      const data = await res.data;
-      setTransactions(data);
+
+      setTransactions(res.data.data);
       setLoading(false);
     } catch (error) {
       if (axios.isCancel(error)) {

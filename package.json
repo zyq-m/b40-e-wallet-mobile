@@ -46,7 +46,8 @@
     "react-qr-code": "^2.0.12",
     "resize-observer-polyfill": "^1.5.1",
     "socket.io-client": "^4.7.2",
-    "@expo/webpack-config": "^19.0.0"
+    "@expo/webpack-config": "^19.0.0",
+    "@react-native-async-storage/async-storage": "1.18.2"
   },
   "private": true
 }

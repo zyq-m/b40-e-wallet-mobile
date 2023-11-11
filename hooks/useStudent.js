@@ -1,4 +1,4 @@
-import instanceAxios from "../lib/instanceAxios";
+import { api } from "../services/axiosInstance";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useTriggerRefresh } from "./useTriggerRefresh";
@@ -7,13 +7,13 @@ export const useStudent = ({ id, student, refresh }) => {
   const [students, setStudents] = useState();
   const { trigger } = useTriggerRefresh(refresh);
 
-  const getStudentById = signal => {
-    instanceAxios
+  const getStudentById = (signal) => {
+    api
       .get(`/api/students/${id}`, {
         signal: signal,
       })
-      .then(res => setStudents(res.data[0]))
-      .catch(err => {
+      .then((res) => setStudents(res.data[0]))
+      .catch((err) => {
         if (axios.isCancel(err)) {
           console.log("Request cancel");
         }

@@ -1,5 +1,4 @@
-import React from "react";
-import { ws } from "../lib/Socket";
+import { socket } from "../services/socket";
 import { logout } from "../lib/API";
 import { deleteItem, getValueFor } from "../utils/SecureStore";
 import { useUserContext } from "./useUserContext";
@@ -9,7 +8,7 @@ export function useLogout() {
 
   const onLogout = async () => {
     const refreshToken = await getValueFor("refreshToken");
-    ws.emit("logout", user.id);
+    // ws.emit("logout", user.id);
 
     const runLogout = logout(refreshToken);
     const delAccessToken = deleteItem("accessToken");
@@ -26,7 +25,7 @@ export function useLogout() {
       login,
       student,
     ]).then(() => {
-      setUser(prev => ({
+      setUser((prev) => ({
         ...prev,
         id: undefined,
         login: false,

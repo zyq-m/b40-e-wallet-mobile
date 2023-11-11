@@ -12,7 +12,7 @@ const Amount = ({ amount, student }) => {
       >
         {student ? "My Balance" : "Total"}
       </Text>
-      <Text style={amountStyle.amountBigText}>RM {amount}</Text>
+      <Text style={amountStyle.amountBigText}>{amount}</Text>
       {student && (
         <Text style={[amountStyle.amountSmallText, { fontSize: 10 }]}>
           Valid till the end of semester

@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
-import { Button } from "../components";
-import { ws } from "../lib/Socket";
-import { useUserContext } from "../hooks";
-import { checkURL } from "../utils/checkURL";
-import { popupMessage } from "../utils/popupMessage";
+import { Button } from "../../components";
+import { useUserContext } from "../../hooks";
+import { checkURL } from "../../utils/checkURL";
+import { popupMessage } from "../../utils/popupMessage";
 
-import { QRScanStyle } from "../styles";
+import { QRScanStyle } from "../../styles";
 
 const QRScan = ({ navigation, route }) => {
   const { amount } = route.params;
@@ -27,31 +26,31 @@ const QRScan = ({ navigation, route }) => {
     const cafeId = checkURL(data);
 
     if (cafeId) {
-      ws.emit("pay", cafeId.id, user.id, amount);
+      // ws.emit("pay", cafeId.id, user.id, amount);
 
-      ws.on("pay_detail", res => {
+      ws.on("pay_detail", (res) => {
         if (!res) {
           return;
         }
 
-        ws.emit("get_student", user.id);
-        ws.emit("get_transaction_student", user.id);
-        ws.emit("get_transaction_cafe", cafeId.id);
-        // TODO: set event to push notification
-        ws.emit("send_notification", cafeId.id, {
-          title: "Payment recieved",
-          body: `You recieved RM${amount}.00 from ${user.details.name} - ${user.details.id}`,
-        });
-        ws.emit("send_notification", user.id, {
-          title: "Payment sent",
-          body: `You spent RM${amount}.00 at ${cafeId.name}`,
-        });
+        // ws.emit("get_student", user.id);
+        // ws.emit("get_transaction_student", user.id);
+        // ws.emit("get_transaction_cafe", cafeId.id);
+        // // TODO: set event to push notification
+        // ws.emit("send_notification", cafeId.id, {
+        //   title: "Payment recieved",
+        //   body: `You recieved RM${amount}.00 from ${user.details.name} - ${user.details.id}`,
+        // });
+        // ws.emit("send_notification", user.id, {
+        //   title: "Payment sent",
+        //   body: `You spent RM${amount}.00 at ${cafeId.name}`,
+        // });
 
         popupMessage({ title: "Success", message: "Payment successful👍" });
         navigation.navigate("Dashboard");
 
         // remove socket to avoid looping ascendingly
-        ws.removeAllListeners("pay_detail");
+        // ws.removeAllListeners("pay_detail");
       });
     } else {
       popupMessage({
@@ -78,14 +77,14 @@ const QRScan = ({ navigation, route }) => {
           <View style={QRScanStyle.row}>
             <Image
               style={[QRScanStyle.square]}
-              source={require("../assets/icons/scanner-icon.png")}
+              source={require("../../assets/icons/scanner-icon.png")}
             />
             <Image
               style={[
                 QRScanStyle.square,
                 { transform: [{ rotateY: "180deg" }] },
               ]}
-              source={require("../assets/icons/scanner-icon.png")}
+              source={require("../../assets/icons/scanner-icon.png")}
             />
           </View>
           <View style={QRScanStyle.row}>
@@ -94,14 +93,14 @@ const QRScan = ({ navigation, route }) => {
                 QRScanStyle.square,
                 { transform: [{ rotateX: "180deg" }] },
               ]}
-              source={require("../assets/icons/scanner-icon.png")}
+              source={require("../../assets/icons/scanner-icon.png")}
             />
             <Image
               style={[
                 QRScanStyle.square,
                 { transform: [{ rotate: "-180deg" }] },
               ]}
-              source={require("../assets/icons/scanner-icon.png")}
+              source={require("../../assets/icons/scanner-icon.png")}
             />
           </View>
         </View>

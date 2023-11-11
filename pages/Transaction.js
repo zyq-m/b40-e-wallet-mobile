@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Text, View, Platform } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
@@ -15,7 +15,7 @@ const Transaction = ({ navigation }) => {
   const { user } = useUserContext();
   const { transactions, loading, error } = useTransaction({
     id: user.id,
-    student: user.student,
+    // student: user.student,
     refresh: user.transaction.refresh,
   });
 
@@ -24,13 +24,13 @@ const Transaction = ({ navigation }) => {
 
   const filterDate = useFilterDate();
 
-  const onCollapse = () => setCollapse(prev => !prev);
+  const onCollapse = () => setCollapse((prev) => !prev);
 
   const filtered = useMemo(() => filterDate(transactions), [transactions]);
 
-  const onList = id => {
-    return setList(prev =>
-      prev.map(data => {
+  const onList = (id) => {
+    return setList((prev) =>
+      prev.map((data) => {
         if (data.id === id) {
           return { ...data, checked: true };
         } else {
@@ -87,7 +87,8 @@ const Transaction = ({ navigation }) => {
             textAlign: "center",
             fontWeight: "500",
             color: "rgba(132, 132, 132, 1)",
-          }}>
+          }}
+        >
           {error ? error : "Loading.."}
         </Text>
       </>
@@ -105,14 +106,15 @@ const Transaction = ({ navigation }) => {
           style={transactionStyle.transactionItemWrap}
         />
       </Refresh>
-      {filterTransaction.length === 0 && (
+      {!filterTransaction?.length && (
         <Text
           style={{
             flex: 1,
             textAlign: "center",
             fontWeight: "500",
             color: "rgba(132, 132, 132, 1)",
-          }}>
+          }}
+        >
           No transactions history
         </Text>
       )}

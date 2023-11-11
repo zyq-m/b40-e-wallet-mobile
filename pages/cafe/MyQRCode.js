@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import QRCode from "react-qr-code";
 
-import instanceAxios from "../lib/instanceAxios";
-import { useUserContext } from "../hooks";
-import { globals } from "../styles";
+import { api } from "../../services/axiosInstance";
+import { useUserContext } from "../../hooks";
+import { globals } from "../../styles";
 
 const MyQRCode = () => {
   const { user } = useUserContext();
@@ -13,13 +13,13 @@ const MyQRCode = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    instanceAxios
+    api
       .get(`/api/cafe/${user.id}`, {
         signal: controller.signal,
       })
-      .then(name => setCafeName(name.data[0].cafe_name))
+      .then((name) => setCafeName(name.data[0].cafe_name))
       .then(() => setLoading(false))
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
     return () => {
       controller.abort();
     };
@@ -32,7 +32,8 @@ const MyQRCode = () => {
           style={{
             fontWeight: "500",
             color: "rgba(132, 132, 132, 1)",
-          }}>
+          }}
+        >
           Loading..
         </Text>
       </View>
@@ -48,7 +49,8 @@ const MyQRCode = () => {
           justifyContent: "center",
           alignItems: "center",
         },
-      ]}>
+      ]}
+    >
       {cafeName && (
         <>
           <View style={QRStyles.QRWrapper}>

@@ -17,9 +17,9 @@ import {
   ChangePassword,
   Profile,
 } from "./pages";
-import { UserContext } from "./lib/Context";
-import { getValueFor } from "./utils/SecureStore";
+import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
+import { getObject } from "./utils/asyncStorage";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -34,7 +34,8 @@ function Home() {
         drawerStyle: { paddingTop: 16 },
         drawerActiveTintColor: "rgba(88, 83, 76, 1)",
         headerStyle: { backgroundColor: "#FFD400" },
-      }}>
+      }}
+    >
       <Drawer.Screen
         name="Dashboard"
         component={Dashboard}
@@ -43,7 +44,7 @@ function Home() {
           drawerLabel: "Home",
         }}
       />
-      {!user.student && (
+      {user?.role === "CAFE" && (
         <Drawer.Screen
           name="Profile"
           component={Profile}
@@ -67,25 +68,20 @@ function Home() {
 
 export default function App() {
   const [user, setUser] = useState({
-    id: undefined,
-    login: false,
-    student: false,
     dashboard: { refresh: false },
     transaction: { refresh: false },
     cafeList: { refresh: false },
   });
 
-  const getInitialValue = async () => {
+  const loadContext = async () => {
     try {
-      const id = await getValueFor("id");
-      const login = await getValueFor("login");
-      const student = await getValueFor("student");
+      const userDetail = await getObject("userDetails");
 
-      setUser(prev => ({
+      setUser((prev) => ({
         ...prev,
-        id: id,
-        login: JSON.parse(login),
-        student: JSON.parse(student),
+        id: userDetail?.id,
+        isSignedIn: userDetail?.isSignedIn,
+        role: userDetail?.role,
       }));
     } catch (error) {
       console.log(error);
@@ -93,7 +89,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    getInitialValue();
+    loadContext();
   }, []);
 
   return (
@@ -104,8 +100,9 @@ export default function App() {
           screenOptions={{
             headerStyle: { backgroundColor: "#FFD400" },
             animation: "fade_from_bottom",
-          }}>
-          {user.login ? (
+          }}
+        >
+          {user?.isSignedIn ? (
             <>
               <Stack.Screen
                 name="Home"
@@ -139,7 +136,7 @@ export default function App() {
                 name="Transaction Details"
                 component={TransactionDetail}
               />
-              {!user.student && (
+              {user?.role === "CAFE" && (
                 <Stack.Screen name="Profile" component={Profile} />
               )}
             </>
