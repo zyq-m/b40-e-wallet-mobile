@@ -4,21 +4,25 @@ import { useState, useEffect } from "react";
 import { useTriggerRefresh } from "./useTriggerRefresh";
 import { api } from "../services/axiosInstance";
 
-export const useTransaction = ({ id, student, refresh }) => {
+export const useTransaction = ({ id, role, refresh }) => {
   const [transactions, setTransactions] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { trigger } = useTriggerRefresh(refresh);
 
   const getTransactionById = async (signal) => {
+    let url = "";
+    if (role === "CAFE") {
+      url = `/cafe/transaction/${id}`;
+    }
+    if (role === "B40") {
+      url = `/cafe/transaction/${id}`;
+    }
+
     try {
-      const res = await api.get(
-        // `/api/transactions/${student ? `students` : `cafe`}/${id}`,
-        `/student/transaction/wallet/${id}`,
-        {
-          signal: signal,
-        }
-      );
+      const res = await api.get(url, {
+        signal: signal,
+      });
 
       setTransactions(res.data.data);
       setLoading(false);
