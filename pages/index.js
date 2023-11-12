@@ -9,6 +9,7 @@ import TransactionDetail from "./TransactionDetail";
 import Report from "./Report";
 import ChangePassword from "./ChangePassword";
 import Profile from "./cafe/Profile";
+import InsertPin from "./student/InsertPin";
 
 export {
   ChangePassword,
@@ -22,4 +23,5 @@ export {
   TransactionDetail,
   Report,
   Profile,
+  InsertPin,
 };

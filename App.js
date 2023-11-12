@@ -16,6 +16,7 @@ import {
   Report,
   ChangePassword,
   Profile,
+  InsertPin,
 } from "./pages";
 import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
@@ -58,6 +59,9 @@ function Home() {
             component={Profile} // Create new page for this
           />
         </>
+      )}
+      {(user?.role === "B40" || user?.role === "NON-B40") && (
+        <Drawer.Screen name="Insert Pin" component={InsertPin} />
       )}
       <Drawer.Screen name="Transactions History" component={Transaction} />
       <Drawer.Screen name="Change password" component={ChangePassword} />
@@ -137,6 +141,7 @@ export default function App() {
                   title: "Choose a cafe",
                 }}
               />
+              <Stack.Screen name="Insert Pin" component={InsertPin} />
               <Stack.Screen name="Transactions" component={Transaction} />
               <Stack.Screen
                 name="Transaction Details"
