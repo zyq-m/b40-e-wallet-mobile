@@ -8,12 +8,11 @@ import { useUserContext } from "../../hooks";
 import { popupMessage } from "../../utils/popupMessage";
 
 const Profile = () => {
-  const [bankName, setBankName] = useState("");
-  const [account, setAccount] = useState("");
+  const [profile, setProfile] = useState({ bank: "", accountNo: "" });
   const { user } = useUserContext();
 
   const onUpdateProfile = () => {
-    updateProfile(user.id, bankName, account)
+    updateProfile(user.id, profile)
       .then(() => {
         popupMessage({
           title: "Success",
@@ -42,8 +41,11 @@ const Profile = () => {
 
     getProfile(user.id, controller.signal)
       .then((details) => {
-        setBankName(details.data?.bank_name);
-        setAccount(details.data?.account_no);
+        setProfile((prev) => ({
+          ...prev,
+          bank: details.data.bank || "",
+          accountNo: details.data.accountNo || "",
+        }));
       })
       .catch((err) => err);
 
@@ -56,9 +58,17 @@ const Profile = () => {
     <View style={globals.container}>
       <View style={{ padding: 16 }}>
         <Para>Bank Name</Para>
-        <Input value={bankName} onChangeText={setBankName} placeholder="CIMB" />
+        <Input
+          value={profile.bank}
+          onChangeText={(e) => setProfile((prev) => ({ ...prev, bank: e }))}
+        />
         <Para>Account No.</Para>
-        <Input value={account} onChangeText={setAccount} />
+        <Input
+          value={profile.accountNo}
+          onChangeText={(e) =>
+            setProfile((prev) => ({ ...prev, accountNo: e }))
+          }
+        />
         <Button label={"Update"} onPress={onUpdateProfile} />
       </View>
     </View>
