@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 
 import { api } from "../services/axiosInstance";
 import { useUserContext } from "./useUserContext";
+import { useTriggerRefresh } from "./useTriggerRefresh";
 
 export const useTransaction = () => {
   const [transactions, setTransactions] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { user } = useUserContext();
+  const { trigger } = useTriggerRefresh(user.transaction?.refresh);
 
   const getTransactionById = async (signal) => {
     let url = "";
@@ -42,7 +44,7 @@ export const useTransaction = () => {
     return () => {
       controller.abort();
     };
-  }, [user.transaction?.refresh]);
+  }, [trigger]);
 
   return { transactions, setTransactions, loading, error };
 };

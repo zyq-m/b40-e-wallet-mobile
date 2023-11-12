@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { socket } from "../services/socket";
 import { api } from "../services/axiosInstance";
+
 import { useUserContext } from "./useUserContext";
+import { useTriggerRefresh } from "./useTriggerRefresh";
 
 export const useDashboard = () => {
   const [dashboard, setDashboard] = useState();
   const { user } = useUserContext();
+  const { trigger } = useTriggerRefresh(user.dashboard?.refresh);
 
   const defineRole = async () => {
     if (user.role === "B40") {
@@ -58,7 +61,7 @@ export const useDashboard = () => {
 
   useEffect(() => {
     defineRole();
-  }, [socket]);
+  }, [socket, trigger]);
 
   return { dashboard };
 };
