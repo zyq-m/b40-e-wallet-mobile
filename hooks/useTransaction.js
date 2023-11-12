@@ -42,7 +42,7 @@ export const useTransaction = () => {
     return () => {
       controller.abort();
     };
-  }, [user.transaction.refresh]);
+  }, [user.transaction?.refresh]);
 
   return { transactions, setTransactions, loading, error };
 };
