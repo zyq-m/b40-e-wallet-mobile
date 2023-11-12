@@ -5,6 +5,7 @@ import { useStudent } from "./useStudent";
 import { useTriggerRefresh } from "./useTriggerRefresh";
 import { usePushNotification } from "./usePushNotification";
 import { useLogout } from "./useLogout";
+import { useDashboard } from "./useDashboard";
 export {
   useLogout,
   useUserContext,
@@ -13,4 +14,5 @@ export {
   useStudent,
   useTriggerRefresh,
   usePushNotification,
+  useDashboard,
 };
