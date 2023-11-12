@@ -15,7 +15,7 @@ import {
   useUserContext,
   usePushNotification,
   useCafe,
-  // useLogout,
+  useDashboard,
 } from "../hooks";
 import { popupMessage } from "../utils/popupMessage";
 import { api } from "../services/axiosInstance";
@@ -35,11 +35,11 @@ const Dashboard = ({ navigation }) => {
       btn: [
         {
           label: "Pay",
-          nav: () => navigation.navigate("Pay"),
+          nav: () => navigation.navigate("Pay", { loyalty: false }),
         },
         {
           label: "Collect Point",
-          nav: () => navigation.navigate("Pay"),
+          nav: () => navigation.navigate("Pay", { loyalty: false }), // create page to collect point
         },
       ],
     },
@@ -69,7 +69,12 @@ const Dashboard = ({ navigation }) => {
 
   const [students, setStudents] = useState();
   const [transactions, setTransactions] = useState();
+  const { dashboard } = useDashboard();
   const [profile, setProfile] = useState({});
+
+  useEffect(() => {
+    setProfile(dashboard);
+  }, [dashboard]);
 
   // useEffect(() => {
   //   // send id to get transaction
@@ -114,51 +119,6 @@ const Dashboard = ({ navigation }) => {
   //     ws.removeAllListeners();
   //   };
   // }, [ws]);
-
-  useEffect(() => {
-    api
-      .get(`/student/${user?.id}`)
-      .then((res) => {
-        setProfile((prev) => ({
-          ...prev,
-          name: res.data.student.user.profile.name,
-        }));
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-
-    socket.emit("student:get-wallet-total", { matricNo: user?.id });
-    socket.on("student:get-wallet-total", (res) => {
-      setProfile((prev) => ({
-        ...prev,
-        total: `RM${res.coupon.total}`,
-        transaction: res.transaction.transaction,
-      }));
-      console.log(res);
-    });
-
-    api
-      .get(`/cafe/${user?.id}`)
-      .then((res) => {
-        setProfile((prev) => ({
-          ...prev,
-          name: res.data.data.name,
-        }));
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    socket.emit("cafe:get-sales-total", { cafeId: user?.id });
-    socket.on("cafe:get-sales-total", (res) => {
-      setProfile((prev) => ({
-        ...prev,
-        total: `RM${res.total}`,
-        transaction: res.transaction.transaction,
-      }));
-      console.log(res);
-    });
-  }, [socket]);
 
   return (
     <View style={[globals.container, { paddingTop: 16 }]}>
