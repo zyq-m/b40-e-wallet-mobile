@@ -11,24 +11,17 @@ import {
   TransactionList,
 } from "../components";
 
-import {
-  useUserContext,
-  usePushNotification,
-  useCafe,
-  useDashboard,
-} from "../hooks";
+import { useUserContext, usePushNotification, useDashboard } from "../hooks";
 import { popupMessage } from "../utils/popupMessage";
-import { api } from "../services/axiosInstance";
-import { socket } from "../services/socket";
 
 import { globals, dashboardStyle } from "../styles";
 
 const Dashboard = ({ navigation }) => {
-  const { user, setUser } = useUserContext();
-  const [total, setTotal] = useState(0);
+  const { user } = useUserContext();
   const { schedulePushNotification } = usePushNotification();
-  // const { cafe } = useCafe({ id: user.id, student: user.student });
-  // const { onLogout } = useLogout();
+  const { dashboard } = useDashboard();
+  const [profile, setProfile] = useState({});
+
   const btn = [
     {
       role: "B40",
@@ -39,7 +32,7 @@ const Dashboard = ({ navigation }) => {
         },
         {
           label: "Collect Point",
-          nav: () => navigation.navigate("Pay", { loyalty: false }), // create page to collect point
+          nav: () => navigation.navigate("Insert Pin"), // create page to collect point
         },
       ],
     },
@@ -61,16 +54,11 @@ const Dashboard = ({ navigation }) => {
       btn: [
         {
           label: "Collet Point",
-          nav: () => navigation.navigate("Pay"),
+          nav: () => navigation.navigate("Insert Pin"),
         },
       ],
     },
   ];
-
-  const [students, setStudents] = useState();
-  const [transactions, setTransactions] = useState();
-  const { dashboard } = useDashboard();
-  const [profile, setProfile] = useState({});
 
   useEffect(() => {
     setProfile(dashboard);
