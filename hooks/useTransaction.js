@@ -16,7 +16,7 @@ export const useTransaction = ({ id, role, refresh }) => {
       url = `/cafe/transaction/${id}`;
     }
     if (role === "B40") {
-      url = `/cafe/transaction/${id}`;
+      url = `/student/transaction/wallet/${id}`;
     }
 
     try {
