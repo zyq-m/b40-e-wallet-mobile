@@ -1,22 +1,22 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-import { useTriggerRefresh } from "./useTriggerRefresh";
 import { api } from "../services/axiosInstance";
+import { useUserContext } from "./useUserContext";
 
-export const useTransaction = ({ id, role, refresh }) => {
+export const useTransaction = () => {
   const [transactions, setTransactions] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { trigger } = useTriggerRefresh(refresh);
+  const { user } = useUserContext();
 
   const getTransactionById = async (signal) => {
     let url = "";
-    if (role === "CAFE") {
-      url = `/cafe/transaction/${id}`;
+    if (user.role === "CAFE") {
+      url = `/cafe/transaction/${user.id}`;
     }
-    if (role === "B40") {
-      url = `/student/transaction/wallet/${id}`;
+    if (user.role === "B40") {
+      url = `/student/transaction/wallet/${user.id}`;
     }
 
     try {
@@ -42,7 +42,7 @@ export const useTransaction = ({ id, role, refresh }) => {
     return () => {
       controller.abort();
     };
-  }, [trigger]);
+  }, [user.transaction.refresh]);
 
   return { transactions, setTransactions, loading, error };
 };
