@@ -13,11 +13,7 @@ import { globals, transactionStyle } from "../styles";
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
   const { user } = useUserContext();
-  const { transactions, loading, error } = useTransaction({
-    id: user.id,
-    role: user.role,
-    refresh: user.transaction.refresh,
-  });
+  const { transactions, loading, error } = useTransaction();
 
   const [list, setList] = useState(listData);
   const [filterTransaction, setFilterTransaction] = useState([]);
