@@ -1,81 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Platform } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 import { Button } from "../../components";
+import { usePayNow } from "../../hooks";
 
 import { globals, payNowStyle } from "../../styles";
 
 const PayNow = ({ navigation, route }) => {
-  const [page, setPage] = useState({});
   const { loyalty } = route.params;
-
-  useEffect(() => {
-    if (!loyalty) {
-      setPage({
-        title: "Choose an amount",
-        option: [
-          {
-            id: 1,
-            name: "RM 1",
-            amount: 1,
-            active: true,
-            screen: Platform.OS === "web" ? "Cafe List" : "QR Scan",
-          },
-          {
-            id: 2,
-            name: "RM 2",
-            amount: 2,
-            active: false,
-            screen: Platform.OS === "web" ? "Cafe List" : "QR Scan",
-          },
-        ],
-      });
-    } else {
-      setPage({
-        title: "Choose a campaign",
-        option: [
-          {
-            id: 1,
-            name: "Cashless",
-            amount: 0,
-            active: true,
-            screen: "Cashless",
-          },
-          {
-            id: 2,
-            name: "Green Campus",
-            amount: 0,
-            active: false,
-            screen: "Green Campus",
-          },
-        ],
-      });
-    }
-  }, []);
-
-  const onActive = (value) => {
-    setPage((prev) => {
-      const title = prev.title;
-      const option = prev.option.map((e) => {
-        let returnVal = { ...e };
-
-        if (e.id === value) {
-          returnVal.active = true;
-        } else {
-          returnVal.active = false;
-        }
-
-        return returnVal;
-      });
-
-      return { title, option };
-    });
-  };
+  const { onActive, page } = usePayNow({ loyalty });
 
   const onRoute = () => {
     page.option.forEach((e) => {
       if (e.active) {
-        navigation.navigate(e.screen, { amount: e.amount });
+        navigation.navigate(e.screen, { amount: e.value });
       }
     });
   };

@@ -6,6 +6,8 @@ import { useTriggerRefresh } from "./useTriggerRefresh";
 import { usePushNotification } from "./usePushNotification";
 import { useLogout } from "./useLogout";
 import { useDashboard } from "./useDashboard";
+import { usePayNow } from "./usePayNow";
+
 export {
   useLogout,
   useUserContext,
@@ -15,4 +17,5 @@ export {
   useTriggerRefresh,
   usePushNotification,
   useDashboard,
+  usePayNow,
 };
