@@ -145,6 +145,13 @@ export default function App() {
                   />
                 </>
               )}
+              <Stack.Screen
+                name="Collect Point"
+                component={PayNow}
+                options={{
+                  title: "Choose campaign",
+                }}
+              />
               <Stack.Screen name="Insert Pin" component={InsertPin} />
               <Stack.Screen name="Transactions" component={Transaction} />
               <Stack.Screen
