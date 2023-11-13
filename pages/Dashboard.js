@@ -32,7 +32,7 @@ const Dashboard = ({ navigation }) => {
         },
         {
           label: "Collect Point",
-          nav: () => navigation.navigate("Insert Pin"), // create page to collect point
+          nav: () => navigation.navigate("Collect Point", { loyalty: true }), // create page to collect point
         },
       ],
     },
@@ -54,7 +54,7 @@ const Dashboard = ({ navigation }) => {
       btn: [
         {
           label: "Collet Point",
-          nav: () => navigation.navigate("Insert Pin"),
+          nav: () => navigation.navigate("Collect Point", { loyalty: true }),
         },
       ],
     },
