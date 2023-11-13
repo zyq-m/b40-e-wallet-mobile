@@ -66,7 +66,6 @@ export const useDashboard = () => {
           total: `RM${res.total}`,
           transaction: res.transaction.transaction,
         }));
-        console.log(res);
       });
     }
   };
