@@ -17,6 +17,7 @@ import {
   ChangePassword,
   Profile,
   InsertPin,
+  MyPin,
 } from "./pages";
 import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
@@ -54,10 +55,7 @@ function Home() {
               headerTitle: "Update profile",
             }}
           />
-          <Drawer.Screen
-            name="One-time pin"
-            component={Profile} // Create new page for this
-          />
+          <Drawer.Screen name="One-time pin" component={MyPin} />
         </>
       )}
       {(user?.role === "B40" || user?.role === "NON-B40") && (
@@ -176,6 +174,7 @@ export default function App() {
                   <Stack.Screen name="One-time QRCode" component={PayNow} />
                   <Stack.Screen name="Green Campus" component={MyQRCode} />
                   <Stack.Screen name="Cashless" component={MyQRCode} />
+                  <Drawer.Screen name="One-time pin" component={MyPin} />
                 </>
               )}
             </>
