@@ -120,27 +120,31 @@ export default function App() {
                 component={Home}
                 options={{ headerShown: false }}
               />
-              <Stack.Screen
-                name="QR Scan"
-                component={QRScan}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="Pay"
-                component={PayNow}
-                options={{
-                  title: "Choose amount",
-                }}
-              />
-              <Stack.Screen
-                name="Cafe List"
-                component={CafeList}
-                options={{
-                  title: "Choose a cafe",
-                }}
-              />
+              {user.role === "B40" && (
+                <>
+                  <Stack.Screen
+                    name="QR Scan"
+                    component={QRScan}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Pay"
+                    component={PayNow}
+                    options={{
+                      title: "Choose amount",
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Cafe List"
+                    component={CafeList}
+                    options={{
+                      title: "Choose a cafe",
+                    }}
+                  />
+                </>
+              )}
               <Stack.Screen name="Insert Pin" component={InsertPin} />
               <Stack.Screen name="Transactions" component={Transaction} />
               <Stack.Screen
