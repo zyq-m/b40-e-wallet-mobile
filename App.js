@@ -61,9 +61,20 @@ function Home() {
         </>
       )}
       {(user?.role === "B40" || user?.role === "NON-B40") && (
-        <Drawer.Screen name="Insert Pin" component={InsertPin} />
+        <>
+          <Drawer.Screen name="Insert Pin" component={InsertPin} />
+          <Drawer.Screen
+            name="Point Claimed"
+            component={Transaction}
+            initialParams={{ loyalty: true }}
+          />
+        </>
       )}
-      <Drawer.Screen name="Transactions History" component={Transaction} />
+      {(user?.role === "B40" || user?.role === "CAFE") && (
+        <>
+          <Drawer.Screen name="Transactions History" component={Transaction} />
+        </>
+      )}
       <Drawer.Screen name="Change password" component={ChangePassword} />
       <Drawer.Screen
         name="Report"
@@ -120,6 +131,19 @@ export default function App() {
                 component={Home}
                 options={{ headerShown: false }}
               />
+              <Stack.Screen
+                name="Collect Point"
+                component={PayNow}
+                options={{
+                  title: "Choose campaign",
+                }}
+              />
+              <Stack.Screen name="Insert Pin" component={InsertPin} />
+              <Stack.Screen name="Transactions" component={Transaction} />
+              <Stack.Screen
+                name="Transaction Details"
+                component={TransactionDetail}
+              />
               {user.role === "B40" && (
                 <>
                   <Stack.Screen
@@ -145,19 +169,6 @@ export default function App() {
                   />
                 </>
               )}
-              <Stack.Screen
-                name="Collect Point"
-                component={PayNow}
-                options={{
-                  title: "Choose campaign",
-                }}
-              />
-              <Stack.Screen name="Insert Pin" component={InsertPin} />
-              <Stack.Screen name="Transactions" component={Transaction} />
-              <Stack.Screen
-                name="Transaction Details"
-                component={TransactionDetail}
-              />
               {user?.role === "CAFE" && (
                 <>
                   <Stack.Screen name="Profile" component={Profile} />
