@@ -10,6 +10,7 @@ import Report from "./Report";
 import ChangePassword from "./ChangePassword";
 import Profile from "./cafe/Profile";
 import InsertPin from "./student/InsertPin";
+import MyPin from "./cafe/MyPin";
 
 export {
   ChangePassword,
@@ -24,4 +25,5 @@ export {
   Report,
   Profile,
   InsertPin,
+  MyPin,
 };
