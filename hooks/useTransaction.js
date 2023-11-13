@@ -5,7 +5,7 @@ import { api } from "../services/axiosInstance";
 import { useUserContext } from "./useUserContext";
 import { useTriggerRefresh } from "./useTriggerRefresh";
 
-export const useTransaction = () => {
+export const useTransaction = (params) => {
   const [transactions, setTransactions] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -19,6 +19,11 @@ export const useTransaction = () => {
     }
     if (user.role === "B40") {
       url = `/student/transaction/wallet/${user.id}`;
+    }
+
+    if (params?.loyalty) {
+      // To load point transaction
+      url = `/student/transaction/point/${user.id}`;
     }
 
     try {
