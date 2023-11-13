@@ -33,7 +33,6 @@ export const useDashboard = () => {
           total: `${res.point || 0}pt`,
           transaction: res.transaction.transaction,
         }));
-        console.log(res);
       });
     }
 
@@ -45,7 +44,6 @@ export const useDashboard = () => {
           total: `RM${res.coupon.total}`,
           transaction: res.transaction.transaction,
         }));
-        console.log(res);
       });
     }
 
