@@ -11,7 +11,7 @@ export const useDashboard = () => {
   const { trigger } = useTriggerRefresh(user.dashboard?.refresh);
 
   const defineRole = async () => {
-    if (user.role === "B40") {
+    if (user.role !== "CAFE") {
       api
         .get(`/student/${user?.id}`)
         .then((res) => {
@@ -23,7 +23,21 @@ export const useDashboard = () => {
         .catch((err) => {
           console.error(err);
         });
+    }
 
+    if (user.role === "NON-B40") {
+      socket.emit("student:get-point-total", { matricNo: user?.id });
+      socket.on("student:get-point-total", (res) => {
+        setDashboard((prev) => ({
+          ...prev,
+          total: `${res.point || 0}pt`,
+          transaction: res.transaction.transaction,
+        }));
+        console.log(res);
+      });
+    }
+
+    if (user.role === "B40") {
       socket.emit("student:get-wallet-total", { matricNo: user?.id });
       socket.on("student:get-wallet-total", (res) => {
         setDashboard((prev) => ({
