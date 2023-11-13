@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
 
-import { changeCafePass, changeStudentPass } from "../lib/API";
 import { useUserContext } from "../hooks";
 import { Button } from "../components";
 import { popupMessage } from "../utils/popupMessage";
@@ -62,9 +61,9 @@ const ChangePassword = ({ navigation }) => {
 
     try {
       if (user.student) {
-        await changeStudentPass(user.id, data);
+        // await changeStudentPass(user.id, data);
       } else {
-        await changeCafePass(user.id, data);
+        // await changeCafePass(user.id, data);
       }
 
       setCurrPass("");
@@ -102,7 +101,7 @@ const Para = ({ children, style }) => {
   return <Text style={[aboutStyle.para, style]}>{children}</Text>;
 };
 
-const Input = props => {
+const Input = (props) => {
   return (
     <TextInput
       {...props}

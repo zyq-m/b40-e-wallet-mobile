@@ -8,7 +8,7 @@ import {
   Platform,
 } from "react-native";
 
-import { createFeedback } from "../lib/API";
+import { createFeedback } from "../api/createFeedback";
 import { useUserContext } from "../hooks";
 import { Button } from "../components";
 import { popupMessage } from "../utils/popupMessage";

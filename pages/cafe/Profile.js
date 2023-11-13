@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 
 import { globals, loginStyle } from "../../styles";
 import { Button } from "../../components";
-import { getProfile, updateProfile } from "../../lib/API";
+import { getProfile, updateProfile } from "../../api/cafe/profile";
+
 import { useUserContext } from "../../hooks";
 import { popupMessage } from "../../utils/popupMessage";
 
