@@ -10,10 +10,10 @@ import { listData } from "../data/constant";
 
 import { globals, transactionStyle } from "../styles";
 
-const Transaction = ({ navigation }) => {
+const Transaction = ({ navigation, route }) => {
   const [collapse, setCollapse] = useState(false);
   const { user } = useUserContext();
-  const { transactions, loading, error } = useTransaction();
+  const { transactions, loading, error } = useTransaction(route.params);
 
   const [list, setList] = useState(listData);
   const [filterTransaction, setFilterTransaction] = useState([]);
