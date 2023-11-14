@@ -7,3 +7,13 @@ export const pay = async (userId, cafeId, amount) => {
     amount: amount,
   });
 };
+
+export const collectPoint = async (userId, cafeId, amount, pointId, otp) => {
+  return await api.post("/student/point/collect", {
+    matricNo: userId,
+    cafeId: cafeId,
+    amount: amount,
+    pointId: pointId,
+    otp: otp,
+  });
+};
