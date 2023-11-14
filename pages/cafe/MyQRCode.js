@@ -10,7 +10,7 @@ const MyQRCode = ({ route }) => {
   const { user } = useUserContext();
   const [qr, setQr] = useState(undefined);
   const [loading, setLoading] = useState(true);
-  const { loyalty, amount } = route.params;
+  const { loyalty, amount, pointId } = route.params;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -20,7 +20,7 @@ const MyQRCode = ({ route }) => {
       })
       .then((res) =>
         setQr({
-          url: `${res.data.data.url}&&amount=${amount}`,
+          url: `${res.data.data.url}&&pointId=${pointId}&&amount=${amount}`,
           name: res.data.data.name,
         })
       )
