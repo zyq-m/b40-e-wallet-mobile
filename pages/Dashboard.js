@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Platform } from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
 
 import {
@@ -32,7 +32,11 @@ const Dashboard = ({ navigation }) => {
         },
         {
           label: "Collect Point",
-          nav: () => navigation.navigate("Collect Point", { loyalty: true }), // create page to collect point
+          nav: () =>
+            navigation.navigate(
+              Platform.OS === "web" ? "Collect Point" : "QR Scan",
+              { loyalty: true }
+            ), // create page to collect point
         },
       ],
     },
@@ -54,7 +58,11 @@ const Dashboard = ({ navigation }) => {
       btn: [
         {
           label: "Collet Point",
-          nav: () => navigation.navigate("Collect Point", { loyalty: true }),
+          nav: () =>
+            navigation.navigate(
+              Platform.OS === "web" ? "Collect Point" : "QR Scan",
+              { loyalty: true }
+            ),
         },
       ],
     },
