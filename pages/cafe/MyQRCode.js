@@ -10,7 +10,7 @@ const MyQRCode = ({ route }) => {
   const { user } = useUserContext();
   const [qr, setQr] = useState(undefined);
   const [loading, setLoading] = useState(true);
-  const { loyalty } = route.params;
+  const { loyalty, amount } = route.params;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -18,9 +18,15 @@ const MyQRCode = ({ route }) => {
       .get(`/cafe/qr/${loyalty ? "loyalty" : "ekupon"}/${user.id}`, {
         signal: controller.signal,
       })
-      .then((res) => setQr(res.data.data))
+      .then((res) =>
+        setQr({
+          url: `${res.data.data.url}&&amount=${amount}`,
+          name: res.data.data.name,
+        })
+      )
       .then(() => setLoading(false))
       .catch((err) => console.error(err));
+
     return () => {
       controller.abort();
     };
