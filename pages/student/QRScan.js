@@ -6,11 +6,13 @@ import { Button } from "../../components";
 import { useUserContext } from "../../hooks";
 import { checkURL } from "../../utils/checkURL";
 import { popupMessage } from "../../utils/popupMessage";
+import { pay, collectPoint } from "../../api/student/studentApi";
 
 import { QRScanStyle } from "../../styles";
+import { socket } from "../../services/socket";
 
 const QRScan = ({ navigation, route }) => {
-  const { amount } = route.params;
+  const { loyalty } = route.params;
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const { user } = useUserContext();
@@ -23,40 +25,41 @@ const QRScan = ({ navigation, route }) => {
   };
 
   const handleQRScan = async ({ data }) => {
-    const cafeId = checkURL(data);
+    try {
+      const { id, otp, amount, pointId, name } = checkURL(data);
 
-    if (cafeId) {
-      // ws.emit("pay", cafeId.id, user.id, amount);
-
-      ws.on("pay_detail", (res) => {
-        if (!res) {
-          return;
-        }
-
-        // ws.emit("get_student", user.id);
-        // ws.emit("get_transaction_student", user.id);
-        // ws.emit("get_transaction_cafe", cafeId.id);
-        // // TODO: set event to push notification
-        // ws.emit("send_notification", cafeId.id, {
-        //   title: "Payment recieved",
-        //   body: `You recieved RM${amount}.00 from ${user.details.name} - ${user.details.id}`,
-        // });
-        // ws.emit("send_notification", user.id, {
-        //   title: "Payment sent",
-        //   body: `You spent RM${amount}.00 at ${cafeId.name}`,
-        // });
-
+      if (loyalty) {
+        // Collect point
+        await collectPoint(user.id, id, amount, pointId, otp);
+        popupMessage({
+          title: "Success",
+          message: "Point collected successful👍",
+        });
+      } else {
+        // Pay
+        await pay(user.id, id, amount);
         popupMessage({ title: "Success", message: "Payment successful👍" });
-        navigation.navigate("Dashboard");
+        // send notification to cafe
+        socket.emit("notification:send", {
+          receiver: id,
+          message: {
+            title: "Payment recieved",
+            body: `You recieved RM${amount} from ${user.id}`,
+          },
+        });
+        // notify self
+        socket.emit("notification:send", {
+          receiver: user.id,
+          message: {
+            title: "Payment sent",
+            body: `You spent RM${amount} at ${name}`,
+          },
+        });
+      }
 
-        // remove socket to avoid looping ascendingly
-        // ws.removeAllListeners("pay_detail");
-      });
-    } else {
-      popupMessage({
-        title: "Error",
-        message: "Invalid QR code. Please scan again.",
-      });
+      navigation.navigate("Dashboard");
+    } catch (error) {
+      popupMessage({ title: "Error", message: "Please try again later" });
     }
 
     setScanned(true);
