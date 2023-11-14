@@ -8,10 +8,10 @@ export const usePayNow = ({ loyalty }) => {
   const { user } = useUserContext();
 
   const point = [
-    { active: true, screen: user.role === "CAFE" ? "Cashless" : "Insert Pin" },
+    { active: true, screen: user.role === "CAFE" ? "Cashless" : "Cafe List" },
     {
       active: false,
-      screen: user.role === "CAFE" ? "Green Campus" : "Insert Pin",
+      screen: user.role === "CAFE" ? "Green Campus" : "Cafe List",
     },
   ];
 
