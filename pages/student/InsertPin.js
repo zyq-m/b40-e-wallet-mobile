@@ -1,13 +1,36 @@
-import React from "react";
-import { View, Text, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text } from "react-native";
 import { Button, Input } from "../../components";
+import { popupMessage } from "../../utils/popupMessage";
+
+import { api } from "../../services/axiosInstance";
+import { useUserContext } from "../../hooks";
+
 import { globals, insertPinStyle } from "../../styles";
 
-const InsertPin = ({ navigation }) => {
-  const toDashboard = () => {
-    // You can add your authentication logic here
-    // If authentication is successful, navigate to the "Dashboard" screen
-    navigation.navigate("Dashboard"); // Replace "Dashboard" with your route name
+const InsertPin = ({ navigation, route }) => {
+  const { user } = useUserContext();
+  const { cafeId, amount, pointId } = route.params;
+  const [pin, setPin] = useState("");
+
+  const onCollect = () => {
+    api
+      .post("/student/point/collect", {
+        matricNo: user.id,
+        cafeId: cafeId,
+        amount: amount,
+        pointId: pointId,
+        otp: pin,
+      })
+      .then(() => {
+        setPin("");
+        // Push notification
+        // navigation.navigate("Dashboard");
+      })
+      .catch((e) => {
+        popupMessage({ title: "Alert", message: e.response.data?.message });
+        console.log(e);
+      });
   };
 
   return (
@@ -19,9 +42,9 @@ const InsertPin = ({ navigation }) => {
     >
       <View>
         <Text style={insertPinStyle.textHeader}>Please Insert PIN Code</Text>
-        <Input label={"Insert PIN code here"} />
+        <Input label={"Insert PIN code here"} onChange={setPin} />
         <View style={{ marginTop: 30 }}>
-          <Button label={"Send"} onPress={toDashboard} />
+          <Button label={"Collect"} onPress={onCollect} />
         </View>
       </View>
     </View>

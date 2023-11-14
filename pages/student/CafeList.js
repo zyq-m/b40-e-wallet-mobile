@@ -4,14 +4,13 @@ import { RadioButton } from "react-native-radio-buttons-group";
 import { Button, Refresh } from "../../components";
 
 import { useUserContext } from "../../hooks";
-import { socket } from "../../services/socket";
 import { popupMessage } from "../../utils/popupMessage";
 import { api } from "../../services/axiosInstance";
 
 import { globals } from "../../styles";
 
 const CafeList = ({ navigation, route }) => {
-  const { amount } = route.params;
+  const { amount, pointId } = route.params;
   const { user } = useUserContext();
 
   const [radioBtn, setRadioBtn] = useState([]);
@@ -34,6 +33,15 @@ const CafeList = ({ navigation, route }) => {
       return popupMessage({
         title: "Error",
         message: "Please select a cafe",
+      });
+    }
+
+    // Collect Point
+    if (route.params?.loyalty) {
+      return navigation.navigate("Insert Pin", {
+        amount: amount,
+        cafeId: selectedCafe.id,
+        pointId: pointId,
       });
     }
 

@@ -12,7 +12,11 @@ const PayNow = ({ navigation, route }) => {
   const onRoute = () => {
     page.option.forEach((e) => {
       if (e.active) {
-        navigation.navigate(e.screen, { amount: e.value });
+        navigation.navigate(e.screen, {
+          amount: e.value,
+          pointId: e.id,
+          loyalty: loyalty,
+        });
       }
     });
   };
