@@ -6,6 +6,7 @@ import { Button, Refresh } from "../../components";
 import { useUserContext } from "../../hooks";
 import { popupMessage } from "../../utils/popupMessage";
 import { api } from "../../services/axiosInstance";
+import { pay } from "../../api/student/studentApi";
 
 import { globals } from "../../styles";
 
@@ -46,11 +47,7 @@ const CafeList = ({ navigation, route }) => {
     }
 
     try {
-      await api.post("/student/pay", {
-        matricNo: user?.id,
-        cafeId: selectedCafe.id,
-        amount: amount,
-      });
+      await pay(user.id, selectedCafe.id, amount);
 
       // emit event
       socket.emit("student:get-wallet-total", { matricNo: user?.id });
