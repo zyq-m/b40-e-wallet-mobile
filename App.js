@@ -60,7 +60,6 @@ function Home() {
       )}
       {(user?.role === "B40" || user?.role === "NON-B40") && (
         <>
-          <Drawer.Screen name="Insert Pin" component={InsertPin} />
           <Drawer.Screen
             name="Point Claimed"
             component={Transaction}
