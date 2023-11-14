@@ -142,6 +142,13 @@ export default function App() {
                 name="Transaction Details"
                 component={TransactionDetail}
               />
+              <Stack.Screen
+                name="Cafe List"
+                component={CafeList}
+                options={{
+                  title: "Choose a cafe",
+                }}
+              />
               {user.role === "B40" && (
                 <>
                   <Stack.Screen
@@ -156,13 +163,6 @@ export default function App() {
                     component={PayNow}
                     options={{
                       title: "Choose amount",
-                    }}
-                  />
-                  <Stack.Screen
-                    name="Cafe List"
-                    component={CafeList}
-                    options={{
-                      title: "Choose a cafe",
                     }}
                   />
                 </>
