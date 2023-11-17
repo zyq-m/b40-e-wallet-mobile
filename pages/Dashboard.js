@@ -143,7 +143,11 @@ const Dashboard = ({ navigation }) => {
               <FeatherIcon
                 name="more-horizontal"
                 size={25}
-                onPress={() => navigation.navigate("Transactions")}
+                onPress={() =>
+                  navigation.navigate(
+                    user.role === "NON-B40" ? "Point Claimed" : "Transactions"
+                  )
+                }
               />
             </View>
             <TransactionContainer>
