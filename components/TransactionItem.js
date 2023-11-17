@@ -18,7 +18,7 @@ const TransactionItem = ({
   time,
   date,
   amount,
-  cafe,
+  role,
   approved,
   transactionId,
   style,
@@ -96,12 +96,14 @@ const TransactionItem = ({
         <Text
           style={[
             transactionItemStyle.transactionAmount,
-            !cafe && { paddingRight: 20 },
+            role !== "CAFE" && { paddingRight: 20 },
           ]}
         >
-          {cafe ? "+" : "-"}RM{amount}
+          {role === "CAFE" && `+RM${amount}`}
+          {role === "B40" && `-RM${amount}`}
+          {role === "NON-B40" && `+${amount}pt`}
         </Text>
-        {cafe && (
+        {role === "CAFE" && (
           <TransactionCheckBox handleCheck={handleCheck} checked={checked} />
         )}
       </View>

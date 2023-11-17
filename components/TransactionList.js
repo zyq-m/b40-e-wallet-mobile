@@ -22,11 +22,11 @@ const TransactionList = ({ data, user, navigation, style, border }) => {
             key={i}
             transactionId={data.id}
             field1={data.matricNo}
-            approved={data.walletTransaction.approved}
+            approved={data.walletTransaction?.approved}
             time={formatTime(data.created_at)}
             date={formatDate(data.created_at)}
             amount={data.amount}
-            cafe={user?.role === "CAFE"}
+            role={user?.role}
             noBorder={!border && i == 0}
             navigate={() => {
               navigation.navigate("Transaction Details", {
