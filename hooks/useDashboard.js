@@ -30,7 +30,7 @@ export const useDashboard = () => {
       socket.on("student:get-point-total", (res) => {
         setDashboard((prev) => ({
           ...prev,
-          total: `${res.point || 0}pt`,
+          total: `${res.point?.total || 0}pt`,
           transaction: res.transaction.transaction,
         }));
       });
