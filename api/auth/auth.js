@@ -14,16 +14,6 @@ export const login = async (id, password) => {
   return token.data.role;
 };
 
-// Renew token
-export const renewToken = async () => {
-  const token = await getObject("token");
-  const newToken = await api.post("/auth/token", {
-    refreshToken: token.refreshToken,
-  });
-
-  return newToken;
-};
-
 // Logout
 export const logout = async () => {
   const token = await getObject("token");

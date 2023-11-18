@@ -1,11 +1,20 @@
 import axios from "axios";
-import { renewToken } from "../api/auth/auth";
 import { getObject, storeObject } from "../utils/asyncStorage";
 import { apiUrl } from "../utils/environment";
 
 export const api = axios.create({
   baseURL: apiUrl,
 });
+
+// Renew token
+const renewToken = async () => {
+  const token = await getObject("token");
+  const newToken = await api.post("/auth/token", {
+    refreshToken: token.refreshToken,
+  });
+
+  return newToken;
+};
 
 // Axios interceptor handle access token authentication
 api.interceptors.request.use(
