@@ -7,6 +7,7 @@ import { useUserContext } from "../../hooks";
 import { popupMessage } from "../../utils/popupMessage";
 import { api } from "../../services/axiosInstance";
 import { pay } from "../../api/student/studentApi";
+import { socket } from "../../services/socket";
 
 import { globals } from "../../styles";
 
