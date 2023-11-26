@@ -99,6 +99,7 @@ const Transaction = ({ navigation, route }) => {
           navigation={navigation}
           user={user}
           border={true}
+          params={route.params}
           style={transactionStyle.transactionItemWrap}
         />
       </Refresh>
