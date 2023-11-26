@@ -22,6 +22,7 @@ const TransactionItem = ({
   approved,
   transactionId,
   style,
+  params,
 }) => {
   const [checked, setChecked] = useState(approved);
 
@@ -100,8 +101,8 @@ const TransactionItem = ({
           ]}
         >
           {role === "CAFE" && `+RM${amount}`}
-          {role === "B40" && `-RM${amount}`}
-          {role === "NON-B40" && `+${amount}pt`}
+          {role === "B40" && !params?.loyalty && `-RM${amount}`}
+          {params?.loyalty && `+${amount}pt`}
         </Text>
         {role === "CAFE" && (
           <TransactionCheckBox handleCheck={handleCheck} checked={checked} />
