@@ -71,6 +71,7 @@ export const useDashboard = () => {
   };
 
   useEffect(() => {
+    socket.emit("user:connect", { id: user.id });
     defineRole();
   }, [socket, trigger]);
 
