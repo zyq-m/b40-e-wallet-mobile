@@ -25,26 +25,45 @@ const QRScan = ({ navigation, route }) => {
   };
 
   const handleQRScan = async ({ data }) => {
-    try {
-      const { id, otp, amount, pointId, name } = checkURL(data);
+    setScanned(true);
+    function getUrlParams(url) {
+      let params = {};
+      let parts = url.replace(
+        /[?&]+([^=&]+)=([^&]*)/gi,
+        function (m, key, value) {
+          params[key] = value;
+        }
+      );
+      return params;
+    }
 
+    const params = getUrlParams(data);
+    try {
       if (loyalty) {
         // Collect point
-        await collectPoint(user.id, id, amount, pointId, otp);
+        await collectPoint(
+          user.id,
+          params.id,
+          params.amount,
+          params.pointId,
+          params.otp
+        );
         popupMessage({
           title: "Success",
           message: "Point collected successful👍",
         });
+        socket.emit("student:get-point-total", { matricNo: user?.id });
       } else {
         // Pay
-        await pay(user.id, id, amount);
+        await pay(user.id, params.id, params.amount);
         popupMessage({ title: "Success", message: "Payment successful👍" });
         // send notification to cafe
+        socket.emit("student:get-wallet-total", { matricNo: user?.id });
         socket.emit("notification:send", {
           receiver: id,
           message: {
             title: "Payment recieved",
-            body: `You recieved RM${amount} from ${user.id}`,
+            body: `You recieved RM${params.amount} from ${user.id}`,
           },
         });
         // notify self
@@ -52,17 +71,16 @@ const QRScan = ({ navigation, route }) => {
           receiver: user.id,
           message: {
             title: "Payment sent",
-            body: `You spent RM${amount} at ${name}`,
+            body: `You spent RM${params.amount} at ${params.name}`,
           },
         });
       }
-
+      socket.emit("admin:get-overall");
       navigation.navigate("Dashboard");
     } catch (error) {
-      popupMessage({ title: "Error", message: "Please try again later" });
+      console.log(error);
+      popupMessage({ title: "Error", message: error.response.data?.message });
     }
-
-    setScanned(true);
   };
 
   useEffect(() => {

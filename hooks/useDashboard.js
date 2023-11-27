@@ -31,7 +31,7 @@ export const useDashboard = () => {
         setDashboard((prev) => ({
           ...prev,
           total: `${res.point?.total || 0}pt`,
-          transaction: res.transaction.transaction,
+          transaction: res.transaction,
         }));
       });
     }
@@ -42,7 +42,7 @@ export const useDashboard = () => {
         setDashboard((prev) => ({
           ...prev,
           total: `RM${res.coupon.total}`,
-          transaction: res.transaction.transaction,
+          transaction: res.transaction,
         }));
       });
     }
@@ -64,7 +64,7 @@ export const useDashboard = () => {
         setDashboard((prev) => ({
           ...prev,
           total: `RM${res.total}`,
-          transaction: res.transaction.transaction,
+          transaction: res.transaction,
         }));
       });
     }
