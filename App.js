@@ -45,6 +45,9 @@ function Home() {
           title: "eKupon@UniSZA",
           drawerLabel: "Home",
         }}
+        initialParams={{
+          loyalty: user?.role === "NON-B40" ? true : false,
+        }}
       />
       {user?.role === "CAFE" && (
         <>
@@ -148,15 +151,15 @@ export default function App() {
                   title: "Choose a cafe",
                 }}
               />
+              <Stack.Screen
+                name="QR Scan"
+                component={QRScan}
+                options={{
+                  headerShown: false,
+                }}
+              />
               {user.role === "B40" && (
                 <>
-                  <Stack.Screen
-                    name="QR Scan"
-                    component={QRScan}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
                   <Stack.Screen
                     name="Pay"
                     component={PayNow}

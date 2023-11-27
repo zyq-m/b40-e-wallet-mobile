@@ -16,7 +16,7 @@ import { popupMessage } from "../utils/popupMessage";
 
 import { globals, dashboardStyle } from "../styles";
 
-const Dashboard = ({ navigation }) => {
+const Dashboard = ({ navigation, route }) => {
   const { user } = useUserContext();
   const { schedulePushNotification } = usePushNotification();
   const { dashboard } = useDashboard();
@@ -152,6 +152,7 @@ const Dashboard = ({ navigation }) => {
             </View>
             <TransactionContainer>
               <TransactionList
+                params={route.params}
                 data={profile?.transaction}
                 navigation={navigation}
                 user={user}
