@@ -11,9 +11,9 @@ const TransactionList = ({ data, user, navigation, style, border, params }) => {
           sender: `${data.transaction.matricNo} - ${data.transaction.matricNo}`,
           recipient: data.transaction.cafe.name,
           transactionId: data.id,
-          amount: `RM${data.transaction.amount}`,
-          date: `${formatDate(data.transaction.created_at)} at ${formatTime(
-            data.transaction.created_at
+          amount: `RM${data.amount}`,
+          date: `${formatDate(data.transaction.createdAt)} at ${formatTime(
+            data.transaction.createdOn
           )}`,
         };
 
@@ -23,9 +23,9 @@ const TransactionList = ({ data, user, navigation, style, border, params }) => {
             transactionId={data.transaction.id}
             field1={data.transaction.matricNo}
             approved={data.transaction?.approved}
-            time={formatTime(data.transaction.created_at)}
-            date={formatDate(data.transaction.created_at)}
-            amount={data.transaction.amount}
+            time={formatTime(data.transaction.createdOn)}
+            date={formatDate(data.transaction.createdAt)}
+            amount={data.amount}
             role={user?.role}
             noBorder={!border && i == 0}
             params={params}
