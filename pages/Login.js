@@ -8,7 +8,6 @@ import { Button, Input } from "../components";
 import { globals, loginStyle } from "../styles";
 import { popupMessage } from "../utils/popupMessage";
 import { useUserContext } from "../hooks";
-import { socket } from "../services/socket";
 import { storeObject } from "../utils/asyncStorage";
 
 const Login = () => {
@@ -19,8 +18,6 @@ const Login = () => {
   const onSubmit = async () => {
     try {
       const user = await login(id, password);
-      socket.emit("user:connect", { id });
-
       // Update context
       const details = {
         id: id,
