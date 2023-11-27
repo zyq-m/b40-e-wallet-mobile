@@ -12,7 +12,7 @@ import { QRScanStyle } from "../../styles";
 import { socket } from "../../services/socket";
 
 const QRScan = ({ navigation, route }) => {
-  const { loyalty } = route.params;
+  const { loyalty, amount } = route.params;
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const { user } = useUserContext();
@@ -48,22 +48,21 @@ const QRScan = ({ navigation, route }) => {
           params.pointId,
           params.otp
         );
+        socket.emit("student:get-point-total", { matricNo: user?.id });
         popupMessage({
           title: "Success",
           message: "Point collected successful👍",
         });
-        socket.emit("student:get-point-total", { matricNo: user?.id });
       } else {
         // Pay
-        await pay(user.id, params.id, params.amount);
-        popupMessage({ title: "Success", message: "Payment successful👍" });
+        await pay(user.id, params.id, amount);
         // send notification to cafe
-        socket.emit("student:get-wallet-total", { matricNo: user?.id });
+        socket.emit("student:get-wallet-total", { matricNo: user.id });
         socket.emit("notification:send", {
           receiver: id,
           message: {
             title: "Payment recieved",
-            body: `You recieved RM${params.amount} from ${user.id}`,
+            body: `You recieved RM${amount} from ${user.id}`,
           },
         });
         // notify self
@@ -71,10 +70,12 @@ const QRScan = ({ navigation, route }) => {
           receiver: user.id,
           message: {
             title: "Payment sent",
-            body: `You spent RM${params.amount} at ${params.name}`,
+            body: `You spent RM${amount} at ${params.name}`,
           },
         });
+        popupMessage({ title: "Success", message: "Payment successful👍" });
       }
+
       socket.emit("admin:get-overall");
       navigation.navigate("Dashboard");
     } catch (error) {
