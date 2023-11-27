@@ -20,7 +20,7 @@ const MyQRCode = ({ route }) => {
       })
       .then((res) =>
         setQr({
-          url: `${res.data.data.url}&&pointId=${pointId}&&amount=${amount}`,
+          url: `${res.data.data.url}&pointId=${pointId}&amount=${amount}`,
           name: res.data.data.name,
         })
       )
