@@ -11,7 +11,9 @@ const TransactionList = ({ data, user, navigation, style, border, params }) => {
           sender: `${data.transaction.matricNo} - ${data.transaction.matricNo}`,
           recipient: data.transaction.cafe.name,
           transactionId: data.id,
-          amount: `RM${data.amount}`,
+          amount: `${!params?.loyalty ? "RM" : ""}${
+            data?.amount || data.transaction.pointTransaction.point.value
+          }${params?.loyalty ? "pt" : ""}`,
           date: `${formatDate(data.transaction.createdAt)} at ${formatTime(
             data.transaction.createdOn
           )}`,
@@ -25,7 +27,9 @@ const TransactionList = ({ data, user, navigation, style, border, params }) => {
             approved={data.transaction?.approved}
             time={formatTime(data.transaction.createdOn)}
             date={formatDate(data.transaction.createdAt)}
-            amount={data.amount}
+            amount={
+              data?.amount || data.transaction.pointTransaction.point.value
+            }
             role={user?.role}
             noBorder={!border && i == 0}
             params={params}

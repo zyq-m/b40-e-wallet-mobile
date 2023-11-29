@@ -126,7 +126,7 @@ const CafeList = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    user.cafeList.refresh && fetchCafe();
+    user.cafeList?.refresh && fetchCafe();
   }, [user.cafeList?.refresh]);
 
   return (
