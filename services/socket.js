@@ -10,7 +10,7 @@ const getToken = async () => {
 
 export const socket = io(apiUrl, {
   auth: {
-    token: getToken(),
+    token: 0,
   },
 }); // store in env
 
