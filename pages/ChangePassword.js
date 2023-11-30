@@ -6,76 +6,32 @@ import { Button } from "../components";
 import { popupMessage } from "../utils/popupMessage";
 
 import { globals, loginStyle } from "../styles";
+import { changePassword } from "../api/auth/auth";
 
 const ChangePassword = ({ navigation }) => {
-  const [currPass, setCurrPass] = useState("");
-  const [newPass, setNewPass] = useState("");
-  const [rePass, setRePass] = useState("");
+  const [credential, setCredential] = useState({
+    currPass: "",
+    newPass: "",
+    rePass: "",
+  });
   const { user } = useUserContext();
 
   const handleSend = async () => {
-    const reg = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-
-    const data = {
-      currentPassword: currPass,
-      newPassword: newPass,
-    };
-
-    // ! buat validation pass & re-type pass
-    if (!reg.test(newPass)) {
-      popupMessage({
-        message:
-          "Password must be at least a number, and at least a special character",
-        title: "Alert",
-      });
-
-      return;
-    }
-
-    if (newPass.length < 8) {
-      popupMessage({
-        message: "Password must be atleast 8 characters",
-        title: "Alert",
-      });
-
-      return;
-    }
-
-    if (newPass.length === 20) {
-      popupMessage({
-        message: "Password is too long",
-        title: "Alert",
-      });
-
-      return;
-    }
-
-    if (rePass !== newPass) {
-      popupMessage({
-        message: "Retype password doesn't match",
-        title: "Alert",
-      });
-
-      return;
-    }
+    const { currPass, newPass, rePass } = credential;
 
     try {
-      if (user.student) {
-        // await changeStudentPass(user.id, data);
-      } else {
-        // await changeCafePass(user.id, data);
-      }
-
-      setCurrPass("");
-      setRePass("");
-      setNewPass("");
+      await changePassword(user.id, currPass, newPass, rePass);
+      // Clear form
+      setCredential({ currPass: "", newPass: "", rePass: "" });
       popupMessage({
         message: "Password changed successful",
         title: "Success",
       });
+
       navigation.navigate("Dashboard");
     } catch (error) {
-      popupMessage({ message: "Wrong current password", title: "Alert" });
+      console.log(error);
+      popupMessage({ message: error.response.data.message, title: "Alert" });
     }
   };
 
@@ -83,13 +39,28 @@ const ChangePassword = ({ navigation }) => {
     <View style={globals.container}>
       <View style={{ padding: 16 }}>
         <Para>Current password</Para>
-        <Input value={currPass} onChangeText={setCurrPass} />
+        <Input
+          value={credential.currPass}
+          onChangeText={(e) =>
+            setCredential((prev) => ({ ...prev, currPass: e }))
+          }
+        />
 
         <Para>New Password</Para>
-        <Input value={newPass} onChangeText={setNewPass} />
+        <Input
+          value={credential.newPass}
+          onChangeText={(e) =>
+            setCredential((prev) => ({ ...prev, newPass: e }))
+          }
+        />
 
         <Para>Re-type password</Para>
-        <Input value={rePass} onChangeText={setRePass} />
+        <Input
+          value={credential.rePass}
+          onChangeText={(e) =>
+            setCredential((prev) => ({ ...prev, rePass: e }))
+          }
+        />
 
         <Button label={"Change"} onPress={handleSend} />
       </View>

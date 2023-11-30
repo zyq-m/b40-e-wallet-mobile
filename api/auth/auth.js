@@ -21,3 +21,12 @@ export const logout = async () => {
     refreshToken: token.refreshToken,
   });
 };
+
+export const changePassword = async (id, oldPass, newPass, rePass) => {
+  return await api.put("/auth/change/password", {
+    id,
+    oldPass,
+    newPass,
+    rePass,
+  });
+};
