@@ -12,13 +12,11 @@ import {
 } from "../components";
 
 import { useUserContext, usePushNotification, useDashboard } from "../hooks";
-import { popupMessage } from "../utils/popupMessage";
 
 import { globals, dashboardStyle } from "../styles";
 
 const Dashboard = ({ navigation, route }) => {
   const { user } = useUserContext();
-  const { schedulePushNotification } = usePushNotification();
   const { dashboard } = useDashboard();
   const [profile, setProfile] = useState({});
 
@@ -71,50 +69,6 @@ const Dashboard = ({ navigation, route }) => {
   useEffect(() => {
     setProfile(dashboard);
   }, [dashboard]);
-
-  // useEffect(() => {
-  //   // send id to get transaction
-  //   if (user.student) {
-  //     ws.emit("get_transaction_student", user.id);
-  //     // receive new data
-  //     ws.on("set_transaction_student", (data) => setTransactions(data));
-
-  //     ws.emit("get_student", user.id);
-  //     ws.on("set_student", (data) => {
-  //       // set wallet amount, name, matric no
-  //       setStudents(data);
-  //       setUser((prev) => ({
-  //         ...prev,
-  //         details: { id: data.matric_no, name: data.student_name },
-  //       }));
-  //     });
-
-  //     ws.on("get_notification", async (notification) => {
-  //       if (notification) {
-  //         await schedulePushNotification(notification);
-  //       }
-  //     });
-  //   } else {
-  //     // get sales amount
-  //     ws.emit("get_sales_amount", user.id);
-  //     ws.on("set_sales_amount", (data) => setTotal(data?.total_sales || 0));
-
-  //     ws.emit("get_transaction_cafe", user.id);
-  //     ws.on("set_transaction_cafe", (data) => {
-  //       setTransactions(data);
-  //     });
-
-  //     ws.on("get_notification", async (notification) => {
-  //       if (notification) {
-  //         await schedulePushNotification(notification);
-  //       }
-  //     });
-  //   }
-
-  //   return () => {
-  //     ws.removeAllListeners();
-  //   };
-  // }, [ws]);
 
   return (
     <View style={[globals.container, { paddingTop: 16 }]}>
