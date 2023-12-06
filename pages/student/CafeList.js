@@ -52,9 +52,24 @@ const CafeList = ({ navigation, route }) => {
 
       // emit event
       socket.emit("student:get-wallet-total", { matricNo: user?.id });
+      socket.emit("cafe:get-sales-total", { cafeId: selectedCafe.id });
       socket.emit("admin:get-overall");
-
       // push notification then nav to dashboard
+      socket.emit("notification:send", {
+        receiver: selectedCafe.id,
+        message: {
+          title: "Payment recieved",
+          body: `You recieved RM${amount} from ${user.id}`,
+        },
+      });
+      // notify self
+      socket.emit("notification:send", {
+        receiver: user.id,
+        message: {
+          title: "Payment sent",
+          body: `You spent RM${amount} at ${selectedCafe.name}`,
+        },
+      });
       popupMessage({ title: "Success", message: "Payment successful👍" });
       navigation.navigate("Dashboard");
     } catch (error) {
@@ -66,32 +81,6 @@ const CafeList = ({ navigation, route }) => {
         });
       }
     }
-
-    // if (selectedCafe) {
-    //   ws.emit("pay", selectedCafe.id, user.id, amount);
-    //   ws.on("pay_detail", (res) => {
-    //     if (!res) {
-    //       return;
-    //     }
-    //     ws.emit("get_student", user.id);
-    //     ws.emit("get_transaction_student", user.id);
-    //     // TODO: update new data to only selected cafe
-    //     ws.emit("get_transaction_cafe", selectedCafe.id);
-    //     // TODO: set event to push notification
-    //     ws.emit("send_notification", selectedCafe.id, {
-    //       title: "Payment recieved",
-    //       body: `You recieved RM${amount}.00 from ${user.details.name} - ${user.details.id}`,
-    //     });
-    //     ws.emit("send_notification", user.id, {
-    //       title: "Payment sent",
-    //       body: `You spent RM${amount}.00 at ${selectedCafe.name}`,
-    //     });
-    //     popupMessage({ title: "Success", message: "Payment successful👍" });
-    //     navigation.navigate("Dashboard");
-    //     // remove socket to avoid looping ascendingly
-    //     ws.removeAllListeners("pay_detail");
-    //   });
-    // }
   };
 
   const fetchCafe = (signal) => {

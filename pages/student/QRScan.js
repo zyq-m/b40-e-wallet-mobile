@@ -58,8 +58,9 @@ const QRScan = ({ navigation, route }) => {
         await pay(user.id, params.id, amount);
         // send notification to cafe
         socket.emit("student:get-wallet-total", { matricNo: user.id });
+        socket.emit("cafe:get-sales-total", { cafeId: params.id });
         socket.emit("notification:send", {
-          receiver: id,
+          receiver: params.id,
           message: {
             title: "Payment recieved",
             body: `You recieved RM${amount} from ${user.id}`,
