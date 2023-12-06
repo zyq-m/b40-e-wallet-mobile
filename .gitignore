@@ -75,4 +75,6 @@ buck-out/
 web-build/
 dist/
 
+%ProgramData%/
+
 # @end expo-cli
