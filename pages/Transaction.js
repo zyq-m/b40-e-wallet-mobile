@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Text, View, Platform } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
@@ -10,27 +10,23 @@ import { listData } from "../data/constant";
 
 import { globals, transactionStyle } from "../styles";
 
-const Transaction = ({ navigation }) => {
+const Transaction = ({ navigation, route }) => {
   const [collapse, setCollapse] = useState(false);
   const { user } = useUserContext();
-  const { transactions, loading, error } = useTransaction({
-    id: user.id,
-    student: user.student,
-    refresh: user.transaction.refresh,
-  });
+  const { transactions, loading, error } = useTransaction(route.params);
 
   const [list, setList] = useState(listData);
   const [filterTransaction, setFilterTransaction] = useState([]);
 
   const filterDate = useFilterDate();
 
-  const onCollapse = () => setCollapse(prev => !prev);
+  const onCollapse = () => setCollapse((prev) => !prev);
 
   const filtered = useMemo(() => filterDate(transactions), [transactions]);
 
-  const onList = id => {
-    return setList(prev =>
-      prev.map(data => {
+  const onList = (id) => {
+    return setList((prev) =>
+      prev.map((data) => {
         if (data.id === id) {
           return { ...data, checked: true };
         } else {
@@ -87,7 +83,8 @@ const Transaction = ({ navigation }) => {
             textAlign: "center",
             fontWeight: "500",
             color: "rgba(132, 132, 132, 1)",
-          }}>
+          }}
+        >
           {error ? error : "Loading.."}
         </Text>
       </>
@@ -102,17 +99,19 @@ const Transaction = ({ navigation }) => {
           navigation={navigation}
           user={user}
           border={true}
+          params={route.params}
           style={transactionStyle.transactionItemWrap}
         />
       </Refresh>
-      {filterTransaction.length === 0 && (
+      {!filterTransaction?.length && (
         <Text
           style={{
             flex: 1,
             textAlign: "center",
             fontWeight: "500",
             color: "rgba(132, 132, 132, 1)",
-          }}>
+          }}
+        >
           No transactions history
         </Text>
       )}

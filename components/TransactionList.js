@@ -3,103 +3,45 @@ import { formatTime, formatDate } from "../utils/formatTime";
 
 import TransactionItem from "./TransactionItem";
 
-const TransactionList = ({ data, user, navigation, style, border, slice }) => {
-  if (slice) {
-    return (
-      <>
-        {data
-          ?.slice(0, 5)
-          .map(
-            (
-              {
-                sender,
-                amount,
-                created_at,
-                created_on,
-                transaction_id,
-                cafe_name,
-                student_name,
-                approved_by_recipient,
-              },
-              i
-            ) => {
-              let details = {
-                sender: `${student_name} - ${sender}`,
-                recipient: cafe_name,
-                transactionId: transaction_id,
-                amount: `RM${amount}`,
-                date: `${formatDate(created_on)} at ${formatTime(created_at)}`,
-              };
-
-              return (
-                <TransactionItem
-                  key={i}
-                  transactionId={transaction_id}
-                  approved={approved_by_recipient}
-                  field1={details.sender}
-                  time={formatTime(created_at)}
-                  date={formatDate(created_on)}
-                  amount={amount}
-                  noBorder={i == 0 && true}
-                  cafe={!user.student}
-                  navigate={() => {
-                    navigation.navigate("Transaction Details", {
-                      data: details,
-                    });
-                  }}
-                />
-              );
-            }
-          )}
-      </>
-    );
-  }
-
+const TransactionList = ({ data, user, navigation, style, border, params }) => {
   return (
     <>
-      {data?.map(
-        (
-          {
-            sender,
-            amount,
-            created_at,
-            created_on,
-            transaction_id,
-            cafe_name,
-            student_name,
-            approved_by_recipient,
-          },
-          i
-        ) => {
-          let details = {
-            sender: `${student_name} - ${sender}`,
-            recipient: cafe_name,
-            transactionId: transaction_id,
-            amount: `RM${amount}`,
-            date: `${formatDate(created_on)} at ${formatTime(created_at)}`,
-          };
+      {data?.map((data, i) => {
+        let details = {
+          sender: `${data.transaction.matricNo} - ${data.transaction.matricNo}`,
+          recipient: data.transaction.cafe.name,
+          transactionId: data.id,
+          amount: `${!params?.loyalty ? "RM" : ""}${
+            data?.amount || data.transaction.pointTransaction.point.value
+          }${params?.loyalty ? "pt" : ""}`,
+          date: `${formatDate(data.transaction.createdAt)} at ${formatTime(
+            data.transaction.createdOn
+          )}`,
+        };
 
-          return (
-            <TransactionItem
-              key={i}
-              transactionId={transaction_id}
-              field1={details.sender}
-              approved={approved_by_recipient}
-              time={formatTime(created_at)}
-              date={formatDate(created_on)}
-              amount={amount}
-              cafe={!user.student}
-              noBorder={!border && i == 0}
-              navigate={() => {
-                navigation.navigate("Transaction Details", {
-                  data: details,
-                });
-              }}
-              style={style}
-            />
-          );
-        }
-      )}
+        return (
+          <TransactionItem
+            key={i}
+            transactionId={data.transaction.id}
+            field1={data.transaction.matricNo}
+            approved={data.transaction?.approved}
+            time={formatTime(data.transaction.createdOn)}
+            date={formatDate(data.transaction.createdAt)}
+            amount={
+              data?.amount || data.transaction.pointTransaction.point.value
+            }
+            role={user?.role}
+            noBorder={!border && i == 0}
+            params={params}
+            navigate={() => {
+              navigation.navigate("Transaction Details", {
+                data: details,
+              });
+            }}
+            style={style}
+          />
+        );
+      })}
     </>
   );
 };

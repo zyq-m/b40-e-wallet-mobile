@@ -1,14 +1,16 @@
-import CafeList from "./CafeList";
+import CafeList from "./student/CafeList";
 import Dashboard from "./Dashboard";
 import Login from "./Login";
-import MyQRCode from "./MyQRCode";
-import PayNow from "./PayNow";
-import QRScan from "./QRScan";
+import MyQRCode from "./cafe/MyQRCode";
+import PayNow from "./student/PayNow";
+import QRScan from "./student/QRScan";
 import Transaction from "./Transaction";
 import TransactionDetail from "./TransactionDetail";
 import Report from "./Report";
 import ChangePassword from "./ChangePassword";
-import Profile from "./Profile";
+import Profile from "./cafe/Profile";
+import InsertPin from "./student/InsertPin";
+import MyPin from "./cafe/MyPin";
 
 export {
   ChangePassword,
@@ -22,4 +24,6 @@ export {
   TransactionDetail,
   Report,
   Profile,
+  InsertPin,
+  MyPin,
 };

@@ -1,25 +1,37 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
+import { api } from "../services/axiosInstance";
+import { useUserContext } from "./useUserContext";
 import { useTriggerRefresh } from "./useTriggerRefresh";
-import instanceAxios from "../lib/instanceAxios";
 
-export const useTransaction = ({ id, student, refresh }) => {
+export const useTransaction = (params) => {
   const [transactions, setTransactions] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { trigger } = useTriggerRefresh(refresh);
+  const { user } = useUserContext();
+  const { trigger } = useTriggerRefresh(user.transaction?.refresh);
 
-  const getTransactionById = async signal => {
+  const getTransactionById = async (signal) => {
+    let url = "";
+    if (user.role === "CAFE") {
+      url = `/cafe/transaction/${user.id}`;
+    }
+    if (user.role === "B40") {
+      url = `/student/transaction/wallet/${user.id}`;
+    }
+
+    if (params?.loyalty) {
+      // To load point transaction
+      url = `/student/transaction/point/${user.id}`;
+    }
+
     try {
-      const res = await instanceAxios.get(
-        `/api/transactions/${student ? `students` : `cafe`}/${id}`,
-        {
-          signal: signal,
-        }
-      );
-      const data = await res.data;
-      setTransactions(data);
+      const res = await api.get(url, {
+        signal: signal,
+      });
+
+      setTransactions(res.data.data);
       setLoading(false);
     } catch (error) {
       if (axios.isCancel(error)) {

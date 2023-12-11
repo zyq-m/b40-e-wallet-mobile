@@ -5,6 +5,7 @@ import loginStyle from "./loginStyle";
 import payNowStyle from "./payNowStyle";
 import QRScanStyle from "./QRScanStyle";
 import transactionStyle from "./transactionStyle";
+import insertPinStyle from "./insertPinStyle";
 
 export {
   dashboardStyle,
@@ -14,4 +15,5 @@ export {
   payNowStyle,
   QRScanStyle,
   transactionStyle,
+  insertPinStyle,
 };

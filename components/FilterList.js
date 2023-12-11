@@ -33,7 +33,8 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
     <TouchableOpacity
       activeOpacity={0}
       style={filterStyle.fitlerBackDrop}
-      onPress={onCollapse}>
+      onPress={onCollapse}
+    >
       <View style={filterStyle.filterContainer}>
         <View style={[filterStyle.filterRow, { paddingTop: 10 }]}>
           <MCIcon name="close" size={24} onPress={onCollapse} />
@@ -49,7 +50,7 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
             />
           ))}
         </View>
-        {!user.student && (
+        {user.role === "CAFE" && (
           <View style={{ marginBottom: 20 }}>
             <Button label={"Print"} onPress={generatePDF} />
           </View>

@@ -16,10 +16,12 @@ import {
   Report,
   ChangePassword,
   Profile,
+  InsertPin,
+  MyPin,
 } from "./pages";
-import { UserContext } from "./lib/Context";
-import { getValueFor } from "./utils/SecureStore";
+import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
+import { getObject } from "./utils/asyncStorage";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -34,7 +36,8 @@ function Home() {
         drawerStyle: { paddingTop: 16 },
         drawerActiveTintColor: "rgba(88, 83, 76, 1)",
         headerStyle: { backgroundColor: "#FFD400" },
-      }}>
+      }}
+    >
       <Drawer.Screen
         name="Dashboard"
         component={Dashboard}
@@ -42,17 +45,36 @@ function Home() {
           title: "eKupon@UniSZA",
           drawerLabel: "Home",
         }}
+        initialParams={{
+          loyalty: user?.role === "NON-B40" ? true : false,
+        }}
       />
-      {!user.student && (
-        <Drawer.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            headerTitle: "Update profile",
-          }}
-        />
+      {user?.role === "CAFE" && (
+        <>
+          <Drawer.Screen
+            name="Profile"
+            component={Profile}
+            options={{
+              headerTitle: "Update profile",
+            }}
+          />
+          <Drawer.Screen name="One-time pin" component={MyPin} />
+        </>
       )}
-      <Drawer.Screen name="Transactions History" component={Transaction} />
+      {(user?.role === "B40" || user?.role === "NON-B40") && (
+        <>
+          <Drawer.Screen
+            name="Point Claimed"
+            component={Transaction}
+            initialParams={{ loyalty: true }}
+          />
+        </>
+      )}
+      {(user?.role === "B40" || user?.role === "CAFE") && (
+        <>
+          <Drawer.Screen name="Transactions History" component={Transaction} />
+        </>
+      )}
       <Drawer.Screen name="Change password" component={ChangePassword} />
       <Drawer.Screen
         name="Report"
@@ -67,25 +89,21 @@ function Home() {
 
 export default function App() {
   const [user, setUser] = useState({
-    id: undefined,
-    login: false,
-    student: false,
     dashboard: { refresh: false },
     transaction: { refresh: false },
     cafeList: { refresh: false },
+    qr: { refresh: false },
   });
 
-  const getInitialValue = async () => {
+  const loadContext = async () => {
     try {
-      const id = await getValueFor("id");
-      const login = await getValueFor("login");
-      const student = await getValueFor("student");
+      const userDetail = await getObject("userDetails");
 
-      setUser(prev => ({
+      setUser((prev) => ({
         ...prev,
-        id: id,
-        login: JSON.parse(login),
-        student: JSON.parse(student),
+        id: userDetail?.id,
+        isSignedIn: userDetail?.isSignedIn,
+        role: userDetail?.role,
       }));
     } catch (error) {
       console.log(error);
@@ -93,7 +111,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    getInitialValue();
+    loadContext();
   }, []);
 
   return (
@@ -104,8 +122,9 @@ export default function App() {
           screenOptions={{
             headerStyle: { backgroundColor: "#FFD400" },
             animation: "fade_from_bottom",
-          }}>
-          {user.login ? (
+          }}
+        >
+          {user?.isSignedIn ? (
             <>
               <Stack.Screen
                 name="Home"
@@ -113,18 +132,17 @@ export default function App() {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
-                name="QR Scan"
-                component={QRScan}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="Pay"
+                name="Collect Point"
                 component={PayNow}
                 options={{
-                  title: "Choose amount",
+                  title: "Choose campaign",
                 }}
+              />
+              <Stack.Screen name="Insert Pin" component={InsertPin} />
+              <Stack.Screen name="Transactions" component={Transaction} />
+              <Stack.Screen
+                name="Transaction Details"
+                component={TransactionDetail}
               />
               <Stack.Screen
                 name="Cafe List"
@@ -133,14 +151,33 @@ export default function App() {
                   title: "Choose a cafe",
                 }}
               />
-              <Stack.Screen name="My QRCode" component={MyQRCode} />
-              <Stack.Screen name="Transactions" component={Transaction} />
               <Stack.Screen
-                name="Transaction Details"
-                component={TransactionDetail}
+                name="QR Scan"
+                component={QRScan}
+                options={{
+                  headerShown: false,
+                }}
               />
-              {!user.student && (
-                <Stack.Screen name="Profile" component={Profile} />
+              {user.role === "B40" && (
+                <>
+                  <Stack.Screen
+                    name="Pay"
+                    component={PayNow}
+                    options={{
+                      title: "Choose amount",
+                    }}
+                  />
+                </>
+              )}
+              {user?.role === "CAFE" && (
+                <>
+                  <Stack.Screen name="Profile" component={Profile} />
+                  <Stack.Screen name="My QRCode" component={MyQRCode} />
+                  <Stack.Screen name="One-time QRCode" component={PayNow} />
+                  <Stack.Screen name="Green Campus" component={MyQRCode} />
+                  <Stack.Screen name="Cashless" component={MyQRCode} />
+                  <Drawer.Screen name="One-time pin" component={MyPin} />
+                </>
               )}
             </>
           ) : (

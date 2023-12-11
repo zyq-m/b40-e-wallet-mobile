@@ -5,14 +5,14 @@ import { useUserContext } from "../hooks";
 
 const Refresh = ({ children, dashboard, transaction, cafeList, style }) => {
   const { setUser } = useUserContext();
-  const wait = timeout => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
   };
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    setUser(prev => {
+    setUser((prev) => {
       // refresh specific pages
       if (dashboard) {
         return { ...prev, dashboard: { refresh: true } };
@@ -26,7 +26,7 @@ const Refresh = ({ children, dashboard, transaction, cafeList, style }) => {
     });
     wait(2000).then(() => {
       setRefreshing(false);
-      setUser(prev => {
+      setUser((prev) => {
         if (dashboard) {
           return { ...prev, dashboard: { refresh: false } };
         }
@@ -48,7 +48,8 @@ const Refresh = ({ children, dashboard, transaction, cafeList, style }) => {
         ) : (
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         )
-      }>
+      }
+    >
       <View style={[{ paddingHorizontal: 16 }, style]}>{children}</View>
     </ScrollView>
   );

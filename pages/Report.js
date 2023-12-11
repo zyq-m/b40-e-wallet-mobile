@@ -8,7 +8,7 @@ import {
   Platform,
 } from "react-native";
 
-import { createFeedback } from "../lib/API";
+import { createFeedback } from "../api/createFeedback";
 import { useUserContext } from "../hooks";
 import { Button } from "../components";
 import { popupMessage } from "../utils/popupMessage";
@@ -16,13 +16,12 @@ import { popupMessage } from "../utils/popupMessage";
 import { globals, loginStyle } from "../styles";
 
 const Report = ({ navigation }) => {
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
+  const [report, setReport] = useState({ title: "", desc: "" });
   const { user } = useUserContext();
 
   const handleSend = () => {
-    if (title !== "") {
-      createFeedback(user.id, title, desc)
+    if (report.title !== "") {
+      createFeedback(user.id, report)
         .then(() => {
           if (Platform.OS === "web") {
             alert("Thank you for your feedback");
@@ -32,8 +31,7 @@ const Report = ({ navigation }) => {
           navigation.navigate("Dashboard");
         })
         .then(() => {
-          setTitle("");
-          setDesc("");
+          setTitle({ title: "", desc: "" });
         })
         .catch(() => {
           popupMessage({
@@ -54,14 +52,14 @@ const Report = ({ navigation }) => {
       <View style={{ padding: 16 }}>
         <Para>Title</Para>
         <Input
-          value={title}
-          onChangeText={setTitle}
+          value={report.title}
+          onChangeText={(e) => setReport((prev) => ({ ...prev, title: e }))}
           placeholder="I want new feature"
         />
         <Para>Comment</Para>
         <Input
-          value={desc}
-          onChangeText={setDesc}
+          value={report.desc}
+          onChangeText={(e) => setReport((prev) => ({ ...prev, desc: e }))}
           multiline
           numberOfLines={4}
         />
@@ -75,7 +73,7 @@ const Para = ({ children, style }) => {
   return <Text style={[aboutStyle.para, style]}>{children}</Text>;
 };
 
-const Input = props => {
+const Input = (props) => {
   return (
     <TextInput
       {...props}

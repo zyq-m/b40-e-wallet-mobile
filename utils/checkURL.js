@@ -1,7 +1,10 @@
-export const checkURL = url => {
-  const arrURL = url.split("api/");
-  if (arrURL.length == 2) {
-    let split = arrURL[1].split("/");
-    return { id: split[0], name: split[1] };
-  } else false;
-};
+export function checkURL(url) {
+  const params = new URLSearchParams(url.split("?")[1]);
+  const id = params.get("id");
+  const otp = params.get("otp");
+  const amount = params.get("amount");
+  const pointId = params.get("pointId");
+  const name = params.get("name");
+
+  return { id, otp, amount, pointId, name };
+}

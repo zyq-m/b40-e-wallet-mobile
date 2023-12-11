@@ -1,26 +1,26 @@
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { globals, loginStyle } from "../styles";
-import { Button } from "../components";
-import { getProfile, updateProfile } from "../lib/API";
-import { useUserContext } from "../hooks";
-import { popupMessage } from "../utils/popupMessage";
+import { globals, loginStyle } from "../../styles";
+import { Button } from "../../components";
+import { getProfile, updateProfile } from "../../api/cafe/profile";
+
+import { useUserContext } from "../../hooks";
+import { popupMessage } from "../../utils/popupMessage";
 
 const Profile = () => {
-  const [bankName, setBankName] = useState("");
-  const [account, setAccount] = useState("");
+  const [profile, setProfile] = useState({ bank: "", accountNo: "" });
   const { user } = useUserContext();
 
   const onUpdateProfile = () => {
-    updateProfile(user.id, bankName, account)
+    updateProfile(user.id, profile)
       .then(() => {
         popupMessage({
           title: "Success",
           message: "Profile successfully updated",
         });
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.response.status == 400) {
           popupMessage({
             title: "Alert",
@@ -41,11 +41,14 @@ const Profile = () => {
     const controller = new AbortController();
 
     getProfile(user.id, controller.signal)
-      .then(details => {
-        setBankName(details.data?.bank_name);
-        setAccount(details.data?.account_no);
+      .then((details) => {
+        setProfile((prev) => ({
+          ...prev,
+          bank: details.data.bank || "",
+          accountNo: details.data.accountNo || "",
+        }));
       })
-      .catch(err => err);
+      .catch((err) => err);
 
     return () => {
       controller.abort();
@@ -56,9 +59,17 @@ const Profile = () => {
     <View style={globals.container}>
       <View style={{ padding: 16 }}>
         <Para>Bank Name</Para>
-        <Input value={bankName} onChangeText={setBankName} placeholder="CIMB" />
+        <Input
+          value={profile.bank}
+          onChangeText={(e) => setProfile((prev) => ({ ...prev, bank: e }))}
+        />
         <Para>Account No.</Para>
-        <Input value={account} onChangeText={setAccount} />
+        <Input
+          value={profile.accountNo}
+          onChangeText={(e) =>
+            setProfile((prev) => ({ ...prev, accountNo: e }))
+          }
+        />
         <Button label={"Update"} onPress={onUpdateProfile} />
       </View>
     </View>
@@ -69,7 +80,7 @@ const Para = ({ children, style }) => {
   return <Text style={[aboutStyle.para, style]}>{children}</Text>;
 };
 
-const Input = props => {
+const Input = (props) => {
   return (
     <TextInput
       {...props}

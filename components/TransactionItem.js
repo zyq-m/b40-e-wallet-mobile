@@ -8,7 +8,7 @@ import {
   Alert,
 } from "react-native";
 import CheckBox from "expo-checkbox";
-import instanceAxios from "../lib/instanceAxios";
+import { api } from "../services/axiosInstance";
 import { popupMessage } from "../utils/popupMessage";
 
 const TransactionItem = ({
@@ -18,15 +18,16 @@ const TransactionItem = ({
   time,
   date,
   amount,
-  cafe,
+  role,
   approved,
   transactionId,
   style,
+  params,
 }) => {
   const [checked, setChecked] = useState(approved);
 
   const updateChecked = () => {
-    instanceAxios
+    api
       .put("/api/transactions/approved", {
         transactionId: transactionId,
         value: !checked,
@@ -61,7 +62,8 @@ const TransactionItem = ({
         transactionItemStyle.transactionItem,
         noBorder ? "" : transactionItemStyle.transactionItemBorder,
         style,
-      ]}>
+      ]}
+    >
       <View
         style={[
           {
@@ -69,7 +71,8 @@ const TransactionItem = ({
             paddingVertical: 16,
             maxWidth: "70%",
           },
-        ]}>
+        ]}
+      >
         <Text numberOfLines={1} style={{ fontWeight: "500", marginBottom: 2 }}>
           {field1}
         </Text>
@@ -79,7 +82,8 @@ const TransactionItem = ({
             style={[
               transactionItemStyle.transactionSmallTxt,
               { marginLeft: 12 },
-            ]}>
+            ]}
+          >
             {date}
           </Text>
         </View>
@@ -88,15 +92,19 @@ const TransactionItem = ({
         style={{
           flexDirection: "row",
           alignItems: "center",
-        }}>
+        }}
+      >
         <Text
           style={[
             transactionItemStyle.transactionAmount,
-            !cafe && { paddingRight: 20 },
-          ]}>
-          {cafe ? "+" : "-"}RM{amount}
+            role !== "CAFE" && { paddingRight: 20 },
+          ]}
+        >
+          {role === "CAFE" && `+RM${amount}`}
+          {role === "B40" && !params?.loyalty && `-RM${amount}`}
+          {params?.loyalty && `+${amount}pt`}
         </Text>
-        {cafe && (
+        {role === "CAFE" && (
           <TransactionCheckBox handleCheck={handleCheck} checked={checked} />
         )}
       </View>
@@ -120,7 +128,8 @@ const TransactionCheckBox = ({ handleCheck, checked }) => {
       <TouchableOpacity
         activeOpacity={1}
         onPress={handleCheck}
-        style={transactionItemStyle.checkBox}>
+        style={transactionItemStyle.checkBox}
+      >
         <CheckBox
           value={checked}
           style={{ padding: 9 }}

@@ -1,78 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, Image } from "react-native";
 
-import { login } from "../lib/API";
-import { ws } from "../lib/Socket";
+import { login } from "../api/auth/auth";
 
 import { Button, Input } from "../components";
 
 import { globals, loginStyle } from "../styles";
-import { getValueFor } from "../utils/SecureStore";
 import { popupMessage } from "../utils/popupMessage";
 import { useUserContext } from "../hooks";
+import { storeObject } from "../utils/asyncStorage";
 
 const Login = () => {
-  const [cafeOwner, setCafeOwner] = useState(false);
-  const [studentAcc, setStudentAcc] = useState("");
-  const [cafeAcc, setCafeAcc] = useState("");
+  const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const { setUser } = useUserContext();
 
-  const authUser = ({ id, student }) => {
-    setUser(prev => ({
-      ...prev,
-      id: id,
-      login: true,
-      student: student || false,
-    }));
-  };
-
   const onSubmit = async () => {
-    if (cafeOwner) {
-      login("cafe", { username: cafeAcc, password: password })
-        .then(() => {
-          ws.emit("new_user", cafeAcc);
-          authUser({ id: cafeAcc });
-        })
-        .catch(() => {
-          popupMessage({
-            title: "Cannot login",
-            message: "Invalid username or password",
-          });
-        });
-    } else {
-      login("students", { matric_no: studentAcc, password: password })
-        .then(() => {
-          ws.emit("new_user", studentAcc);
-          authUser({ id: studentAcc, student: true });
-        })
-        .catch(() => {
-          popupMessage({
-            title: "Cannot login",
-            message: "Invalid matric no or password",
-          });
-        });
+    try {
+      const user = await login(id, password);
+      // Update context
+      const details = {
+        id: id,
+        isSignedIn: true,
+        role: user,
+      };
+      setUser(details);
+      storeObject("userDetails", details);
+    } catch (error) {
+      // Look for status code & message
+      console.log(error);
+      popupMessage({
+        title: "Cannot login",
+        message: "Invalid userId or password",
+      });
     }
   };
-
-  useEffect(() => {
-    // trigger sockect to update when page refresh
-    getValueFor("id").then(id => {
-      if (id !== null) {
-        ws.emit("new_user", id);
-      }
-    });
-    return () => {
-      ws.removeAllListeners();
-    };
-  }, [ws]);
 
   return (
     <View
       style={[
         globals.container,
         { justifyContent: "center", paddingHorizontal: 16 },
-      ]}>
+      ]}
+    >
       <View>
         <Image
           style={{
@@ -84,15 +54,7 @@ const Login = () => {
           source={require("../assets/eKupon/logo.png")}
         />
         <Text style={loginStyle.loginHeader}>eKupon@UniSZA</Text>
-        {cafeOwner ? (
-          <Input label={"Username |"} value={cafeAcc} onChange={setCafeAcc} />
-        ) : (
-          <Input
-            label={"Matric No. |"}
-            value={studentAcc}
-            onChange={setStudentAcc}
-          />
-        )}
+        <Input label={"Username |"} value={id} onChange={setId} />
         <Input
           label={"Password |"}
           secure={true}
@@ -102,11 +64,7 @@ const Login = () => {
         <View style={{ marginTop: 37 }}>
           <Button label={"Login"} onPress={onSubmit} />
         </View>
-        <Text
-          style={loginStyle.smallText}
-          onPress={() => setCafeOwner(!cafeOwner)}>
-          {cafeOwner ? "Are you a student?" : "Are you a cafe owner?"}
-        </Text>
+        <Text style={loginStyle.smallText}>Hi there, welcome back!</Text>
       </View>
     </View>
   );

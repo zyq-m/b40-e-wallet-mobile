@@ -2,24 +2,31 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import QRCode from "react-qr-code";
 
-import instanceAxios from "../lib/instanceAxios";
-import { useUserContext } from "../hooks";
-import { globals } from "../styles";
+import { api } from "../../services/axiosInstance";
+import { useUserContext } from "../../hooks";
+import { globals } from "../../styles";
 
-const MyQRCode = () => {
+const MyQRCode = ({ route }) => {
   const { user } = useUserContext();
-  const [cafeName, setCafeName] = useState(undefined);
+  const [qr, setQr] = useState(undefined);
   const [loading, setLoading] = useState(true);
+  const { loyalty, amount, pointId } = route.params;
 
   useEffect(() => {
     const controller = new AbortController();
-    instanceAxios
-      .get(`/api/cafe/${user.id}`, {
+    api
+      .get(`/cafe/qr/${loyalty ? "loyalty" : "ekupon"}/${user.id}`, {
         signal: controller.signal,
       })
-      .then(name => setCafeName(name.data[0].cafe_name))
+      .then((res) =>
+        setQr({
+          url: `${res.data.data.url}&pointId=${pointId}&amount=${amount}`,
+          name: res.data.data.name,
+        })
+      )
       .then(() => setLoading(false))
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
+
     return () => {
       controller.abort();
     };
@@ -32,7 +39,8 @@ const MyQRCode = () => {
           style={{
             fontWeight: "500",
             color: "rgba(132, 132, 132, 1)",
-          }}>
+          }}
+        >
           Loading..
         </Text>
       </View>
@@ -48,17 +56,18 @@ const MyQRCode = () => {
           justifyContent: "center",
           alignItems: "center",
         },
-      ]}>
-      {cafeName && (
+      ]}
+    >
+      {qr && (
         <>
           <View style={QRStyles.QRWrapper}>
             <QRCode
               size={300}
-              value={`${process.env.REACT_APP_API_KEY}/api/${user.id}/${cafeName}`}
+              value={qr?.url}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
             />
           </View>
-          <Text style={QRStyles.cafeName}>{cafeName}</Text>
+          <Text style={QRStyles.cafeName}>{qr?.name}</Text>
         </>
       )}
     </View>
