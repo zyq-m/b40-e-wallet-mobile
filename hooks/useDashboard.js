@@ -27,7 +27,7 @@ export const useDashboard = () => {
         });
     }
 
-    if (user.role === "NON-B40") {
+    if (user.role === "PAYNET") {
       socket.emit("student:get-point-total", { matricNo: user?.id });
       socket.on("student:get-point-total", (res) => {
         setDashboard((prev) => ({
@@ -38,9 +38,13 @@ export const useDashboard = () => {
       });
     }
 
-    if (user.role === "B40") {
-      socket.emit("student:get-wallet-total", { matricNo: user?.id });
+    if (["B40", "MAIDAM"].includes(user.role)) {
+      socket.emit("student:get-wallet-total", {
+        matricNo: user?.id,
+        role: user.role,
+      });
       socket.on("student:get-wallet-total", (res) => {
+        console.log(res);
         setDashboard((prev) => ({
           ...prev,
           total: `RM${res.coupon.total}`,
@@ -61,7 +65,10 @@ export const useDashboard = () => {
         .catch((e) => {
           console.log(e);
         });
-      socket.emit("cafe:get-sales-total", { cafeId: user?.id });
+      socket.emit("cafe:get-sales-total", {
+        cafeId: user?.id,
+        role: user.role,
+      });
       socket.on("cafe:get-sales-total", (res) => {
         setDashboard((prev) => ({
           ...prev,

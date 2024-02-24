@@ -22,7 +22,7 @@ const Dashboard = ({ navigation, route }) => {
 
   const btn = [
     {
-      role: "B40",
+      role: ["B40", "MAIDAM"],
       btn: [
         {
           label: "Pay",
@@ -39,7 +39,7 @@ const Dashboard = ({ navigation, route }) => {
       ],
     },
     {
-      role: "CAFE",
+      role: ["CAFE"],
       btn: [
         {
           label: "My QRCode",
@@ -52,7 +52,7 @@ const Dashboard = ({ navigation, route }) => {
       ],
     },
     {
-      role: "NON-B40",
+      role: ["PAYNET"],
       btn: [
         {
           label: "Collet Point",
@@ -80,7 +80,7 @@ const Dashboard = ({ navigation, route }) => {
           <Amount amount={profile?.total} student={user.student} />
         </View>
         {btn
-          .filter((val) => user?.role === val.role)[0]
+          .filter((val) => val.role.includes(user?.role))[0]
           .btn.map((val, i) => {
             return (
               <View key={i} style={{ marginTop: 10 }}>
@@ -99,7 +99,7 @@ const Dashboard = ({ navigation, route }) => {
                 size={25}
                 onPress={() =>
                   navigation.navigate(
-                    user.role === "NON-B40" ? "Point Claimed" : "Transactions"
+                    user.role === "PAYNET" ? "Point Claimed" : "Transactions"
                   )
                 }
               />

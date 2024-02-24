@@ -46,7 +46,7 @@ function Home() {
           drawerLabel: "Home",
         }}
         initialParams={{
-          loyalty: user?.role === "NON-B40" ? true : false,
+          loyalty: user?.role === "PAYNET" ? true : false,
         }}
       />
       {user?.role === "CAFE" && (
@@ -61,7 +61,7 @@ function Home() {
           <Drawer.Screen name="One-time pin" component={MyPin} />
         </>
       )}
-      {(user?.role === "B40" || user?.role === "NON-B40") && (
+      {(user?.role === "B40" || user?.role === "PAYNET") && (
         <>
           <Drawer.Screen
             name="Point Claimed"
@@ -105,6 +105,8 @@ export default function App() {
         isSignedIn: userDetail?.isSignedIn,
         role: userDetail?.role,
       }));
+
+      console.log(userDetail);
     } catch (error) {
       console.log(error);
     }
@@ -158,7 +160,7 @@ export default function App() {
                   headerShown: false,
                 }}
               />
-              {user.role === "B40" && (
+              {["B40", "MAIDAM"].includes(user.role) && (
                 <>
                   <Stack.Screen
                     name="Pay"
