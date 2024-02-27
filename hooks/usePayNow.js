@@ -74,6 +74,7 @@ export const usePayNow = ({ loyalty }) => {
               ...data,
               active: point[i].active,
               screen: point[i].screen,
+              role: ["B40", "MAIDAM", "PAYNET"],
             };
           });
 

@@ -44,7 +44,6 @@ export const useDashboard = () => {
         role: user.role,
       });
       socket.on("student:get-wallet-total", (res) => {
-        console.log(res);
         setDashboard((prev) => ({
           ...prev,
           total: `RM${res.coupon.total}`,

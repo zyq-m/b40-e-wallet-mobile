@@ -105,8 +105,6 @@ export default function App() {
         isSignedIn: userDetail?.isSignedIn,
         role: userDetail?.role,
       }));
-
-      console.log(userDetail);
     } catch (error) {
       console.log(error);
     }
