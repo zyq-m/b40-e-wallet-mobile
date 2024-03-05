@@ -173,7 +173,7 @@ export default function App() {
                 <>
                   <Stack.Screen name="Profile" component={Profile} />
                   <Stack.Screen name="My QRCode" component={MyQRCode} />
-                  <Stack.Screen name="One-time QRCode" component={PayNow} />
+                  <Stack.Screen name="One-time QRCode" component={MyQRCode} />
                   <Stack.Screen name="Green Campus" component={MyQRCode} />
                   <Stack.Screen name="Cashless" component={MyQRCode} />
                   <Drawer.Screen name="One-time pin" component={MyPin} />

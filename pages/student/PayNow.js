@@ -16,7 +16,6 @@ const PayNow = ({ navigation, route }) => {
     setAmount(() => {
       setPage((pagePrev) => {
         pagePrev.option[2].value = e;
-        console.log(pagePrev);
         return pagePrev;
       });
 
