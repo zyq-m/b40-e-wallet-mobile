@@ -92,7 +92,9 @@ const Transaction = ({ navigation, route }) => {
               Total:
             </Text>
             <Text style={{ fontWeight: "500" }}>
-              RM{transactions.summary._sum.amount}
+              {route.params?.loyalty
+                ? `${transactions.summary._sum.amount}pt`
+                : `RM${transactions.summary._sum.amount}`}
             </Text>
           </View>
         </View>
