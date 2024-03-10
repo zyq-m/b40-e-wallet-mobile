@@ -61,7 +61,7 @@ function Home() {
           <Drawer.Screen name="One-time pin" component={MyPin} />
         </>
       )}
-      {(user?.role === "B40" || user?.role === "PAYNET") && (
+      {["PAYNET", "B40", "MAIDAM"].includes(user?.role) && (
         <>
           <Drawer.Screen
             name="Point Claimed"
@@ -70,7 +70,7 @@ function Home() {
           />
         </>
       )}
-      {(user?.role === "B40" || user?.role === "CAFE") && (
+      {["CAFE", "B40", "MAIDAM"].includes(user?.role) && (
         <>
           <Drawer.Screen name="Transactions History" component={Transaction} />
         </>

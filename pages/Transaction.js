@@ -1,40 +1,17 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Text, View, Platform } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
 import { Refresh, FilterList, TransactionList } from "../components";
-
 import { useUserContext, useTransaction } from "../hooks";
-import { useFilterDate } from "../utils/filterDate";
-import { listData } from "../data/constant";
 
 import { globals, transactionStyle } from "../styles";
 
 const Transaction = ({ navigation, route }) => {
   const [collapse, setCollapse] = useState(false);
   const { user } = useUserContext();
-  const { transactions, loading, error } = useTransaction(route.params);
-
-  const [list, setList] = useState(listData);
-  const [filterTransaction, setFilterTransaction] = useState([]);
-
-  const filterDate = useFilterDate();
-
   const onCollapse = () => setCollapse((prev) => !prev);
-
-  const filtered = useMemo(() => filterDate(transactions), [transactions]);
-
-  const onList = (id) => {
-    return setList((prev) =>
-      prev.map((data) => {
-        if (data.id === id) {
-          return { ...data, checked: true };
-        } else {
-          return { ...data, checked: false };
-        }
-      })
-    );
-  };
+  const { transactions, list, onList } = useTransaction(route.params);
 
   useEffect(() => {
     let subscribe = true;
@@ -62,40 +39,11 @@ const Transaction = ({ navigation, route }) => {
     };
   }, []);
 
-  useEffect(() => {
-    list.forEach(({ checked, id }) => {
-      if (checked) {
-        id === 0 && setFilterTransaction(filtered.getAll);
-        id === 1 && setFilterTransaction(filtered.getToday);
-        id === 2 && setFilterTransaction(filtered.getWeek);
-        id === 3 && setFilterTransaction(filtered.getMonth);
-      }
-    });
-  }, [list, transactions]);
-
-  if (loading) {
-    return (
-      <>
-        <Refresh transaction={true} />
-        <Text
-          style={{
-            flex: 1,
-            textAlign: "center",
-            fontWeight: "500",
-            color: "rgba(132, 132, 132, 1)",
-          }}
-        >
-          {error ? error : "Loading.."}
-        </Text>
-      </>
-    );
-  }
-
   return (
-    <View style={[globals.container]}>
+    <View style={[globals.container, {}]}>
       <Refresh transaction={true} style={{ paddingBottom: 24 }}>
         <TransactionList
-          data={filterTransaction}
+          data={transactions.data}
           navigation={navigation}
           user={user}
           border={true}
@@ -103,7 +51,7 @@ const Transaction = ({ navigation, route }) => {
           style={transactionStyle.transactionItemWrap}
         />
       </Refresh>
-      {!filterTransaction?.length && (
+      {!transactions.data.length ? (
         <Text
           style={{
             flex: 1,
@@ -114,13 +62,47 @@ const Transaction = ({ navigation, route }) => {
         >
           No transactions history
         </Text>
+      ) : (
+        <View
+          style={{
+            paddingHorizontal: 16,
+            paddingTop: 16,
+            paddingBottom: 12,
+            borderTopLeftRadius: 9,
+            borderTopRightRadius: 9,
+            borderWidth: 1,
+            borderColor: "rgba(0, 0, 0, 0.08)",
+            backgroundColor: "#FFF",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "baseline",
+              gap: 4,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 12,
+                fontWeight: "500",
+                color: "rgba(0, 0, 0, 0.47)",
+              }}
+            >
+              Total:
+            </Text>
+            <Text style={{ fontWeight: "500" }}>
+              RM{transactions.summary._sum.amount}
+            </Text>
+          </View>
+        </View>
       )}
       {collapse && (
         <FilterList
           onCollapse={onCollapse}
           list={list}
           onList={onList}
-          document={filterTransaction}
+          // document={filterTransaction}
         />
       )}
     </View>
