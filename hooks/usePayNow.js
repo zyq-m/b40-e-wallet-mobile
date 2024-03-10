@@ -45,6 +45,7 @@ export const usePayNow = ({ loyalty }) => {
             value: 1,
             active: true,
             screen: Platform.OS === "web" ? "Cafe List" : "QR Scan",
+            role: ["B40", "MAIDAM"],
           },
           {
             id: 2,
@@ -52,6 +53,15 @@ export const usePayNow = ({ loyalty }) => {
             value: 2,
             active: false,
             screen: Platform.OS === "web" ? "Cafe List" : "QR Scan",
+            role: ["B40", "MAIDAM"],
+          },
+          {
+            id: 3,
+            name: "Enter amount",
+            value: 0,
+            active: false,
+            screen: Platform.OS === "web" ? "Cafe List" : "QR Scan",
+            role: ["MAIDAM"],
           },
         ],
       });
@@ -64,6 +74,7 @@ export const usePayNow = ({ loyalty }) => {
               ...data,
               active: point[i].active,
               screen: point[i].screen,
+              role: ["B40", "MAIDAM", "PAYNET"],
             };
           });
 
@@ -78,5 +89,5 @@ export const usePayNow = ({ loyalty }) => {
     }
   }, []);
 
-  return { page, onActive };
+  return { page, onActive, setPage };
 };

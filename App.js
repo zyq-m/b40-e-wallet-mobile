@@ -46,7 +46,7 @@ function Home() {
           drawerLabel: "Home",
         }}
         initialParams={{
-          loyalty: user?.role === "NON-B40" ? true : false,
+          loyalty: user?.role === "PAYNET" ? true : false,
         }}
       />
       {user?.role === "CAFE" && (
@@ -61,7 +61,7 @@ function Home() {
           <Drawer.Screen name="One-time pin" component={MyPin} />
         </>
       )}
-      {(user?.role === "B40" || user?.role === "NON-B40") && (
+      {["PAYNET", "B40", "MAIDAM"].includes(user?.role) && (
         <>
           <Drawer.Screen
             name="Point Claimed"
@@ -70,7 +70,7 @@ function Home() {
           />
         </>
       )}
-      {(user?.role === "B40" || user?.role === "CAFE") && (
+      {["CAFE", "B40", "MAIDAM"].includes(user?.role) && (
         <>
           <Drawer.Screen name="Transactions History" component={Transaction} />
         </>
@@ -158,7 +158,7 @@ export default function App() {
                   headerShown: false,
                 }}
               />
-              {user.role === "B40" && (
+              {["B40", "MAIDAM"].includes(user.role) && (
                 <>
                   <Stack.Screen
                     name="Pay"
@@ -173,7 +173,7 @@ export default function App() {
                 <>
                   <Stack.Screen name="Profile" component={Profile} />
                   <Stack.Screen name="My QRCode" component={MyQRCode} />
-                  <Stack.Screen name="One-time QRCode" component={PayNow} />
+                  <Stack.Screen name="One-time QRCode" component={MyQRCode} />
                   <Stack.Screen name="Green Campus" component={MyQRCode} />
                   <Stack.Screen name="Cashless" component={MyQRCode} />
                   <Drawer.Screen name="One-time pin" component={MyPin} />

@@ -51,7 +51,10 @@ const CafeList = ({ navigation, route }) => {
       await pay(user.id, selectedCafe.id, amount);
 
       // emit event
-      socket.emit("student:get-wallet-total", { matricNo: user?.id });
+      socket.emit("student:get-wallet-total", {
+        matricNo: user?.id,
+        role: user.role,
+      });
       socket.emit("cafe:get-sales-total", { cafeId: selectedCafe.id });
       socket.emit("admin:get-overall");
       // push notification then nav to dashboard
