@@ -122,6 +122,10 @@ export const useTransaction = (params) => {
     }
   };
 
+  function resetList() {
+    setList((prev) => prev.map((val) => ({ ...val, checked: false })));
+  }
+
   useEffect(() => {
     const controller = new AbortController();
     initLoad(controller.signal);
@@ -131,5 +135,5 @@ export const useTransaction = (params) => {
     };
   }, [trigger]);
 
-  return { transactions, list, onList };
+  return { transactions, list, onList, setTransactions, resetList };
 };

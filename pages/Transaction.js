@@ -11,7 +11,8 @@ const Transaction = ({ navigation, route }) => {
   const [collapse, setCollapse] = useState(false);
   const { user } = useUserContext();
   const onCollapse = () => setCollapse((prev) => !prev);
-  const { transactions, list, onList } = useTransaction(route.params);
+  const { transactions, list, onList, setTransactions, resetList } =
+    useTransaction(route.params);
 
   useEffect(() => {
     let subscribe = true;
@@ -105,6 +106,11 @@ const Transaction = ({ navigation, route }) => {
           list={list}
           onList={onList}
           // document={filterTransaction}
+          customDate={(data) => {
+            setTransactions(data);
+            resetList();
+          }}
+          loyalty={route.params?.loyalty}
         />
       )}
     </View>

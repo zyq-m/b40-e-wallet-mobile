@@ -12,6 +12,7 @@ const loginStyle = StyleSheet.create({
     alignSelf: "center",
   },
   inputContainer: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     marginTop: 20,
@@ -28,7 +29,7 @@ const loginStyle = StyleSheet.create({
   },
   input: {
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 3,
   },
   smallText: {
     marginTop: 21,
