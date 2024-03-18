@@ -24,6 +24,8 @@ const Profile = ({ textField1, textField2 }) => {
 
       // navigation.navigate("Login"); // Replace "Dashboard" with your route name
     } catch (error) {
+      await removeAll();
+      setUser({});
       console.log(error);
     }
   };
