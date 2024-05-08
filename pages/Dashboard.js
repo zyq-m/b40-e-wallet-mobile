@@ -22,20 +22,20 @@ const Dashboard = ({ navigation, route }) => {
 
   const btn = [
     {
-      role: ["B40", "MAIDAM"],
+      role: ["B40", "MAIDAM", "PAYNET"],
       btn: [
         {
           label: "Pay",
           nav: () => navigation.navigate("Pay", { loyalty: false }),
         },
-        {
-          label: "Collect Point",
-          nav: () =>
-            navigation.navigate(
-              Platform.OS === "web" ? "Collect Point" : "QR Scan",
-              { loyalty: true }
-            ), // create page to collect point
-        },
+        // {
+        //   label: "Collect Point",
+        //   nav: () =>
+        //     navigation.navigate(
+        //       Platform.OS === "web" ? "Collect Point" : "QR Scan",
+        //       { loyalty: true }
+        //     ), // create page to collect point
+        // },
       ],
     },
     {
@@ -45,23 +45,10 @@ const Dashboard = ({ navigation, route }) => {
           label: "My QRCode",
           nav: () => navigation.navigate("My QRCode", { loyalty: false }),
         },
-        {
-          label: "One-time QRCode",
-          nav: () => navigation.navigate("One-time QRCode", { loyalty: true }),
-        },
-      ],
-    },
-    {
-      role: ["PAYNET"],
-      btn: [
-        {
-          label: "Collet Point",
-          nav: () =>
-            navigation.navigate(
-              Platform.OS === "web" ? "Collect Point" : "QR Scan",
-              { loyalty: true }
-            ),
-        },
+        // {
+        //   label: "One-time QRCode",
+        //   nav: () => navigation.navigate("One-time QRCode", { loyalty: true }),
+        // },
       ],
     },
   ];
@@ -97,11 +84,7 @@ const Dashboard = ({ navigation, route }) => {
               <FeatherIcon
                 name="more-horizontal"
                 size={25}
-                onPress={() =>
-                  navigation.navigate(
-                    user.role === "PAYNET" ? "Point Claimed" : "Transactions"
-                  )
-                }
+                onPress={() => navigation.navigate("Transactions")}
               />
             </View>
             <TransactionContainer>

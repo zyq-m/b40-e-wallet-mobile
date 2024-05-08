@@ -102,7 +102,7 @@ export const useTransaction = (params) => {
       };
     }
 
-    if (["B40", "MAIDAM"].includes(user.role)) {
+    if (["B40", "MAIDAM", "PAYNET"].includes(user.role)) {
       return {
         all: `/student/transaction/wallet/${user.id}`,
         today: `/student/transaction/wallet/${moment().format(

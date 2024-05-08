@@ -27,18 +27,18 @@ export const useDashboard = () => {
         });
     }
 
-    if (user.role === "PAYNET") {
-      socket.emit("student:get-point-total", { matricNo: user?.id });
-      socket.on("student:get-point-total", (res) => {
-        setDashboard((prev) => ({
-          ...prev,
-          total: `${res.point?.total || 0}pt`,
-          transaction: res.transaction,
-        }));
-      });
-    }
+    // if (user.role === "PAYNET") {
+    //   socket.emit("student:get-point-total", { matricNo: user?.id });
+    //   socket.on("student:get-point-total", (res) => {
+    //     setDashboard((prev) => ({
+    //       ...prev,
+    //       total: `${res.point?.total || 0}pt`,
+    //       transaction: res.transaction,
+    //     }));
+    //   });
+    // }
 
-    if (["B40", "MAIDAM"].includes(user.role)) {
+    if (["B40", "MAIDAM", "PAYNET"].includes(user.role)) {
       socket.emit("student:get-wallet-total", {
         matricNo: user?.id,
         role: user.role,

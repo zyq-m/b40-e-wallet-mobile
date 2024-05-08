@@ -45,9 +45,9 @@ function Home() {
           title: "eKupon@UniSZA",
           drawerLabel: "Home",
         }}
-        initialParams={{
-          loyalty: user?.role === "PAYNET" ? true : false,
-        }}
+        // initialParams={{
+        //   loyalty: user?.role === "PAYNET" ? true : false,
+        // }}
       />
       {user?.role === "CAFE" && (
         <>
@@ -58,10 +58,10 @@ function Home() {
               headerTitle: "Update profile",
             }}
           />
-          <Drawer.Screen name="One-time pin" component={MyPin} />
+          {/* <Drawer.Screen name="One-time pin" component={MyPin} /> */}
         </>
       )}
-      {["PAYNET", "B40", "MAIDAM"].includes(user?.role) && (
+      {/* {["PAYNET", "B40", "MAIDAM"].includes(user?.role) && (
         <>
           <Drawer.Screen
             name="Point Claimed"
@@ -69,8 +69,8 @@ function Home() {
             initialParams={{ loyalty: true }}
           />
         </>
-      )}
-      {["CAFE", "B40", "MAIDAM"].includes(user?.role) && (
+      )} */}
+      {["CAFE", "B40", "MAIDAM", "PAYNET"].includes(user?.role) && (
         <>
           <Drawer.Screen name="Transactions History" component={Transaction} />
         </>
@@ -131,14 +131,14 @@ export default function App() {
                 component={Home}
                 options={{ headerShown: false }}
               />
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="Collect Point"
                 component={PayNow}
                 options={{
                   title: "Choose campaign",
                 }}
-              />
-              <Stack.Screen name="Insert Pin" component={InsertPin} />
+              /> */}
+              {/* <Stack.Screen name="Insert Pin" component={InsertPin} /> */}
               <Stack.Screen name="Transactions" component={Transaction} />
               <Stack.Screen
                 name="Transaction Details"
@@ -158,7 +158,7 @@ export default function App() {
                   headerShown: false,
                 }}
               />
-              {["B40", "MAIDAM"].includes(user.role) && (
+              {["B40", "MAIDAM", "PAYNET"].includes(user.role) && (
                 <>
                   <Stack.Screen
                     name="Pay"
