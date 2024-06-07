@@ -70,7 +70,7 @@ function Home() {
           />
         </>
       )} */}
-      {["CAFE", "B40", "MAIDAM", "PAYNET"].includes(user?.role) && (
+      {["CAFE", "B40", "MAIDAM", "PAYNET", "TILAWAH"].includes(user?.role) && (
         <>
           <Drawer.Screen name="Transactions History" component={Transaction} />
         </>
@@ -158,7 +158,7 @@ export default function App() {
                   headerShown: false,
                 }}
               />
-              {["B40", "MAIDAM", "PAYNET"].includes(user.role) && (
+              {["B40", "MAIDAM", "PAYNET", "TILAWAH"].includes(user.role) && (
                 <>
                   <Stack.Screen
                     name="Pay"
