@@ -38,12 +38,12 @@ export const useDashboard = () => {
     //   });
     // }
 
-    if (["B40", "MAIDAM", "PAYNET"].includes(user.role)) {
+    if (["B40", "MAIDAM", "PAYNET", "TILAWAH"].includes(user.role)) {
       socket.emit("student:get-wallet-total", {
         matricNo: user?.id,
-        role: user.role,
       });
       socket.on("student:get-wallet-total", (res) => {
+        console.log(res);
         setDashboard((prev) => ({
           ...prev,
           total: `RM${res.coupon.total}`,
