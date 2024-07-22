@@ -45,7 +45,7 @@ export const usePayNow = ({ loyalty }) => {
             value: 1,
             active: true,
             screen: Platform.OS === "web" ? "Cafe List" : "QR Scan",
-            role: ["B40", "MAIDAM", "PAYNET", "TILAWAH"],
+            role: ["B40", "MAIDAM", "PAYNET", "TILAWAH", "FASI_MMS_2025"],
           },
           {
             id: 2,
@@ -53,7 +53,7 @@ export const usePayNow = ({ loyalty }) => {
             value: 2,
             active: false,
             screen: Platform.OS === "web" ? "Cafe List" : "QR Scan",
-            role: ["B40", "MAIDAM", "PAYNET", "TILAWAH"],
+            role: ["B40", "MAIDAM", "PAYNET", "TILAWAH", "FASI_MMS_2025"],
           },
           {
             id: 3,
@@ -61,7 +61,7 @@ export const usePayNow = ({ loyalty }) => {
             value: 0,
             active: false,
             screen: Platform.OS === "web" ? "Cafe List" : "QR Scan",
-            role: ["MAIDAM", "PAYNET", "TILAWAH"],
+            role: ["MAIDAM", "PAYNET", "TILAWAH", "FASI_MMS_2025"],
           },
         ],
       });
@@ -74,7 +74,7 @@ export const usePayNow = ({ loyalty }) => {
               ...data,
               active: point[i].active,
               screen: point[i].screen,
-              role: ["B40", "MAIDAM", "PAYNET", "TILAWAH"],
+              role: ["B40", "MAIDAM", "PAYNET", "TILAWAH", "FASI_MMS_2025"],
             };
           });
 
