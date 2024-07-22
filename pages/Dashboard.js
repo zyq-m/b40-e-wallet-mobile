@@ -22,7 +22,7 @@ const Dashboard = ({ navigation, route }) => {
 
   const btn = [
     {
-      role: ["B40", "MAIDAM", "PAYNET", "TILAWAH"],
+      role: ["B40", "MAIDAM", "PAYNET", "TILAWAH", "FASI_MMS_2025"],
       btn: [
         {
           label: "Pay",
