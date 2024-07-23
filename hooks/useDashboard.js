@@ -38,11 +38,7 @@ export const useDashboard = () => {
     //   });
     // }
 
-    if (
-      ["B40", "MAIDAM", "PAYNET", "TILAWAH", "FASI_MMS_2025"].includes(
-        user.role
-      )
-    ) {
+    if (!["CAFE"].includes(user.role)) {
       socket.emit("student:get-wallet-total", {
         matricNo: user?.id,
       });

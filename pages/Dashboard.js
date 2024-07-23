@@ -20,38 +20,13 @@ const Dashboard = ({ navigation, route }) => {
   const { dashboard } = useDashboard();
   const [profile, setProfile] = useState({});
 
-  const btn = [
-    {
-      role: ["B40", "MAIDAM", "PAYNET", "TILAWAH", "FASI_MMS_2025"],
-      btn: [
-        {
-          label: "Pay",
-          nav: () => navigation.navigate("Pay", { loyalty: false }),
-        },
-        // {
-        //   label: "Collect Point",
-        //   nav: () =>
-        //     navigation.navigate(
-        //       Platform.OS === "web" ? "Collect Point" : "QR Scan",
-        //       { loyalty: true }
-        //     ), // create page to collect point
-        // },
-      ],
-    },
-    {
-      role: ["CAFE"],
-      btn: [
-        {
-          label: "My QRCode",
-          nav: () => navigation.navigate("My QRCode", { loyalty: false }),
-        },
-        // {
-        //   label: "One-time QRCode",
-        //   nav: () => navigation.navigate("One-time QRCode", { loyalty: true }),
-        // },
-      ],
-    },
-  ];
+  const btn = {
+    label: user?.role == "CAFE" ? "My QRCode" : "Pay",
+    nav: () =>
+      navigation.navigate(user?.role == "CAFE" ? "My QRCode" : "Pay", {
+        loyalty: false,
+      }),
+  };
 
   useEffect(() => {
     setProfile(dashboard);
@@ -66,15 +41,9 @@ const Dashboard = ({ navigation, route }) => {
         <View style={{ marginTop: 24 }}>
           <Amount amount={profile?.total} student={user.student} />
         </View>
-        {btn
-          .filter((val) => val.role.includes(user?.role))[0]
-          .btn.map((val, i) => {
-            return (
-              <View key={i} style={{ marginTop: 10 }}>
-                <Button label={val.label} onPress={val.nav} />
-              </View>
-            );
-          })}
+        <View style={{ marginTop: 10 }}>
+          <Button label={btn.label} onPress={btn.nav} />
+        </View>
         {profile?.transaction?.length ? (
           <View style={{ marginTop: 40, marginBottom: 24 }}>
             <View style={[dashboardStyle.transactionHeaderWrap]}>

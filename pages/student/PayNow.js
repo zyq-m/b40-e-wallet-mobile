@@ -42,7 +42,7 @@ const PayNow = ({ navigation, route }) => {
           {page?.title}
         </Text>
         {page?.option
-          ?.filter((op) => op.role.includes(user.role))
+          ?.filter((op) => !op.role.includes(user.role))
           .map((op) => {
             return (
               <TouchableOpacity key={op.id} onPress={() => onActive(op.id)}>
