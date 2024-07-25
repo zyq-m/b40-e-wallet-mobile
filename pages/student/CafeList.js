@@ -17,6 +17,7 @@ const CafeList = ({ navigation, route }) => {
 
   const [radioBtn, setRadioBtn] = useState([]);
   const [selectedCafe, setSelectedCafe] = useState("");
+  const [confirmBtn, setConfirmBtn] = useState(false);
 
   const onSelected = (i) =>
     setRadioBtn((prev) =>
@@ -48,6 +49,7 @@ const CafeList = ({ navigation, route }) => {
     }
 
     try {
+      setConfirmBtn(true);
       await pay(user.id, selectedCafe.id, amount);
 
       // emit event
@@ -84,6 +86,8 @@ const CafeList = ({ navigation, route }) => {
         });
       }
     }
+
+    setConfirmBtn(false);
   };
 
   const fetchCafe = (signal) => {
@@ -142,7 +146,7 @@ const CafeList = ({ navigation, route }) => {
         </View>
       </Refresh>
       <View style={{ paddingBottom: 24, paddingHorizontal: 16 }}>
-        <Button label={"Confirm"} onPress={onConfirm} />
+        <Button label={"Confirm"} onPress={onConfirm} disable={confirmBtn} />
       </View>
     </View>
   );
