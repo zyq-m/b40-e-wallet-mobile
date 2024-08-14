@@ -47,7 +47,7 @@ const FilterList = ({
     if (user.role === "CAFE") {
       return `/cafe/transaction/${date.from}/${date.to}/${user.id}`;
     }
-    if (["B40", "MAIDAM"].includes(user.role)) {
+    if (user.role !== "CAFE") {
       return `/student/transaction/wallet/${date?.from}/${date?.to}/${user.id}`;
     }
   }
