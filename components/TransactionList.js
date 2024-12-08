@@ -2,48 +2,44 @@ import { memo } from "react";
 import { formatTime, formatDate } from "../utils/formatTime";
 
 import TransactionItem from "./TransactionItem";
+import toMYR from "../utils/toMYR";
+import dayjs from "dayjs";
 
 const TransactionList = ({ data, user, navigation, style, border, params }) => {
-  return (
-    <>
-      {data?.map((data, i) => {
-        let details = {
-          sender: `${data.transaction.matricNo} - ${data.transaction.matricNo}`,
-          recipient: data.transaction.cafe.name,
-          transactionId: data.id,
-          amount: `${!params?.loyalty ? "RM" : ""}${
-            data?.amount || data.transaction.pointTransaction.point.value
-          }${params?.loyalty ? "pt" : ""}`,
-          date: `${formatDate(data.transaction.createdAt)} at ${formatTime(
-            data.transaction.createdOn
-          )}`,
-        };
+	return (
+		<>
+			{data?.map((data, i) => {
+				let details = {
+					sender: `${data.student.name} - ${data.student.matric_no}`,
+					recipient: data.cafe.cafe_name,
+					transactionId: data.id,
+					amount: toMYR(data.amount),
+					date: dayjs(data.timestamp).format("DD/MM/YYYY hh:mm"),
+				};
 
-        return (
-          <TransactionItem
-            key={i}
-            transactionId={data.transaction.id}
-            field1={data.transaction.matricNo}
-            approved={data.transaction?.approved}
-            time={formatTime(data.transaction.createdOn)}
-            date={formatDate(data.transaction.createdAt)}
-            amount={
-              data?.amount || data.transaction.pointTransaction.point.value
-            }
-            role={user?.role}
-            noBorder={!border && i == 0}
-            params={params}
-            navigate={() => {
-              navigation.navigate("Transaction Details", {
-                data: details,
-              });
-            }}
-            style={style}
-          />
-        );
-      })}
-    </>
-  );
+				return (
+					<TransactionItem
+						key={i}
+						transactionId={data.id}
+						field1={data.student.matric_no}
+						approved={data.transaction?.approved}
+						time={dayjs(data.timestamp).format("hh:mm")}
+						date={dayjs(data.timestamp).format("DD/MM/YYYY")}
+						amount={toMYR(data.amount)}
+						role={user?.role}
+						noBorder={!border && i == 0}
+						params={params}
+						navigate={() => {
+							navigation.navigate("Transaction Details", {
+								data: details,
+							});
+						}}
+						style={style}
+					/>
+				);
+			})}
+		</>
+	);
 };
 
 export default memo(TransactionList);
