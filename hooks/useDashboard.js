@@ -14,10 +14,10 @@ export const useDashboard = () => {
 	const { trigger } = useTriggerRefresh(user.dashboard?.refresh);
 
 	const defineRole = async () => {
-		if (user.role === "student") {
+		if (user.role === "STUDENT") {
 			api.get(`/student/${user?.id}`)
 				.then((res) => {
-					storeData("fund_id", res.data.coupon[0].fund_id);
+					storeData("fund_id", res.data.coupons[0].fund_id);
 					setDashboard((prev) => ({
 						...prev,
 						id: res.data.matric_no,
@@ -37,7 +37,7 @@ export const useDashboard = () => {
 			});
 		}
 
-		if (user.role === "cafe") {
+		if (user.role === "CAFE") {
 			api.get(`/cafe/${user?.id}`)
 				.then((res) => {
 					setDashboard((prev) => ({

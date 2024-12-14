@@ -49,7 +49,7 @@ function Home() {
 				//   loyalty: user?.role === "PAYNET" ? true : false,
 				// }}
 			/>
-			{user?.role === "cafe" && (
+			{user?.role === "CAFE" && (
 				<>
 					<Drawer.Screen
 						name="Profile"
@@ -160,7 +160,7 @@ export default function App() {
 									headerShown: false,
 								}}
 							/>
-							{user?.role === "student" && (
+							{user?.role === "STUDENT" && (
 								<>
 									<Stack.Screen
 										name="Pay"
@@ -171,7 +171,7 @@ export default function App() {
 									/>
 								</>
 							)}
-							{user?.role === "cafe" && (
+							{user?.role === "CAFE" && (
 								<>
 									<Stack.Screen
 										name="Profile"

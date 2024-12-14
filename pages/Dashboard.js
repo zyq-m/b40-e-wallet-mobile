@@ -21,12 +21,14 @@ const Dashboard = ({ navigation, route }) => {
 	const [profile, setProfile] = useState({});
 
 	const btn = {
-		label: user?.role == "cafe" ? "My QRCode" : "Pay",
+		label: user?.role == "CAFE" ? "My QRCode" : "Pay",
 		nav: () =>
-			navigation.navigate(user?.role == "cafe" ? "My QRCode" : "Pay", {
+			navigation.navigate(user?.role == "CAFE" ? "My QRCode" : "Pay", {
 				loyalty: false,
 			}),
 	};
+
+	console.log(user);
 
 	useEffect(() => {
 		setProfile(dashboard);
