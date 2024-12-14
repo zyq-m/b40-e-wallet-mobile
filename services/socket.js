@@ -8,7 +8,7 @@ const getToken = async () => {
 	return token?.accessToken;
 };
 
-export const socket = io("http://localhost:3000", {
+export const socket = io(apiUrl, {
 	auth: {
 		token: 0,
 	},

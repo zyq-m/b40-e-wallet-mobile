@@ -3,7 +3,7 @@ import { getObject, storeObject } from "../utils/asyncStorage";
 import { apiUrl } from "../utils/environment";
 
 export const api = axios.create({
-	baseURL: "http://localhost:3000",
+	baseURL: apiUrl,
 });
 
 // Renew token
