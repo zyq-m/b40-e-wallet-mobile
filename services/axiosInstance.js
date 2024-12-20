@@ -9,7 +9,7 @@ export const api = axios.create({
 // Renew token
 const renewToken = async () => {
 	const token = await getObject("token");
-	const newToken = await api.post("/auth/token", {
+	const newToken = await api.post("/auth/refresh", {
 		refreshToken: token.refreshToken,
 	});
 
