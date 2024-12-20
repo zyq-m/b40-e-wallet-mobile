@@ -11,19 +11,21 @@ import ChangePassword from "./ChangePassword";
 import Profile from "./cafe/Profile";
 import InsertPin from "./student/InsertPin";
 import MyPin from "./cafe/MyPin";
+import CouponList from "./student/CouponList";
 
 export {
-  ChangePassword,
-  CafeList,
-  Dashboard,
-  Login,
-  MyQRCode,
-  PayNow,
-  QRScan,
-  Transaction,
-  TransactionDetail,
-  Report,
-  Profile,
-  InsertPin,
-  MyPin,
+	ChangePassword,
+	CafeList,
+	Dashboard,
+	Login,
+	MyQRCode,
+	PayNow,
+	QRScan,
+	Transaction,
+	TransactionDetail,
+	Report,
+	Profile,
+	InsertPin,
+	MyPin,
+	CouponList,
 };

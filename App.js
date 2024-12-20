@@ -16,8 +16,7 @@ import {
 	Report,
 	ChangePassword,
 	Profile,
-	InsertPin,
-	MyPin,
+	CouponList,
 } from "./pages";
 import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
@@ -45,9 +44,6 @@ function Home() {
 					title: "eKupon@UniSZA",
 					drawerLabel: "Home",
 				}}
-				// initialParams={{
-				//   loyalty: user?.role === "PAYNET" ? true : false,
-				// }}
 			/>
 			{user?.role === "CAFE" && (
 				<>
@@ -58,18 +54,9 @@ function Home() {
 							headerTitle: "Update profile",
 						}}
 					/>
-					{/* <Drawer.Screen name="One-time pin" component={MyPin} /> */}
 				</>
 			)}
-			{/* {["PAYNET", "B40", "MAIDAM"].includes(user?.role) && (
-        <>
-          <Drawer.Screen
-            name="Point Claimed"
-            component={Transaction}
-            initialParams={{ loyalty: true }}
-          />
-        </>
-      )} */}
+
 			<Drawer.Screen
 				name="Transactions History"
 				component={Transaction}
@@ -130,14 +117,6 @@ export default function App() {
 								component={Home}
 								options={{ headerShown: false }}
 							/>
-							{/* <Stack.Screen
-                name="Collect Point"
-                component={PayNow}
-                options={{
-                  title: "Choose campaign",
-                }}
-              /> */}
-							{/* <Stack.Screen name="Insert Pin" component={InsertPin} /> */}
 							<Stack.Screen
 								name="Transactions"
 								component={Transaction}
@@ -146,27 +125,34 @@ export default function App() {
 								name="Transaction Details"
 								component={TransactionDetail}
 							/>
-							<Stack.Screen
-								name="Cafe List"
-								component={CafeList}
-								options={{
-									title: "Choose a cafe",
-								}}
-							/>
-							<Stack.Screen
-								name="QR Scan"
-								component={QRScan}
-								options={{
-									headerShown: false,
-								}}
-							/>
 							{user?.role === "STUDENT" && (
 								<>
+									<Stack.Screen
+										name="Cafe List"
+										component={CafeList}
+										options={{
+											title: "Choose a cafe",
+										}}
+									/>
+									<Stack.Screen
+										name="QR Scan"
+										component={QRScan}
+										options={{
+											headerShown: false,
+										}}
+									/>
 									<Stack.Screen
 										name="Pay"
 										component={PayNow}
 										options={{
 											title: "Choose amount",
+										}}
+									/>
+									<Stack.Screen
+										name="Coupon List"
+										component={CouponList}
+										options={{
+											title: "Choose coupon",
 										}}
 									/>
 								</>

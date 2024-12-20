@@ -28,8 +28,6 @@ const Dashboard = ({ navigation, route }) => {
 			}),
 	};
 
-	console.log(user);
-
 	useEffect(() => {
 		setProfile(dashboard);
 	}, [dashboard]);

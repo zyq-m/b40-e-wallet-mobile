@@ -10,10 +10,9 @@ import { pay } from "../../api/student/studentApi";
 import { socket } from "../../services/socket";
 
 import { globals } from "../../styles";
-import { getData } from "../../utils/asyncStorage";
 
 const CafeList = ({ navigation, route }) => {
-	const { amount, pointId } = route.params;
+	const { amount, fundId } = route.params;
 	const { user } = useUserContext();
 
 	const [radioBtn, setRadioBtn] = useState([]);
@@ -42,8 +41,7 @@ const CafeList = ({ navigation, route }) => {
 
 		try {
 			setConfirmBtn(true);
-			const id = await getData("fund_id");
-			await pay(id, amount, user.id, selectedCafe.id);
+			await pay(fundId, amount, user.id, selectedCafe.id);
 
 			// emit event
 			socket.emit("student:get-wallet-total", { icNo: user?.id });
