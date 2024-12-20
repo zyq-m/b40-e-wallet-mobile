@@ -17,6 +17,7 @@ import {
 	ChangePassword,
 	Profile,
 	CouponList,
+	CouponDetail,
 } from "./pages";
 import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
@@ -155,6 +156,10 @@ export default function App() {
 											title: "Choose coupon",
 										}}
 									/>
+									<Stack.Screen
+										name="Coupon Details"
+										component={CouponDetail}
+									/>
 								</>
 							)}
 							{user?.role === "CAFE" && (
@@ -178,10 +183,6 @@ export default function App() {
 									<Stack.Screen
 										name="Cashless"
 										component={MyQRCode}
-									/>
-									<Drawer.Screen
-										name="One-time pin"
-										component={MyPin}
 									/>
 								</>
 							)}

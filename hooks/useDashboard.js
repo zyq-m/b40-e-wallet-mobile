@@ -17,7 +17,6 @@ export const useDashboard = () => {
 		if (user.role === "STUDENT") {
 			api.get(`/student/${user?.id}`)
 				.then((res) => {
-					storeData("fund_id", res.data.coupons[0].fund_id);
 					setDashboard((prev) => ({
 						...prev,
 						id: res.data.matric_no,
@@ -33,6 +32,7 @@ export const useDashboard = () => {
 					...prev,
 					total: res.coupon[0].balance,
 					transaction: res.transaction,
+					coupons: res.coupon,
 				}));
 			});
 		}

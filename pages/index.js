@@ -12,6 +12,7 @@ import Profile from "./cafe/Profile";
 import InsertPin from "./student/InsertPin";
 import MyPin from "./cafe/MyPin";
 import CouponList from "./student/CouponList";
+import CouponDetail from "./student/CouponDetail";
 
 export {
 	ChangePassword,
@@ -28,4 +29,5 @@ export {
 	InsertPin,
 	MyPin,
 	CouponList,
+	CouponDetail,
 };

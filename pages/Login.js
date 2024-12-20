@@ -29,7 +29,6 @@ const Login = () => {
 			storeObject("userDetails", details);
 		} catch (error) {
 			// Look for status code & message
-			console.log(error);
 			popupMessage({
 				title: "Cannot login",
 				message: "Invalid userId or password",

@@ -43,8 +43,9 @@ const Dashboard = ({ navigation, route }) => {
 				</View>
 				<View style={{ marginTop: 24 }}>
 					<Amount
+						student={user?.role == "STUDENT"}
+						coupons={profile?.coupons}
 						amount={profile?.total}
-						student={user?.role == "student"}
 					/>
 				</View>
 				<View style={{ marginTop: 10 }}>
