@@ -29,7 +29,6 @@ export const useDashboard = () => {
 			socket.on("student:get-wallet-total", (res) => {
 				setDashboard((prev) => ({
 					...prev,
-					total: res.coupon[0].balance,
 					transaction: res.transaction,
 					coupons: res.coupon,
 				}));
