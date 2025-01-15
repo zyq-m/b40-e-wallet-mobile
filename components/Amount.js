@@ -65,7 +65,7 @@ const Amount = ({ coupon, student, amount, studentName }) => {
 								{ fontSize: 10 },
 							]}
 						>
-							Valid till{" "}
+							Exp{" "}
 							{dayjs(coupon?.fund.expired).format("DD/MM/YYYY")}
 						</Text>
 					)}
