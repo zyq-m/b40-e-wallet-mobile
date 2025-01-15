@@ -23,8 +23,6 @@ const Dashboard = ({ navigation, route }) => {
 		setProfile(dashboard);
 	}, [dashboard]);
 
-	console.log(profile);
-
 	return (
 		<View style={[globals.container, { paddingTop: 16 }]}>
 			<Refresh dashboard={true}>
