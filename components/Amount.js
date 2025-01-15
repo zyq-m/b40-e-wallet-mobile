@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import toMYR from "../utils/toMYR";
 import dayjs from "dayjs";
 import { useNavigation } from "@react-navigation/native";
-import { ArrowRightLeft } from "lucide-react-native";
+import { ArrowRightLeft, QrCode } from "lucide-react-native";
 
 const Amount = ({ coupon, student, amount, studentName }) => {
 	const navigation = useNavigation();
@@ -40,10 +40,12 @@ const Amount = ({ coupon, student, amount, studentName }) => {
 							{ fontSize: 12, fontWeight: "500" },
 						]}
 					>
-						{student ? coupon?.fund.name : "Total"}
+						{student ? coupon?.fund.name : "Total earns"}
 					</Text>
-					{student && (
+					{student ? (
 						<ArrowRightLeft size={18} color="rgba(255,212,0,1)" />
+					) : (
+						<QrCode size={18} color="rgba(255,212,0,1)" />
 					)}
 				</View>
 				<View

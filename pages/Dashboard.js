@@ -23,6 +23,8 @@ const Dashboard = ({ navigation, route }) => {
 		setProfile(dashboard);
 	}, [dashboard]);
 
+	console.log(profile);
+
 	return (
 		<View style={[globals.container, { paddingTop: 16 }]}>
 			<Refresh dashboard={true}>
@@ -33,14 +35,18 @@ const Dashboard = ({ navigation, route }) => {
 					/>
 				</View>
 				<View style={{ marginTop: 24, gap: 4 }}>
-					{profile?.coupons?.map((coupon) => (
-						<Amount
-							key={coupon.id}
-							student={true}
-							coupon={coupon}
-							studentName={profile?.name}
-						/>
-					))}
+					{profile?.coupons ? (
+						profile.coupons.map((coupon) => (
+							<Amount
+								key={coupon.id}
+								student={true}
+								coupon={coupon}
+								studentName={profile?.name}
+							/>
+						))
+					) : (
+						<Amount amount={profile?.total} />
+					)}
 				</View>
 				{profile?.transaction?.length ? (
 					<View style={{ marginTop: 40, marginBottom: 24 }}>
