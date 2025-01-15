@@ -18,6 +18,7 @@ import {
 	Profile,
 	CouponList,
 	CouponDetail,
+	SuccessTf,
 } from "./pages";
 import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
@@ -146,7 +147,7 @@ export default function App() {
 										name="Pay"
 										component={PayNow}
 										options={{
-											title: "Choose amount",
+											title: "Payment Details",
 										}}
 									/>
 									<Stack.Screen
@@ -159,6 +160,11 @@ export default function App() {
 									<Stack.Screen
 										name="Coupon Details"
 										component={CouponDetail}
+									/>
+									<Stack.Screen
+										name="SuccessTf"
+										options={{ headerShown: false }}
+										component={SuccessTf}
 									/>
 								</>
 							)}

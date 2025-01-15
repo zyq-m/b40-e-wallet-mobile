@@ -1,21 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import toMYR from "../utils/toMYR";
 import dayjs from "dayjs";
-import Icon from "react-native-vector-icons/Feather";
-import TransactionContainer from "./TransactionContainer";
 import { useNavigation } from "@react-navigation/native";
+import { ArrowRightLeft } from "lucide-react-native";
 
-const Amount = ({ coupons, student, amount }) => {
-	const [isCollapse, setIsCollapse] = useState(false);
-	const navigate = useNavigation();
+const Amount = ({ coupon, student, amount, studentName }) => {
+	const navigation = useNavigation();
+
+	function onPress() {
+		if (student) {
+			navigation.navigate("Pay", {
+				fundId: coupon.fund_id,
+				name: studentName,
+				coupon: coupon.fund.name,
+			});
+		} else {
+			navigation.navigate("My QRCode");
+		}
+	}
 
 	return (
 		<>
 			<TouchableOpacity
 				activeOpacity={0.75}
 				style={amountStyle.amountContainer}
-				onPress={() => setIsCollapse(!isCollapse)}
+				onPress={onPress}
 			>
 				<View
 					style={{
@@ -30,14 +40,10 @@ const Amount = ({ coupons, student, amount }) => {
 							{ fontSize: 12, fontWeight: "500" },
 						]}
 					>
-						{student ? "My Balance" : "Total"}
+						{student ? coupon?.fund.name : "Total"}
 					</Text>
 					{student && (
-						<Icon
-							name="chevron-down"
-							size={18}
-							color="rgba(255, 255, 255, 1)"
-						/>
+						<ArrowRightLeft size={18} color="rgba(255,212,0,1)" />
 					)}
 				</View>
 				<View
@@ -48,7 +54,7 @@ const Amount = ({ coupons, student, amount }) => {
 					}}
 				>
 					<Text style={amountStyle.amountBigText}>
-						{toMYR(amount)}
+						{toMYR(student ? coupon.balance : amount)}
 					</Text>
 					{student && (
 						<Text
@@ -58,43 +64,11 @@ const Amount = ({ coupons, student, amount }) => {
 							]}
 						>
 							Valid till{" "}
-							{dayjs(coupons?.[0].fund.expired).format(
-								"DD/MM/YYYY"
-							)}
+							{dayjs(coupon?.fund.expired).format("DD/MM/YYYY")}
 						</Text>
 					)}
 				</View>
 			</TouchableOpacity>
-			{isCollapse && student && (
-				<TransactionContainer>
-					{coupons?.map((coupon, i) => (
-						<TouchableOpacity
-							activeOpacity={0.75}
-							key={coupon.id}
-							onPress={() =>
-								navigate.navigate("Coupon Details", {
-									data: coupon,
-								})
-							}
-							style={[
-								{
-									paddingHorizontal: 20,
-									paddingVertical: 16,
-									backgroundColor: "white",
-								},
-								i != 0 && {
-									borderTopColor: "rgba(0, 0, 0, 0.11)",
-									borderTopWidth: 1,
-								},
-							]}
-						>
-							<Text>
-								{coupon.fund.name}: {toMYR(coupon.balance)}
-							</Text>
-						</TouchableOpacity>
-					))}
-				</TransactionContainer>
-			)}
 		</>
 	);
 };

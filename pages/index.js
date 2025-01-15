@@ -13,6 +13,7 @@ import InsertPin from "./student/InsertPin";
 import MyPin from "./cafe/MyPin";
 import CouponList from "./student/CouponList";
 import CouponDetail from "./student/CouponDetail";
+import SuccessTf from "./student/SuccessTf";
 
 export {
 	ChangePassword,
@@ -30,4 +31,5 @@ export {
 	MyPin,
 	CouponList,
 	CouponDetail,
+	SuccessTf,
 };

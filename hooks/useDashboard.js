@@ -5,7 +5,6 @@ import { api } from "../services/axiosInstance";
 import { useUserContext } from "./useUserContext";
 import { useTriggerRefresh } from "./useTriggerRefresh";
 import { usePushNotification } from "./usePushNotification";
-import { storeData } from "../utils/asyncStorage";
 
 export const useDashboard = () => {
 	const [dashboard, setDashboard] = useState();

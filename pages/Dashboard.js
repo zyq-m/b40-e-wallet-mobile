@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Platform } from "react-native";
+import { View, Text } from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
 
 import {
@@ -7,11 +7,10 @@ import {
 	Amount,
 	TransactionContainer,
 	Refresh,
-	Button,
 	TransactionList,
 } from "../components";
 
-import { useUserContext, usePushNotification, useDashboard } from "../hooks";
+import { useUserContext, useDashboard } from "../hooks";
 
 import { globals, dashboardStyle } from "../styles";
 
@@ -19,14 +18,6 @@ const Dashboard = ({ navigation, route }) => {
 	const { user } = useUserContext();
 	const { dashboard } = useDashboard();
 	const [profile, setProfile] = useState({});
-
-	const btn = {
-		label: user?.role == "CAFE" ? "My QRCode" : "Pay",
-		nav: () =>
-			navigation.navigate(user?.role == "CAFE" ? "My QRCode" : "Pay", {
-				loyalty: false,
-			}),
-	};
 
 	useEffect(() => {
 		setProfile(dashboard);
@@ -41,15 +32,15 @@ const Dashboard = ({ navigation, route }) => {
 						textField2={profile?.id}
 					/>
 				</View>
-				<View style={{ marginTop: 24 }}>
-					<Amount
-						student={user?.role == "STUDENT"}
-						coupons={profile?.coupons}
-						amount={profile?.total}
-					/>
-				</View>
-				<View style={{ marginTop: 10 }}>
-					<Button label={btn.label} onPress={btn.nav} />
+				<View style={{ marginTop: 24, gap: 4 }}>
+					{profile?.coupons?.map((coupon) => (
+						<Amount
+							key={coupon.id}
+							student={true}
+							coupon={coupon}
+							studentName={profile?.name}
+						/>
+					))}
 				</View>
 				{profile?.transaction?.length ? (
 					<View style={{ marginTop: 40, marginBottom: 24 }}>

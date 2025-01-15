@@ -9,17 +9,19 @@ import Refresh from "./Refresh";
 import FilterItem from "./FilterItem";
 import DocumentTemplate from "./DocumentTemplate";
 import TransactionList from "./TransactionList";
+import Card from "./Card";
 
 export {
-  Refresh,
-  Amount,
-  Button,
-  DocumentTemplate,
-  FilterList,
-  FilterItem,
-  Input,
-  Profile,
-  TransactionContainer,
-  TransactionList,
-  TransactionItem,
+	Refresh,
+	Amount,
+	Button,
+	DocumentTemplate,
+	FilterList,
+	FilterItem,
+	Input,
+	Profile,
+	TransactionContainer,
+	TransactionList,
+	TransactionItem,
+	Card,
 };
