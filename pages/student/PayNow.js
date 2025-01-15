@@ -19,10 +19,7 @@ const PayNow = ({ navigation, route }) => {
 	const [disable, setDisable] = useState(true);
 	const [open, setOpen] = useState(false);
 	const [value, setValue] = useState(null);
-	const [items, setItems] = useState([
-		{ label: "Apple", value: "apple" },
-		{ label: "Banana", value: "banana" },
-	]);
+	const [items, setItems] = useState([]);
 
 	const [isModalVisible, setModalVisible] = useState(false);
 
@@ -142,17 +139,7 @@ const PayNow = ({ navigation, route }) => {
 							padding: 8,
 						}}
 					/>
-					<Text
-						style={[
-							cardStyle.title,
-							{
-								borderTopWidth: 1,
-								marginTop: 24,
-								paddingTop: 24,
-								borderTopColor: "rgb(235, 235, 235)",
-							},
-						]}
-					>
+					<Text style={[cardStyle.title, cardStyle.separator]}>
 						Amount in MYR
 					</Text>
 					<TextInput
@@ -161,10 +148,10 @@ const PayNow = ({ navigation, route }) => {
 						onChangeText={setAmount}
 						keyboardType="numeric"
 					/>
-				</Card>
 
-				<Card>
-					<Text style={cardStyle.title}>Coupon</Text>
+					<Text style={[cardStyle.title, cardStyle.separator]}>
+						Coupon
+					</Text>
 					<Text style={cardStyle.child}>{params?.coupon}</Text>
 				</Card>
 			</View>
@@ -221,6 +208,12 @@ const cardStyle = StyleSheet.create({
 	},
 	child: {
 		fontWeight: "500",
+	},
+	separator: {
+		borderTopWidth: 1,
+		marginTop: 24,
+		paddingTop: 24,
+		borderTopColor: "rgb(235, 235, 235)",
 	},
 });
 
