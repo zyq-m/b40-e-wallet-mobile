@@ -50,7 +50,7 @@ const PayNow = ({ navigation, route }) => {
 				receiver: user.id,
 				message: {
 					title: "Payment sent",
-					body: `You spent RM${amount} at ${value}`,
+					body: `You spent RM${amount}`,
 				},
 			});
 
