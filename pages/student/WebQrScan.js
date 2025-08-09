@@ -32,12 +32,6 @@ export default function WebQrScan({ navigation, route }) {
 		);
 	}
 
-	function toggleCameraType() {
-		setType((current) =>
-			current === CameraType.back ? CameraType.front : CameraType.back
-		);
-	}
-
 	async function onScan(data) {
 		function getUrlParams(url) {
 			let params = {};
