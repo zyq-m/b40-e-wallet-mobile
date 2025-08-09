@@ -14,6 +14,8 @@ import MyPin from "./cafe/MyPin";
 import CouponList from "./student/CouponList";
 import CouponDetail from "./student/CouponDetail";
 import SuccessTf from "./student/SuccessTf";
+import WebQrScan from "./student/WebQrScan";
+import InsertAmount from "./student/InsertAmount";
 
 export {
 	ChangePassword,
@@ -32,4 +34,6 @@ export {
 	CouponList,
 	CouponDetail,
 	SuccessTf,
+	WebQrScan,
+	InsertAmount,
 };

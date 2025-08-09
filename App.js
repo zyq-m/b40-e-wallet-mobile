@@ -19,6 +19,8 @@ import {
 	CouponList,
 	CouponDetail,
 	SuccessTf,
+	WebQrScan,
+	InsertAmount,
 } from "./pages";
 import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
@@ -59,10 +61,7 @@ function Home() {
 				</>
 			)}
 
-			<Drawer.Screen
-				name="Transactions History"
-				component={Transaction}
-			/>
+			<Drawer.Screen name="Transactions History" component={Transaction} />
 			<Drawer.Screen name="Change password" component={ChangePassword} />
 			<Drawer.Screen
 				name="Report"
@@ -119,10 +118,7 @@ export default function App() {
 								component={Home}
 								options={{ headerShown: false }}
 							/>
-							<Stack.Screen
-								name="Transactions"
-								component={Transaction}
-							/>
+							<Stack.Screen name="Transactions" component={Transaction} />
 							<Stack.Screen
 								name="Transaction Details"
 								component={TransactionDetail}
@@ -166,34 +162,40 @@ export default function App() {
 										options={{ headerShown: false }}
 										component={SuccessTf}
 									/>
+									<Stack.Screen
+										name="WebScan"
+										component={WebQrScan}
+										options={{
+											title: "Scan QR",
+											headerTitleAlign: "center",
+										}}
+									/>
+									<Stack.Screen
+										name="InsertAmount"
+										component={InsertAmount}
+										options={{
+											title: "Insert Amount",
+											headerTitleAlign: "center",
+										}}
+									/>
 								</>
 							)}
 							{user?.role === "CAFE" && (
 								<>
-									<Stack.Screen
-										name="Profile"
-										component={Profile}
-									/>
-									<Stack.Screen
-										name="My QRCode"
-										component={MyQRCode}
-									/>
-									<Stack.Screen
-										name="One-time QRCode"
-										component={MyQRCode}
-									/>
-									<Stack.Screen
-										name="Green Campus"
-										component={MyQRCode}
-									/>
-									<Stack.Screen
-										name="Cashless"
-										component={MyQRCode}
-									/>
+									<Stack.Screen name="Profile" component={Profile} />
+									<Stack.Screen name="My QRCode" component={MyQRCode} />
+									<Stack.Screen name="One-time QRCode" component={MyQRCode} />
+									<Stack.Screen name="Green Campus" component={MyQRCode} />
+									<Stack.Screen name="Cashless" component={MyQRCode} />
 								</>
 							)}
 						</>
 					) : (
+						// <Stack.Screen
+						// 	name="WebScan"
+						// 	component={WebQrScan}
+						// 	options={{ headerShown: true }}
+						// />
 						<Stack.Screen
 							name="login"
 							component={Login}

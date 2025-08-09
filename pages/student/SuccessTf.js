@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
 import { globals } from "../../styles";
 import { Button, Card } from "../../components";
 import { SquareCheckBig, X } from "lucide-react-native";
@@ -74,22 +73,16 @@ const SuccessTf = ({ navigation, route }) => {
 					</View>
 					<View>
 						<Text style={style.label}>From</Text>
-						<Text style={style.desc}>
-							{params?.tf.student.name}
-						</Text>
+						<Text style={style.desc}>{params?.tf.student.name}</Text>
 					</View>
 					<View>
 						<Text style={style.label}>To</Text>
-						<Text style={style.desc}>
-							{params?.tf.cafe.cafe_name}
-						</Text>
+						<Text style={style.desc}>{params?.tf.cafe.cafe_name}</Text>
 					</View>
 					<View>
 						<Text style={style.label}>Time</Text>
 						<Text style={style.desc}>
-							{dayjs(params?.tf.timestamp).format(
-								"D MMM YYYY hh:mmA"
-							)}
+							{dayjs(params?.tf.timestamp).format("D MMM YYYY hh:mmA")}
 						</Text>
 					</View>
 					<View>

@@ -10,26 +10,21 @@ const MyQRCode = ({ route }) => {
 	const { user } = useUserContext();
 	const [qr, setQr] = useState(undefined);
 	const [loading, setLoading] = useState(true);
-	// const { amount, pointId } = route.params;
 
-	// useEffect(() => {
-	// 	const controller = new AbortController();
-	// 	api.get(`/cafe/qr/ekupon/${user.id}`, {
-	// 		signal: controller.signal,
-	// 	})
-	// 		.then((res) =>
-	// 			setQr({
-	// 				url: `${res.data.data.url}&pointId=${pointId}&amount=${amount}`,
-	// 				name: res.data.data.name,
-	// 			})
-	// 		)
-	// 		.then(() => setLoading(false))
-	// 		.catch((err) => console.error(err));
+	useEffect(() => {
+		const controller = new AbortController();
+		api
+			.get(`/cafe/my-qr/${user.id}`, {
+				signal: controller.signal,
+			})
+			.then((res) => setQr(res.data))
+			.then(() => setLoading(false))
+			.catch((err) => console.error(err));
 
-	// 	return () => {
-	// 		controller.abort();
-	// 	};
-	// }, []);
+		return () => {
+			controller.abort();
+		};
+	}, []);
 
 	if (loading) {
 		return (
