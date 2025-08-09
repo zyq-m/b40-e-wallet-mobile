@@ -1,6 +1,6 @@
 import { Camera, CameraType } from "expo-camera";
 import { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 import { api } from "../../services/axiosInstance";
 
 export default function WebQrScan({ navigation, route }) {
