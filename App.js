@@ -19,6 +19,7 @@ import {
 	CouponList,
 	CouponDetail,
 	SuccessTf,
+	Signup,
 } from "./pages";
 import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
@@ -59,10 +60,7 @@ function Home() {
 				</>
 			)}
 
-			<Drawer.Screen
-				name="Transactions History"
-				component={Transaction}
-			/>
+			<Drawer.Screen name="Transactions History" component={Transaction} />
 			<Drawer.Screen name="Change password" component={ChangePassword} />
 			<Drawer.Screen
 				name="Report"
@@ -119,10 +117,7 @@ export default function App() {
 								component={Home}
 								options={{ headerShown: false }}
 							/>
-							<Stack.Screen
-								name="Transactions"
-								component={Transaction}
-							/>
+							<Stack.Screen name="Transactions" component={Transaction} />
 							<Stack.Screen
 								name="Transaction Details"
 								component={TransactionDetail}
@@ -170,35 +165,27 @@ export default function App() {
 							)}
 							{user?.role === "CAFE" && (
 								<>
-									<Stack.Screen
-										name="Profile"
-										component={Profile}
-									/>
-									<Stack.Screen
-										name="My QRCode"
-										component={MyQRCode}
-									/>
-									<Stack.Screen
-										name="One-time QRCode"
-										component={MyQRCode}
-									/>
-									<Stack.Screen
-										name="Green Campus"
-										component={MyQRCode}
-									/>
-									<Stack.Screen
-										name="Cashless"
-										component={MyQRCode}
-									/>
+									<Stack.Screen name="Profile" component={Profile} />
+									<Stack.Screen name="My QRCode" component={MyQRCode} />
+									<Stack.Screen name="One-time QRCode" component={MyQRCode} />
+									<Stack.Screen name="Green Campus" component={MyQRCode} />
+									<Stack.Screen name="Cashless" component={MyQRCode} />
 								</>
 							)}
 						</>
 					) : (
-						<Stack.Screen
-							name="login"
-							component={Login}
-							options={{ headerShown: false }}
-						/>
+						<>
+							<Stack.Screen
+								name="login"
+								component={Login}
+								options={{ headerShown: false }}
+							/>
+							<Stack.Screen
+								name="signup"
+								component={Signup}
+								options={{ headerShown: false }}
+							/>
+						</>
 					)}
 				</Stack.Navigator>
 				<StatusBar style="auto" />

@@ -14,8 +14,10 @@ import MyPin from "./cafe/MyPin";
 import CouponList from "./student/CouponList";
 import CouponDetail from "./student/CouponDetail";
 import SuccessTf from "./student/SuccessTf";
+import Signup from "./Signup";
 
 export {
+	Signup,
 	ChangePassword,
 	CafeList,
 	Dashboard,

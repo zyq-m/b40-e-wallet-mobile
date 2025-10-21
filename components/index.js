@@ -10,6 +10,7 @@ import FilterItem from "./FilterItem";
 import DocumentTemplate from "./DocumentTemplate";
 import TransactionList from "./TransactionList";
 import Card from "./Card";
+import ModalDropdown from "./ModalDropdown";
 
 export {
 	Refresh,
@@ -24,4 +25,5 @@ export {
 	TransactionList,
 	TransactionItem,
 	Card,
+	ModalDropdown,
 };

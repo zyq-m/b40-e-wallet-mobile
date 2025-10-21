@@ -11,7 +11,7 @@ import { useUserContext } from "../hooks";
 import { storeObject } from "../utils/asyncStorage";
 import { jwtDecode } from "jwt-decode";
 
-const Login = () => {
+const Login = ({ navigation }) => {
 	const [id, setId] = useState("");
 	const [password, setPassword] = useState("");
 	const { setUser } = useUserContext();
@@ -54,9 +54,9 @@ const Login = () => {
 					source={require("../assets/eKupon/logo.png")}
 				/>
 				<Text style={loginStyle.loginHeader}>eKupon@UniSZA</Text>
-				<Input label={"Username |"} value={id} onChange={setId} />
+				<Input label={"User Id"} value={id} onChange={setId} />
 				<Input
-					label={"Password |"}
+					label={"Password"}
 					secure={true}
 					value={password}
 					onChange={setPassword}
@@ -65,7 +65,13 @@ const Login = () => {
 					<Button label={"Login"} onPress={onSubmit} />
 				</View>
 				<Text style={loginStyle.smallText}>
-					Hi there, welcome back!
+					Don't have account? Sign up{" "}
+					<span
+						style={{ color: "blue" }}
+						onClick={() => navigation.navigate("signup")}
+					>
+						here
+					</span>
 				</Text>
 			</View>
 		</View>
