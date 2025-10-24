@@ -9,7 +9,6 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { api } from "../../services/axiosInstance";
 import Modal from "react-native-modal";
 import { socket } from "../../services/socket";
-import { pay } from "../../api/student/studentApi";
 import { popupMessage } from "../../utils/popupMessage";
 
 const PayNow = ({ navigation, route }) => {
@@ -31,10 +30,23 @@ const PayNow = ({ navigation, route }) => {
 		try {
 			toggleModal();
 			setDisable(true);
-			const res = await pay(params.fundId, amount, user.id, value);
+
+			let body = {
+				fundId: params.fundId,
+				amount: amount,
+				cafeId: value,
+			};
+
+			if (user.role === "STUDENT") body = { ...body, icNo: user.id };
+			if (user.role === "STAFF") body = { ...body, email: user.id };
+
+			const res = await api.post("/transaction/pay", body);
 
 			// emit event
-			socket.emit("student:get-wallet-total", { icNo: user?.id });
+			if (user.role === "STUDENT")
+				socket.emit("student:get-wallet-total", { icNo: user?.id });
+			if (user.role === "STAFF")
+				socket.emit("staff:get-wallet-total", { email: user?.id });
 			socket.emit("cafe:get-sales-total", { cafeId: value });
 			socket.emit("admin:get-overall");
 			// push notification then nav to dashboard
@@ -78,7 +90,8 @@ const PayNow = ({ navigation, route }) => {
 	useEffect(() => {
 		const controller = new AbortController();
 
-		api.get("/cafe", { signal: controller.signal })
+		api
+			.get("/cafe", { signal: controller.signal })
 			.then((res) => {
 				setItems(
 					res.data.map((cafe) => ({
@@ -149,9 +162,7 @@ const PayNow = ({ navigation, route }) => {
 						keyboardType="numeric"
 					/>
 
-					<Text style={[cardStyle.title, cardStyle.separator]}>
-						Coupon
-					</Text>
+					<Text style={[cardStyle.title, cardStyle.separator]}>Coupon</Text>
 					<Text style={cardStyle.child}>{params?.coupon}</Text>
 				</Card>
 			</View>
@@ -162,26 +173,17 @@ const PayNow = ({ navigation, route }) => {
 							Are absolutely sure?
 						</Text>
 						<Text>
-							This action cannot be undone. Your account will be
-							deducted.
+							This action cannot be undone. Your account will be deducted.
 						</Text>
 						<View style={{ flexDirection: "row", gap: 8 }}>
-							<Button
-								label="Cancel"
-								onPress={toggleModal}
-								muted={true}
-							/>
+							<Button label="Cancel" onPress={toggleModal} muted={true} />
 							<Button label="Confirm" onPress={onConfirm} />
 						</View>
 					</View>
 				</View>
 			</Modal>
 			<View style={{ paddingBottom: 24 }}>
-				<Button
-					label={"Submit"}
-					disable={disable}
-					onPress={toggleModal}
-				/>
+				<Button label={"Submit"} disable={disable} onPress={toggleModal} />
 			</View>
 		</View>
 	);

@@ -44,7 +44,10 @@ const CafeList = ({ navigation, route }) => {
 			await pay(fundId, amount, user.id, selectedCafe.id);
 
 			// emit event
-			socket.emit("student:get-wallet-total", { icNo: user?.id });
+			if (user.role === "STUDENT")
+				socket.emit("student:get-wallet-total", { icNo: user?.id });
+			if (user.role === "STAFF")
+				socket.emit("staff:get-wallet-total", { email: user?.id });
 			socket.emit("cafe:get-sales-total", { cafeId: selectedCafe.id });
 			socket.emit("admin:get-overall");
 			// push notification then nav to dashboard
@@ -79,7 +82,8 @@ const CafeList = ({ navigation, route }) => {
 	};
 
 	const fetchCafe = (signal) => {
-		api.get("/cafe", { signal: signal })
+		api
+			.get("/cafe", { signal: signal })
 			.then((res) => {
 				let cafeList = res.data.map((data, i) => ({
 					id: i,
@@ -139,11 +143,7 @@ const CafeList = ({ navigation, route }) => {
 				</View>
 			</Refresh>
 			<View style={{ paddingBottom: 24, paddingHorizontal: 16 }}>
-				<Button
-					label={"Confirm"}
-					onPress={onConfirm}
-					disable={confirmBtn}
-				/>
+				<Button label={"Confirm"} onPress={onConfirm} disable={confirmBtn} />
 			</View>
 		</View>
 	);

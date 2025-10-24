@@ -75,21 +75,17 @@ const SuccessTf = ({ navigation, route }) => {
 					<View>
 						<Text style={style.label}>From</Text>
 						<Text style={style.desc}>
-							{params?.tf.student.name}
+							{params?.tf?.student?.name || params?.tf?.staff?.name}
 						</Text>
 					</View>
 					<View>
 						<Text style={style.label}>To</Text>
-						<Text style={style.desc}>
-							{params?.tf.cafe.cafe_name}
-						</Text>
+						<Text style={style.desc}>{params?.tf.cafe.cafe_name}</Text>
 					</View>
 					<View>
 						<Text style={style.label}>Time</Text>
 						<Text style={style.desc}>
-							{dayjs(params?.tf.timestamp).format(
-								"D MMM YYYY hh:mmA"
-							)}
+							{dayjs(params?.tf.timestamp).format("D MMM YYYY hh:mmA")}
 						</Text>
 					</View>
 					<View>

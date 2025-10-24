@@ -122,7 +122,7 @@ export default function App() {
 								name="Transaction Details"
 								component={TransactionDetail}
 							/>
-							{user?.role === "STUDENT" && (
+							{["STUDENT", "STAFF"].includes(user?.role) && (
 								<>
 									<Stack.Screen
 										name="Cafe List"

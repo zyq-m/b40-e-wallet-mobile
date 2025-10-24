@@ -1,5 +1,4 @@
 import { memo } from "react";
-import { formatTime, formatDate } from "../utils/formatTime";
 
 import TransactionItem from "./TransactionItem";
 import toMYR from "../utils/toMYR";
@@ -10,7 +9,9 @@ const TransactionList = ({ data, user, navigation, style, border, params }) => {
 		<>
 			{data?.map((data, i) => {
 				let details = {
-					sender: `${data.student.name} - ${data.student.matric_no}`,
+					sender: `${data?.student?.name || data?.staff?.name} - ${
+						data?.student?.matric_no || data?.staff?.email
+					}`,
 					recipient: data.cafe.cafe_name,
 					transactionId: data.id,
 					amount: toMYR(data.amount),
@@ -21,7 +22,7 @@ const TransactionList = ({ data, user, navigation, style, border, params }) => {
 					<TransactionItem
 						key={i}
 						transactionId={data.id}
-						field1={data.student.matric_no}
+						field1={data?.student?.matric_no || data?.staff?.email}
 						approved={data.transaction?.approved}
 						time={dayjs(data.timestamp).format("hh:mm")}
 						date={dayjs(data.timestamp).format("DD/MM/YYYY")}

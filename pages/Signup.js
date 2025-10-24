@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { popupMessage } from "../utils/popupMessage";
 import { Button, Input } from "../components";
@@ -20,7 +20,7 @@ const Signup = () => {
 	const [ptj, setPtj] = useState("");
 	const [items, setItems] = useState([{ label: "FSK", value: 1 }]);
 
-	const onSubmit = async () => {
+	const onSubmit = async ({ navigation }) => {
 		try {
 			const newAcc = await api.post("/auth/register", {
 				email: email,
@@ -32,12 +32,19 @@ const Signup = () => {
 			});
 
 			popupMessage(newAcc.data);
+			navigation.navigate("login");
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				popupMessage(error.response.data);
 			}
 		}
 	};
+
+	useEffect(() => {
+		api.get("/lookup/ptj").then((res) => {
+			setItems(res.data.map(({ id, ptj }) => ({ label: ptj, value: id })));
+		});
+	}, []);
 
 	return (
 		<View
@@ -64,6 +71,12 @@ const Signup = () => {
 						borderColor: "rgba(0, 0, 0, 0.11)",
 						backgroundColor: "rgba(255, 255, 255, 1)",
 					}}
+					searchable={true}
+					searchTextInputStyle={{
+						borderColor: "rgba(0, 0, 0, 0.11)",
+						backgroundColor: "rgba(255, 255, 255, 1)",
+					}}
+					searchPlaceholder="Find your PTJ..."
 				/>
 				<Input label={"Email"} value={email} onChange={setEmail} />
 				<Input

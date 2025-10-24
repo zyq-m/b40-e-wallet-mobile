@@ -14,7 +14,8 @@ export const useDashboard = () => {
 
 	const defineRole = async () => {
 		if (user.role === "STUDENT") {
-			api.get(`/student/${user?.id}`)
+			api
+				.get(`/student/${user?.id}`)
 				.then((res) => {
 					setDashboard((prev) => ({
 						...prev,
@@ -35,8 +36,32 @@ export const useDashboard = () => {
 			});
 		}
 
+		if (user.role === "STAFF") {
+			api
+				.get(`/staff/${user?.id}`)
+				.then((res) => {
+					setDashboard((prev) => ({
+						...prev,
+						id: res.data.no_staff,
+						name: res.data.name,
+					}));
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			socket.emit("staff:get-wallet-total", { email: user?.id });
+			socket.on("staff:get-wallet-total", (res) => {
+				setDashboard((prev) => ({
+					...prev,
+					transaction: res.transaction,
+					coupons: res.coupon,
+				}));
+			});
+		}
+
 		if (user.role === "CAFE") {
-			api.get(`/cafe/${user?.id}`)
+			api
+				.get(`/cafe/${user?.id}`)
 				.then((res) => {
 					setDashboard((prev) => ({
 						...prev,

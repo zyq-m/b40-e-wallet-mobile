@@ -10,6 +10,7 @@ import { popupMessage } from "../utils/popupMessage";
 import { useUserContext } from "../hooks";
 import { storeObject } from "../utils/asyncStorage";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const Login = ({ navigation }) => {
 	const [id, setId] = useState("");
@@ -28,11 +29,12 @@ const Login = ({ navigation }) => {
 			setUser(details);
 			storeObject("userDetails", details);
 		} catch (error) {
-			// Look for status code & message
-			popupMessage({
-				title: "Cannot login",
-				message: "Invalid userId or password",
-			});
+			if (axios.isAxiosError(error)) {
+				popupMessage({
+					title: "Cannot login",
+					message: error.response.data.message,
+				});
+			}
 		}
 	};
 
