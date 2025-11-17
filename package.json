@@ -7,7 +7,7 @@
     "build-metro": "npx expo export --platform web",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web",
+    "web": "expo start --web --https",
     "eject": "expo eject",
     "eas-build-android": "eas build -p android --profile local-apk",
     "eas-build-android-aab": "eas build -p android --profile local-aab",
@@ -51,9 +51,11 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "^0.19.9",
     "react-native-web-refresh-control": "^1.1.1",
+    "react-qr-barcode-scanner": "^2.1.8",
     "react-qr-code": "^2.0.12",
     "resize-observer-polyfill": "^1.5.1",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "expo-camera": "~13.4.4"
   },
   "private": true
 }

@@ -10,7 +10,12 @@ const Amount = ({ coupon, student, amount, studentName }) => {
 
 	function onPress() {
 		if (student) {
-			navigation.navigate("Pay", {
+			// navigation.navigate("Pay", {
+			// 	fundId: coupon.fund_id,
+			// 	name: studentName,
+			// 	coupon: coupon.fund.name,
+			// });
+			navigation.navigate("WebScan", {
 				fundId: coupon.fund_id,
 				name: studentName,
 				coupon: coupon.fund.name,
@@ -59,14 +64,8 @@ const Amount = ({ coupon, student, amount, studentName }) => {
 						{toMYR(student ? coupon.balance : amount)}
 					</Text>
 					{student && (
-						<Text
-							style={[
-								amountStyle.amountSmallText,
-								{ fontSize: 10 },
-							]}
-						>
-							Exp{" "}
-							{dayjs(coupon?.fund.expired).format("DD/MM/YYYY")}
+						<Text style={[amountStyle.amountSmallText, { fontSize: 10 }]}>
+							Exp {dayjs(coupon?.fund.expired).format("DD/MM/YYYY")}
 						</Text>
 					)}
 				</View>

@@ -19,6 +19,8 @@ import {
 	CouponList,
 	CouponDetail,
 	SuccessTf,
+	WebQrScan,
+	InsertAmount,
 } from "./pages";
 import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
@@ -162,6 +164,22 @@ export default function App() {
 										options={{ headerShown: false }}
 										component={SuccessTf}
 									/>
+									<Stack.Screen
+										name="WebScan"
+										component={WebQrScan}
+										options={{
+											title: "Scan QR",
+											headerTitleAlign: "center",
+										}}
+									/>
+									<Stack.Screen
+										name="InsertAmount"
+										component={InsertAmount}
+										options={{
+											title: "Insert Amount",
+											headerTitleAlign: "center",
+										}}
+									/>
 								</>
 							)}
 							{user?.role === "CAFE" && (
@@ -175,6 +193,11 @@ export default function App() {
 							)}
 						</>
 					) : (
+						// <Stack.Screen
+						// 	name="WebScan"
+						// 	component={WebQrScan}
+						// 	options={{ headerShown: true }}
+						// />
 						<Stack.Screen
 							name="login"
 							component={Login}

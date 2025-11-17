@@ -10,7 +10,6 @@ const MyQRCode = ({ route }) => {
 	const { user } = useUserContext();
 	const [qr, setQr] = useState(undefined);
 	const [loading, setLoading] = useState(true);
-	// const { amount, pointId } = route.params;
 
 	useEffect(() => {
 		const controller = new AbortController();

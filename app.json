@@ -34,6 +34,13 @@
         "projectId": "67b6d53d-5fe1-4332-9338-6dabedd106d0"
       }
     },
-    "plugins": [["expo-notifications"]]
+    "plugins": [["expo-notifications", [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ]]]
   }
 }
