@@ -63,7 +63,7 @@ const MyQRCode = ({ route }) => {
 					<View style={QRStyles.QRWrapper}>
 						<QRCode
 							size={300}
-							value={qr}
+							value={qr?.url}
 							style={{
 								height: "auto",
 								maxWidth: "100%",
