@@ -21,6 +21,7 @@ import {
 	SuccessTf,
 	WebQrScan,
 	InsertAmount,
+	PayOption,
 } from "./pages";
 import { UserContext } from "./context/UserContext";
 import { useUserContext } from "./hooks";
@@ -177,6 +178,14 @@ export default function App() {
 										component={InsertAmount}
 										options={{
 											title: "Insert Amount",
+											headerTitleAlign: "center",
+										}}
+									/>
+									<Stack.Screen
+										name="PayOption"
+										component={PayOption}
+										options={{
+											title: "Payment Method",
 											headerTitleAlign: "center",
 										}}
 									/>

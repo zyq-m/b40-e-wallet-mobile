@@ -16,8 +16,10 @@ import CouponDetail from "./student/CouponDetail";
 import SuccessTf from "./student/SuccessTf";
 import WebQrScan from "./student/WebQrScan";
 import InsertAmount from "./student/InsertAmount";
+import PayOption from "./student/PayOption";
 
 export {
+	PayOption,
 	ChangePassword,
 	CafeList,
 	Dashboard,

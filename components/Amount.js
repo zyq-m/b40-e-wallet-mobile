@@ -1,4 +1,3 @@
-import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import toMYR from "../utils/toMYR";
 import dayjs from "dayjs";
@@ -10,12 +9,7 @@ const Amount = ({ coupon, student, amount, studentName }) => {
 
 	function onPress() {
 		if (student) {
-			// navigation.navigate("Pay", {
-			// 	fundId: coupon.fund_id,
-			// 	name: studentName,
-			// 	coupon: coupon.fund.name,
-			// });
-			navigation.navigate("WebScan", {
+			navigation.navigate("PayOption", {
 				fundId: coupon.fund_id,
 				name: studentName,
 				coupon: coupon.fund.name,
