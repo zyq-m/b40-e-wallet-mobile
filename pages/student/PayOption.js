@@ -10,7 +10,7 @@ export default function PayOption({ navigation, route }) {
 				{ paddingHorizontal: 16, justifyContent: "center", gap: 12 },
 			]}
 		>
-			<Pressable onPress={() => navigation.navigate("Cafe List", route.params)}>
+			<Pressable onPress={() => navigation.navigate("Pay", route.params)}>
 				<View style={PayOpStyle.item}>
 					<Text>Choose Cafe</Text>
 					<List size={20} />
