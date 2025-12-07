@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getObject, storeObject } from "../utils/asyncStorage";
+import { getObject, removeAll, storeObject } from "../utils/asyncStorage";
 import { apiUrl } from "../utils/environment";
 
 export const api = axios.create({
@@ -40,6 +40,17 @@ api.interceptors.response.use(
 	},
 	async function (error) {
 		const originalRequest = error.config;
+
+		if (error.response.status === 401 && !originalRequest._retry) {
+			// auto logout
+			removeAll();
+			alert(error.response.data.message);
+			// force reload
+			window.location.reload();
+
+			return;
+		}
+
 		if (error.response.status === 403 && !originalRequest._retry) {
 			originalRequest._retry = true;
 			const newToken = await renewToken();
